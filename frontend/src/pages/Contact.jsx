@@ -202,7 +202,7 @@ const Contact = () => {
                  <div className="flex gap-4">
                     <a href="#" className="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm text-xl"><FaLinkedinIn /></a>
                     <a href="#" className="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-pink-500 hover:bg-pink-500 hover:text-white transition-all shadow-sm text-xl"><FaInstagram /></a>
-                    <a href="#" className="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-green-500 hover:bg-green-500 hover:text-white transition-all shadow-sm text-xl"><FaWhatsapp /></a>
+                    <a href="https://wa.me/919500181230" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-green-500 hover:bg-green-500 hover:text-white transition-all shadow-sm text-xl"><FaWhatsapp /></a>
                  </div>
               </div>
               <div className="bg-gray-900 text-white p-8 rounded-3xl relative overflow-hidden">

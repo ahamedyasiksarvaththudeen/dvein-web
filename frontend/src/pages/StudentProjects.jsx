@@ -328,9 +328,14 @@ const StudentProjects = () => {
              <p className="max-w-xl mx-auto text-slate-400 font-bold uppercase text-xs mb-12 tracking-widest">
                Join our next batch of student innovators and turn your ideas into physical industrial mastery.
              </p>
-             <button className="bg-indigo-600 text-white px-16 py-6 rounded-2xl font-extrabold text-xs uppercase tracking-[0.4em] shadow-3xl hover:bg-white hover:text-indigo-600 transition-all transform hover:-translate-y-2">
+             <a
+               href="https://wa.me/919500181230?text=Hello%20DVein%20Team,%20I%20am%20interested%20in%20launching%20a%20project%20node."
+               target="_blank"
+               rel="noopener noreferrer"
+               className="inline-block bg-indigo-600 text-white px-16 py-6 rounded-2xl font-extrabold text-xs uppercase tracking-[0.4em] shadow-3xl hover:bg-white hover:text-indigo-600 transition-all transform hover:-translate-y-2"
+             >
                 Launch Project Node
-             </button>
+             </a>
           </motion.div>
          
       </section>

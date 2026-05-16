@@ -158,17 +158,20 @@ def _send_application_email(first, last, email, phone, portfolio, job_title, res
 
     try:
         msg = MIMEMultipart()
+        RECIPIENT = "jayasri@dveininnovations.com"
         msg["From"]    = f"DVein Careers <{EMAIL_USER}>"
-        msg["To"]      = "dvein76@gmail.com"
-        msg["Subject"] = f"New Application Received: {job_title}"
+        msg["To"]      = RECIPIENT
+        msg["Subject"] = f"New Internship Application Received: {job_title}"
 
         body = f"""
-        <h3>New Job Application</h3>
+        <h3>New Internship Application</h3>
         <p><strong>Name:</strong> {first} {last}</p>
         <p><strong>Email:</strong> {email}</p>
         <p><strong>Phone:</strong> {phone}</p>
         <p><strong>Portfolio:</strong> {portfolio or 'Not Provided'}</p>
-        <p><strong>Job Title:</strong> {job_title}</p>
+        <p><strong>Applied For:</strong> {job_title}</p>
+        <hr/>
+        <p style="color:#555;font-size:12px;">This application has been automatically stored in the DVein admin panel database.</p>
         """
         msg.attach(MIMEText(body, "html"))
 
@@ -182,6 +185,6 @@ def _send_application_email(first, last, email, phone, portfolio, job_title, res
 
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(EMAIL_USER, EMAIL_PASS)
-            server.sendmail(EMAIL_USER, "dvein76@gmail.com", msg.as_string())
+            server.sendmail(EMAIL_USER, RECIPIENT, msg.as_string())
     except Exception as e:
         print(f"Email failed: {e}")

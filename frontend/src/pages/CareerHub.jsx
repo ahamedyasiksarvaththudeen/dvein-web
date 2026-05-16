@@ -158,7 +158,12 @@ const CareerHub = () => {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"></div>
               <div className="relative z-10 flex flex-col items-center">
                   <h2 className="text-3xl md:text-6xl font-black text-white mb-6 uppercase italic tracking-tighter leading-none">JOIN THE <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400">COLLECTIVE.</span></h2>
-                  <Link to="/register" className="bg-white text-slate-900 px-12 py-4 rounded-full font-black text-[11px] uppercase tracking-[0.4em] hover:scale-105 transition-transform shadow-xl">Touch In Now</Link>
+                  <a
+                    href="https://wa.me/919500181230?text=Hello%20DVein%20Team,%20I%20want%20to%20join%20the%20collective!"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-white text-slate-900 px-12 py-4 rounded-full font-black text-[11px] uppercase tracking-[0.4em] hover:scale-105 transition-transform shadow-xl"
+                  >Touch In Now</a>
               </div>
           </div>
       </section>

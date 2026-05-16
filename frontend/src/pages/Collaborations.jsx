@@ -16,7 +16,7 @@ const Collaborations = () => {
 
   const handleCollaborate = () => {
     window.open(
-      "https://wa.me/919245798766?text=Hello%20DVein%20Team,%20I%20am%20interested%20in%20a%20global%20collaboration.",
+      "https://wa.me/919500181230?text=Hello%20DVein%20Team,%20I%20am%20interested%20in%20a%20global%20collaboration.",
       "_blank"
     );
   };
@@ -99,17 +99,11 @@ const Collaborations = () => {
           </p>
 
           <div className="flex justify-center gap-4">
-            <button 
+            <button
               onClick={handleCollaborate}
               className="inline-flex items-center gap-3 bg-indigo-600 text-white px-9 py-4 rounded-xl font-semibold text-sm transition-all shadow hover:bg-indigo-700"
             >
               <FaHandshake className="text-lg" /> Start a Collaboration
-            </button>
-
-            <button 
-              className="inline-flex items-center gap-3 bg-white border border-slate-200 text-slate-700 px-9 py-4 rounded-xl font-medium text-sm hover:bg-slate-50 transition"
-            >
-              View Enterprise Profile
             </button>
           </div>
         </motion.div>
