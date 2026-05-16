@@ -222,7 +222,7 @@ const AcademyPage = () => {
           <p className="text-sm text-slate-300 mb-10 max-w-2xl mx-auto">
             Let’s discuss your goals and activate your learning path.
           </p>
-          <Link to="/register">
+          <Link to="/training">
             <button className="px-10 py-4 bg-white text-slate-900 rounded-xl font-medium text-sm hover:bg-slate-100 transition flex items-center gap-3 mx-auto shadow">
               Join DVein Academy <FaArrowRight />
             </button>

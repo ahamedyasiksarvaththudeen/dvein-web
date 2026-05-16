@@ -10,7 +10,9 @@ const slides = [
     title: "Empowering Innovation through Technology",
     description: "Your partner for custom software solutions and engineering training.",
     primaryBtn: "Explore Services",
-    secondaryBtn: "Contact Us"
+    primaryLink: "/student-projects",
+    secondaryBtn: "Contact Us",
+    secondaryLink: "/contact"
   },
   {
     id: 2,
@@ -19,7 +21,9 @@ const slides = [
     title: "Custom Software built for Business Growth",
     description: "We build digital ecosystems. From Web & Mobile Apps to AI/ML solutions.",
     primaryBtn: "View Solutions",
-    secondaryBtn: "Get a Quote"
+    primaryLink: "/services/software",
+    secondaryBtn: "Get a Quote",
+    secondaryLink: "/contact"
   },
   {
     id: 3,
@@ -28,7 +32,9 @@ const slides = [
     title: "Shaping Future Tech Leaders",
     description: "Industry-relevant training programs designed by experts for students.",
     primaryBtn: "View Courses",
-    secondaryBtn: "Apply Internship"
+    primaryLink: "/services/courses",
+    secondaryBtn: "Apply Internship",
+    secondaryLink: "/register"
   }
 ];
 
@@ -94,12 +100,12 @@ const Hero = () => {
 
             {/* Buttons */}
             <div className="flex flex-wrap gap-4">
-              <Link to="/services">
+              <Link to={slides[current].primaryLink}>
                   <button className="bg-dveinBlue hover:bg-white hover:text-dveinBlue text-white px-8 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-all shadow-[0_4px_14px_0_rgba(0,118,255,0.39)] hover:-translate-y-1">
                   {slides[current].primaryBtn}
                   </button>
               </Link>
-              <Link to="/contact">
+              <Link to={slides[current].secondaryLink}>
                   <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-all hover:-translate-y-1 shadow-lg">
                   {slides[current].secondaryBtn}
                   </button>
