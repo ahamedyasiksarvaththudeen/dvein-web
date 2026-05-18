@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { 
-  FaLaptopCode, FaRocket, FaGlobe, FaMicrochip, FaNetworkWired, 
-  FaCheckCircle, FaShieldAlt, FaUsers, FaChartLine, FaDraftingCompass, 
-  FaArrowRight, FaBolt, FaChevronUp, FaChevronDown, FaAward, FaBrain, FaCogs 
+import {
+  FaLaptopCode, FaRocket, FaGlobe, FaMicrochip, FaNetworkWired,
+  FaCheckCircle, FaShieldAlt, FaUsers, FaChartLine, FaDraftingCompass,
+  FaArrowRight, FaBolt, FaChevronUp, FaChevronDown, FaAward, FaBrain, FaCogs,
+  FaSearch, FaLayerGroup, FaSyncAlt, FaCloudUploadAlt
 } from 'react-icons/fa';
+import AnimatedRoadmap from '../components/AnimatedRoadmap';
 
 const AcademyPage = () => {
   const [trainings, setTrainings] = useState([]);
@@ -53,7 +55,7 @@ const AcademyPage = () => {
 
           <div className="flex justify-center gap-4">
             <a
-              href="https://forms.gle/tB3wjiN8QQewdRB68"
+              href="https://forms.gle/GEWGy11JyF1mBuMe6"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-indigo-600 text-white px-9 py-4 rounded-xl font-medium text-sm shadow hover:bg-indigo-700 transition"
@@ -84,32 +86,18 @@ const AcademyPage = () => {
         </div>
       </section>
 
-      {/* ROADMAP */}
-      <section className="bg-white/60 border-y border-slate-100 py-24 mb-24">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 mb-4">
-            Engineering Roadmap
-          </h2>
-          <p className="text-sm text-slate-500 mb-14">
-            Structured workflow for technical growth.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-            {['Core Scan', 'Architecture Build', 'Live Sync', 'Global Deploy'].map((step, index) => (
-              <motion.div key={index} whileHover={{ y: -6 }}>
-                <div className="w-16 h-16 bg-white mx-auto rounded-xl flex items-center justify-center border border-slate-100 shadow-md mb-4">
-                  <span className="text-lg font-semibold text-indigo-600">
-                    0{index + 1}
-                  </span>
-                </div>
-                <h3 className="text-sm font-semibold text-slate-900">
-                  {step}
-                </h3>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ANIMATED ROADMAP */}
+      <AnimatedRoadmap
+        title="Engineering Roadmap"
+        subtitle="Structured workflow for technical growth — from fundamentals to global deployment."
+        accent="bg-indigo-500"
+        steps={[
+          { icon: <FaSearch />,          label: 'Core Scan',          desc: 'Deep assessment of your skills and career goals to align the learning path.', color: 'bg-indigo-600' },
+          { icon: <FaLayerGroup />,      label: 'Architecture Build', desc: 'Hands-on architecture design, system thinking, and production patterns.', color: 'bg-purple-600' },
+          { icon: <FaSyncAlt />,         label: 'Live Sync',          desc: 'Real-time collaboration with engineering teams on live production builds.', color: 'bg-blue-600' },
+          { icon: <FaCloudUploadAlt />,  label: 'Global Deploy',      desc: 'Ship globally-certified projects and receive your ledger-verified credential.', color: 'bg-cyan-600' },
+        ]}
+      />
 
       {/* PROGRAM GRID – ENTERPRISE STYLE */}
 <section className="max-w-7xl mx-auto px-6 mb-28">
@@ -166,16 +154,14 @@ const AcademyPage = () => {
             <FaCheckCircle className="text-indigo-500" /> Active Program
           </div>
 
-          <button className="
-            w-full mt-4 py-2.5
-            bg-indigo-600 text-white
-            rounded-lg
-            font-medium text-sm
-            hover:bg-indigo-700
-            transition
-          ">
+          <a
+            href="https://forms.gle/GEWGy11JyF1mBuMe6"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full mt-4 py-2.5 bg-indigo-600 text-white rounded-lg font-medium text-sm hover:bg-indigo-700 transition block text-center"
+          >
             Enroll Now
-          </button>
+          </a>
         </div>
       </motion.div>
     ))}

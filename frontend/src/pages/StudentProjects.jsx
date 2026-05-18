@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // ✅ FIXED: Removed duplicate declaration and invalid 'FaCpu'
-import { 
-  FaMicrochip, FaCode, FaTools, FaCloudDownloadAlt, 
-  FaLightbulb, FaCheckCircle, FaProjectDiagram, FaGlobe, 
+import {
+  FaMicrochip, FaCode, FaTools, FaCloudDownloadAlt,
+  FaLightbulb, FaCheckCircle, FaProjectDiagram, FaGlobe,
   FaSatellite, FaBolt, FaTerminal, FaSync, FaShieldAlt,
   FaServer, FaDatabase, FaCogs, FaCubes, FaBroadcastTower,
   FaMemory, FaArrowRight, FaRocket
 } from 'react-icons/fa';
+import AnimatedRoadmap from '../components/AnimatedRoadmap';
 
 // ✅ FIXED: Changed 'FaRocketLaunch' to 'FaRocket' because it's the standard export
 import { FaArrowRight as FaArrowRightLong } from "react-icons/fa"; 
@@ -286,34 +287,18 @@ const StudentProjects = () => {
       </section>
 
       {/* 6. EXECUTION CYCLE - GOD LEVEL BLUE SECTION */}
-      <section className="bg-indigo-600 py-32 text-white text-center relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-           <FaCubes className="text-[40rem] absolute -top-40 -left-40 rotate-12" />
-        </div>
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <h2 className="text-3xl md:text-5xl font-extrabold uppercase mb-20 tracking-tighter italic">
-            The Innovation Execution Cycle.
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-             {[
-               { i: <FaLightbulb/>, t: "Ideation Node", d: "Conceptualizing disruptive frameworks." },
-               { i: <FaProjectDiagram/>, t: "Logic Mesh", d: "Designing decentralized architecture nodes." },
-               { i: <FaTools/>, t: "Assembly Sync", d: "Building production-grade hardware prototypes." },
-               { i: <FaCheckCircle/>, t: "Deployment", d: "Final activation for global sync." }
-             ].map((step, i) => (
-               <div key={i} className="group">
-                  <div className="w-20 h-20 bg-white text-indigo-600 rounded-[2rem] flex items-center justify-center text-3xl mx-auto mb-6 shadow-2xl group-hover:scale-110 group-hover:rotate-12 transition-all">
-                    {step.i}
-                  </div>
-                  <h4 className="font-extrabold uppercase tracking-widest text-[11px] mb-3">{step.t}</h4>
-                  <p className="text-[10px] text-indigo-100 font-medium leading-relaxed opacity-70 px-4 group-hover:opacity-100 transition-opacity">
-                    {step.d}
-                  </p>
-               </div>
-             ))}
-          </div>
-        </div>
-      </section>
+      {/* ANIMATED PROJECT EXECUTION ROADMAP */}
+      <AnimatedRoadmap
+        title="The Innovation Execution Cycle"
+        subtitle="From raw idea to global-grade deployment — powered by real engineering discipline."
+        accent="bg-indigo-400"
+        steps={[
+          { icon: <FaLightbulb />,       label: 'Ideation Node',   desc: 'Conceptualizing disruptive frameworks and defining the problem worth solving.', color: 'bg-indigo-500' },
+          { icon: <FaProjectDiagram />,  label: 'Logic Mesh',      desc: 'Designing decentralized architecture nodes, data flows, and system contracts.', color: 'bg-violet-600' },
+          { icon: <FaTools />,           label: 'Assembly Sync',   desc: 'Building production-grade prototypes with peer reviews and quality gates.', color: 'bg-blue-600' },
+          { icon: <FaGlobe />,           label: 'Global Deploy',   desc: 'Final activation, CI/CD pipeline, and worldwide sync for maximum impact.', color: 'bg-cyan-600' },
+        ]}
+      />
 
       {/* 7. FINAL CALL TO ACTION - ROCKET NODE */}
       <section className="py-40 text-center bg-white relative overflow-hidden">

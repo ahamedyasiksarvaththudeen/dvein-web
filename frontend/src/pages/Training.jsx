@@ -113,7 +113,7 @@ const Training = () => {
             </h1>
             <p className="text-base md:text-lg text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">Join an elite program designed by Senior Engineers. Master industry-standard tech through intense execution and real-world deployment.</p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
-              <button onClick={() => document.getElementById('apply-section').scrollIntoView({ behavior: 'smooth' })} className="px-8 py-3.5 bg-purple-600 text-white rounded-xl font-bold shadow-lg hover:bg-purple-700 transition-all">Apply Now</button>
+              <a href="https://forms.gle/GEWGy11JyF1mBuMe6" target="_blank" rel="noopener noreferrer" className="px-8 py-3.5 bg-purple-600 text-white rounded-xl font-bold shadow-lg hover:bg-purple-700 transition-all">Apply Now</a>
               <button onClick={() => document.getElementById('domains').scrollIntoView({ behavior: 'smooth' })} className="px-8 py-3.5 bg-white text-gray-800 border border-gray-200 rounded-xl font-bold shadow-sm hover:bg-gray-50 transition-all">Explore Tracks</button>
             </div>
           </motion.div>
@@ -147,7 +147,7 @@ const Training = () => {
                 <div className="flex flex-wrap gap-2 mb-8">
                   {domain.skills?.map((s, i) => <span key={i} className="px-2.5 py-1 bg-white border border-gray-100 rounded-lg text-[10px] font-bold text-gray-500 uppercase">{s}</span>)}
                 </div>
-                <button onClick={() => document.getElementById('apply-section').scrollIntoView({ behavior: 'smooth' })} className="inline-flex items-center gap-2 text-purple-600 font-black text-xs uppercase tracking-widest">Apply Now <FaIcons.FaArrowRight /></button>
+                <a href="https://forms.gle/GEWGy11JyF1mBuMe6" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-purple-600 font-black text-xs uppercase tracking-widest">Apply Now <FaIcons.FaArrowRight /></a>
               </motion.div>
             ))}
           </div>
@@ -182,55 +182,36 @@ const Training = () => {
         </div>
       </div>
 
-      {/* APPLICATION FORM */}
+      {/* APPLICATION CTA */}
       <div id="apply-section" className="py-24 max-w-4xl mx-auto px-6">
-        <div className="bg-white p-8 md:p-14 rounded-[2.5rem] shadow-2xl border border-purple-50">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-black mb-3">Internship Application</h2>
-            <p className="text-gray-400 text-sm font-medium">WhatsApp details will follow application review.</p>
+        <div className="bg-white p-8 md:p-14 rounded-[2.5rem] shadow-2xl border border-purple-50 text-center">
+          <h2 className="text-3xl font-black mb-3">Ready to Apply?</h2>
+          <p className="text-gray-400 text-sm font-medium mb-8">Fill out our application form. Our team will review and reach out to you on WhatsApp and Email within 48 hours.</p>
+          <a
+            href="https://forms.gle/GEWGy11JyF1mBuMe6"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-10 py-4 bg-purple-600 text-white rounded-xl font-bold text-base hover:bg-purple-700 transition-all shadow-xl mb-6"
+          >
+            Apply Now — Fill the Form
+          </a>
+          <p className="text-xs text-gray-400 mb-4">Or reach us directly:</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="https://wa.me/919500181230?text=Hello%20DVein%20Team!%20I%20want%20to%20apply%20for%20the%20Internship%20Cohort%202026."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 max-w-xs mx-auto sm:mx-0 bg-green-500 text-white text-center py-2.5 px-4 rounded-lg font-bold text-sm hover:bg-green-600 transition"
+            >
+              📱 WhatsApp Us
+            </a>
+            <a
+              href="mailto:info@dveininnovations.com?subject=Internship%20Application%202026"
+              className="flex-1 max-w-xs mx-auto sm:mx-0 bg-dveinBlue text-white text-center py-2.5 px-4 rounded-lg font-bold text-sm hover:opacity-90 transition"
+            >
+              ✉️ Email Us
+            </a>
           </div>
-          <form onSubmit={handleApply} className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <input required value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} className="bg-gray-50 p-3.5 rounded-xl outline-none focus:ring-1 focus:ring-purple-400 text-sm" placeholder="First Name" />
-            <input required value={formData.lastName}  onChange={e => setFormData({...formData, lastName:  e.target.value})} className="bg-gray-50 p-3.5 rounded-xl outline-none focus:ring-1 focus:ring-purple-400 text-sm" placeholder="Last Name" />
-            <input required type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="bg-gray-50 p-3.5 rounded-xl outline-none focus:ring-1 focus:ring-purple-400 text-sm" placeholder="Email Address" />
-            <input required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="bg-gray-50 p-3.5 rounded-xl outline-none focus:ring-1 focus:ring-purple-400 text-sm" placeholder="WhatsApp Number" />
-            <div className="md:col-span-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block ml-1">Resume (PDF Only)</label>
-              <input required type="file" accept=".pdf" onChange={e => setResume(e.target.files[0])} className="w-full bg-purple-50 p-3.5 rounded-xl border border-dashed border-purple-200 text-xs" />
-            </div>
-            <button type="submit" disabled={submitting} className="md:col-span-2 py-4 bg-gray-900 text-white rounded-xl font-bold text-base hover:bg-black transition-all shadow-xl disabled:opacity-50">
-              {submitting ? "Processing..." : "Submit Application"}
-            </button>
-
-            {submitStatus === 'success' && (
-              <div className="md:col-span-2 bg-green-50 border border-green-200 text-green-700 rounded-xl p-4 text-sm font-semibold text-center">
-                ✅ Application submitted successfully! Our team will reach out soon.
-              </div>
-            )}
-
-            {submitStatus === 'fallback' && (
-              <div className="md:col-span-2 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-5 text-sm">
-                <p className="font-bold mb-2">⚠️ Our server is temporarily offline.</p>
-                <p className="mb-3 text-xs">Please send your application via one of these alternatives:</p>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <a
-                    href={`https://wa.me/919500181230?text=Hello%20DVein%20Team!%20I%20want%20to%20apply%20for%20Internship%20Cohort%202026.%20Name:%20${encodeURIComponent(formData.firstName + ' ' + formData.lastName)}%20Email:%20${encodeURIComponent(formData.email)}%20Phone:%20${encodeURIComponent(formData.phone)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 bg-green-500 text-white text-center py-2 px-4 rounded-lg font-bold text-xs hover:bg-green-600 transition"
-                  >
-                    📱 Apply via WhatsApp
-                  </a>
-                  <a
-                    href={`mailto:info@dveininnovations.com?subject=Internship%20Application%20-%20${encodeURIComponent(formData.firstName + ' ' + formData.lastName)}&body=Hello%20DVein%20Team,%0A%0AI%20want%20to%20apply%20for%20Internship%20Cohort%202026.%0A%0AName:%20${encodeURIComponent(formData.firstName + ' ' + formData.lastName)}%0AEmail:%20${encodeURIComponent(formData.email)}%0APhone:%20${encodeURIComponent(formData.phone)}`}
-                    className="flex-1 bg-dveinBlue text-white text-center py-2 px-4 rounded-lg font-bold text-xs hover:opacity-90 transition"
-                  >
-                    ✉️ Apply via Email
-                  </a>
-                </div>
-              </div>
-            )}
-          </form>
         </div>
       </div>
 

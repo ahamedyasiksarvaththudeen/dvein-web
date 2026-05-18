@@ -1,37 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaCopy, FaCheck } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import logo from '../assets/logo.png';
-
-const CopyItem = ({ value, icon, display }) => {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(value).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
-  return (
-    <li className="relative group flex items-center justify-center gap-2 text-sm cursor-pointer" onClick={handleCopy}>
-      <span className="text-dveinGreen shrink-0">{icon}</span>
-      <span className="hover:text-dveinGreen transition-colors">{display}</span>
-      <span className={`
-        absolute -top-8 left-1/2 -translate-x-1/2
-        text-[10px] font-bold px-2 py-1 rounded-lg shadow-md whitespace-nowrap
-        transition-all duration-200
-        ${copied
-          ? 'bg-dveinGreen text-white opacity-100 scale-100'
-          : 'bg-gray-800 text-white opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100'
-        }
-      `}>
-        {copied ? <span className="flex items-center gap-1"><FaCheck size={8}/> Copied!</span> : <span className="flex items-center gap-1"><FaCopy size={8}/> Copy</span>}
-      </span>
-    </li>
-  );
-};
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -45,7 +16,12 @@ const Footer = () => {
           <div className="flex flex-col items-center gap-4 text-center">
             <img src={logo} alt="DVein" className="h-10 w-auto object-contain" />
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              <a href="#" className="w-9 h-9 flex items-center justify-center rounded-full bg-white text-[#1877F2] hover:scale-110 transition-transform shadow-sm">
+              <a
+                href="https://www.facebook.com/share/1752aXvNUP/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-white text-[#1877F2] hover:scale-110 transition-transform shadow-sm"
+              >
                 <FaFacebookF size={14} />
               </a>
               <a
@@ -95,20 +71,28 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Right: Contact — centered, with copy-on-hover */}
+          {/* Right: Contact — click phone to call, click email to compose */}
           <div className="flex flex-col items-center text-center">
             <h3 className="text-white text-sm font-bold mb-3 border-b border-dveinGreen inline-block pb-1 uppercase tracking-wider">Contact</h3>
             <ul className="space-y-4 text-sm">
-              <CopyItem
-                value="+919500181230"
-                display="+91 95001 81230"
-                icon={<FaPhoneAlt />}
-              />
-              <CopyItem
-                value="info@dveininnovations.com"
-                display="info@dveininnovations.com"
-                icon={<FaEnvelope />}
-              />
+              <li>
+                <a
+                  href="tel:+919500181230"
+                  className="flex items-center justify-center gap-2 hover:text-dveinGreen transition-colors group"
+                >
+                  <FaPhoneAlt className="text-dveinGreen shrink-0" />
+                  <span>+91 95001 81230</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:info@dveininnovations.com"
+                  className="flex items-center justify-center gap-2 hover:text-dveinGreen transition-colors group"
+                >
+                  <FaEnvelope className="text-dveinGreen shrink-0" />
+                  <span>info@dveininnovations.com</span>
+                </a>
+              </li>
             </ul>
           </div>
 

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { 
-  FaCode, FaMobileAlt, FaBrain, FaCloud, FaDatabase, FaShieldAlt, 
-  FaCheckCircle, FaAws, FaRocket, FaHeadset, FaChartLine, FaLaptopCode, 
-  FaBuilding, FaStethoscope, FaGraduationCap, FaShoppingCart, FaChevronDown, FaChevronUp, FaArrowRight 
+import {
+  FaCode, FaMobileAlt, FaBrain, FaCloud, FaDatabase, FaShieldAlt,
+  FaCheckCircle, FaAws, FaRocket, FaHeadset, FaChartLine, FaLaptopCode,
+  FaBuilding, FaStethoscope, FaGraduationCap, FaShoppingCart, FaChevronDown, FaChevronUp, FaArrowRight,
+  FaSearch, FaPencilRuler, FaCogs, FaLifeRing
 } from 'react-icons/fa';
+import AnimatedRoadmap from '../components/AnimatedRoadmap';
 import { 
   SiReact, SiNodedotjs, SiPython, SiMongodb, SiPostgresql, 
   SiDocker, SiTensorflow, SiFlutter, SiFirebase 
@@ -96,26 +98,18 @@ const SoftwareSolutions = () => {
         </div>
       </div>
 
-      {/* === PROCESS SECTION === */}
-      <div className="bg-white/40 border-y border-white/50 py-20 mb-24 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-               <h2 className="text-3xl font-bold text-gray-900">Our Development Process</h2>
-               <p className="text-gray-600 mt-2">A transparent, agile workflow designed for speed and quality.</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
-                <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gray-200 -z-10"></div>
-                {['Requirement Analysis', 'UI/UX & Architecture', 'Development & QA', 'Deployment & Support'].map((step, index) => (
-                    <div key={index} className="text-center group">
-                        <div className="w-24 h-24 bg-white mx-auto rounded-full flex items-center justify-center shadow-md border-4 border-gray-50 group-hover:border-purple-500 transition-colors mb-6 relative z-10">
-                            <span className="text-2xl font-bold text-gray-400 group-hover:text-purple-600 transition-colors">0{index + 1}</span>
-                        </div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2">{step}</h3>
-                    </div>
-                ))}
-            </div>
-        </div>
-      </div>
+      {/* === ANIMATED PROCESS ROADMAP === */}
+      <AnimatedRoadmap
+        title="Our Development Process"
+        subtitle="A transparent, agile workflow engineered for speed, quality, and scale."
+        accent="bg-purple-500"
+        steps={[
+          { icon: <FaSearch />,      label: 'Requirement Analysis',  desc: 'Deep dive into your goals, users, and technical needs to define the perfect scope.', color: 'bg-purple-600' },
+          { icon: <FaPencilRuler />, label: 'UI/UX & Architecture',  desc: 'Design system blueprints, wireframes, and scalable tech architecture.', color: 'bg-indigo-600' },
+          { icon: <FaCogs />,        label: 'Development & QA',      desc: 'Agile sprints with continuous testing, code reviews, and performance benchmarks.', color: 'bg-blue-600' },
+          { icon: <FaLifeRing />,    label: 'Deployment & Support',  desc: 'CI/CD pipeline launch, monitoring setup, and round-the-clock post-launch support.', color: 'bg-cyan-600' },
+        ]}
+      />
 
       {/* === KEY SERVICES === */}
       <div id="services" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
