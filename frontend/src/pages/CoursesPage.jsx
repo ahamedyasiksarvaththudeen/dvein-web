@@ -52,9 +52,14 @@ const AcademyPage = () => {
           </p>
 
           <div className="flex justify-center gap-4">
-            <button className="bg-indigo-600 text-white px-9 py-4 rounded-xl font-medium text-sm shadow hover:bg-indigo-700 transition">
+            <a
+              href="https://forms.gle/tB3wjiN8QQewdRB68"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-indigo-600 text-white px-9 py-4 rounded-xl font-medium text-sm shadow hover:bg-indigo-700 transition"
+            >
               Browse Curriculum
-            </button>
+            </a>
             <button className="bg-white border border-slate-200 text-slate-700 px-9 py-4 rounded-xl font-medium text-sm hover:bg-slate-50 transition">
               Download Roadmap
             </button>
