@@ -3,15 +3,26 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Inter', sans-serif;
-  color: #1F2937;
+  font-family: 'DM Sans', sans-serif;
+  color: #374151;           /* textBody — warm dark gray */
   background-color: #ffffff;
   overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', sans-serif;
-  color: #0056D2; /* DVein Blue */
+  font-family: 'Space Grotesk', sans-serif;
+  color: #0D1117;           /* textPrimary — deep near-black */
+  letter-spacing: -0.02em; /* Space Grotesk looks best slightly tight */
+  line-height: 1.2;
+}
+
+/* Tech tags and code-style elements */
+.font-mono, code, pre {
+  font-family: 'JetBrains Mono', monospace;
 }
 
 /* DVein brand accent overrides */

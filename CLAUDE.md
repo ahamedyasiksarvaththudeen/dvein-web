@@ -8,6 +8,7 @@ Full-stack web application for DVein Innovations, a Chennai-based IT company off
 ### Frontend
 - **React 19** + **Vite 7** (port 5173)
 - **Tailwind CSS** with custom colors (`dveinBlue: #0056D2`, `dveinGreen: #10B981`)
+- **Fonts**: Space Grotesk (headings), DM Sans (body), JetBrains Mono (code/tags) — via Google Fonts
 - **Framer Motion** for animations
 - **React Router v7** for routing
 - **react-icons** v5.5.0 (use `react-icons/fa` and `react-icons/fa6` for FaXTwitter)
