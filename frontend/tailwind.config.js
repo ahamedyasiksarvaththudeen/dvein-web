@@ -15,9 +15,9 @@ export default {
         bgGray: '#F4F7F6',
         // Refined Text Palette
         textPrimary: '#0D1117',   // Near-black — headings
-        textBody: '#374151',      // Dark slate — body paragraphs
-        textMuted: '#6B7280',     // Medium gray — subtext, captions
-        textLight: '#9CA3AF',     // Light gray — placeholders, footer meta
+        textBody: '#005ff7',      // Dark slate — body paragraphs
+        textMuted: '#0055fe',     // Medium gray — subtext, captions
+        textLight: '#0056ea',     // Light gray — placeholders, footer meta
         textAccent: '#0056D2',    // DVein blue — links, highlights
         textSuccess: '#059669',   // Emerald — positive badges
         // Legacy aliases

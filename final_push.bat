@@ -9,7 +9,7 @@ git config user.name "Genjaku"
 
 git add -A
 
-git commit -m "fix: Restore complete file integrity and clean restart setup"
+git commit -m "chore: Remove 15 redundant bat files, clean up root folder"
 
 git push origin main
 
