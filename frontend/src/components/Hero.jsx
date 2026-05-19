@@ -89,7 +89,10 @@ const Hero = () => {
             </span>
             
             {/* Title - Pure White Text with Strong Shadow */}
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.1] mb-6 font-heading text-[#0056D2] drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
+            <h1
+              className="text-4xl md:text-6xl font-extrabold leading-[1.1] mb-6 font-heading drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]"
+              style={{ color: '#0056D2' }}
+            >
               {slides[current].title}
             </h1>
             

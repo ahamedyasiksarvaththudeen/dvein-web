@@ -9,7 +9,7 @@ git config user.name "Genjaku"
 
 git add -A
 
-git commit -m "feat: Change hero slide title color to #0056D2 across all 3 slides"
+git commit -m "feat: Hero title color #0056D2 via inline style for all 3 slides"
 
 git push origin main
 
