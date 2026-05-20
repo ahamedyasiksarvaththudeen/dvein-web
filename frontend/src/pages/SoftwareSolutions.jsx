@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ImageSlideshow from '../components/ImageSlideshow';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaCode, FaMobileAlt, FaBrain, FaCloud, FaDatabase, FaShieldAlt,
@@ -149,35 +150,74 @@ const SoftwareSolutions = () => {
         </div>
       </div>
 
-      {/* === INDUSTRIES (dark section — white text kept) === */}
+      {/* === SOFTWARE PROJECTS === */}
       <div className="bg-[#0f172a] py-20 mb-24 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <span className="font-bold tracking-widest uppercase text-sm" style={{ color: BRAND }}>Industries</span>
-              <h2 className="text-4xl font-bold mt-2 mb-6 text-white">Software for Every Sector</h2>
-              <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                Our technical expertise spans across various industries. We understand the unique challenges and compliance requirements of your sector.
-              </p>
-              <button
-                onClick={() => openWA_SS('Hello DVein Team, I would like to schedule a consultation for software development.')}
-                className="font-bold hover:underline flex items-center gap-2"
-                style={{ color: BRAND }}
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight uppercase">
+              Software Projects
+            </h2>
+            <div className="w-16 h-1 mx-auto mt-4 rounded-full" style={{ backgroundColor: BRAND }}></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "E-Commerce Platform",
+                desc: "Full-stack multi-vendor marketplace with real-time inventory, payment gateway integration, and AI-powered product recommendations.",
+                tags: ["React", "Node.js", "MongoDB", "Stripe"],
+                images: [
+                  "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070",
+                  "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=2070",
+                  "https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=2070"
+                ]
+              },
+              {
+                title: "Healthcare Management System",
+                desc: "Telemedicine portal with appointment scheduling, EHR management, video consultation, and HIPAA-compliant data handling.",
+                tags: ["React", "FastAPI", "PostgreSQL", "WebRTC"],
+                images: [
+                  "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070",
+                  "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=2031",
+                  "https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=2070"
+                ]
+              },
+              {
+                title: "EdTech Learning Platform",
+                desc: "Interactive LMS with live virtual classrooms, progress analytics, automated assessments, and a student performance dashboard.",
+                tags: ["Next.js", "Python", "Firebase", "TensorFlow"],
+                images: [
+                  "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=2074",
+                  "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070",
+                  "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?q=80&w=2070"
+                ]
+              }
+            ].map((project, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-blue-500/40 hover:bg-white/10 transition-all overflow-hidden flex flex-col"
               >
-                Schedule a Consultation <FaArrowRight />
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              {industries.map((ind, i) => (
-                <div key={i} className="bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-blue-500/50 hover:bg-white/10 transition-colors">
-                  <div className="text-3xl mb-3" style={{ color: BRAND }}>{ind.icon}</div>
-                  <h4 className="font-bold text-lg text-white">{ind.name}</h4>
-                  <p className="text-sm text-gray-400 mt-1">{ind.desc}</p>
+                <div className="h-48 relative overflow-hidden">
+                  <ImageSlideshow images={project.images} interval={3000 + i * 500} className="w-full h-full" />
                 </div>
-              ))}
-            </div>
+                <div className="p-6 flex flex-col flex-grow">
+                  <h4 className="font-bold text-lg text-white mb-2">{project.title}</h4>
+                  <p className="text-sm text-gray-400 leading-relaxed mb-4 flex-grow">{project.desc}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag, j) => (
+                      <span key={j} className="text-[10px] font-bold uppercase px-2 py-1 rounded-md bg-white/10 text-blue-300 tracking-wider">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

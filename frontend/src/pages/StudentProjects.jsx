@@ -10,6 +10,7 @@ import {
   FaMemory, FaArrowRight, FaRocket
 } from 'react-icons/fa';
 import AnimatedRoadmap from '../components/AnimatedRoadmap';
+import ImageSlideshow from '../components/ImageSlideshow';
 
 // ✅ FIXED: Changed 'FaRocketLaunch' to 'FaRocket' because it's the standard export
 import { FaArrowRight as FaArrowRightLong } from "react-icons/fa"; 
@@ -22,6 +23,15 @@ import { FaRocket as FaRocketLaunch } from "react-icons/fa";
 
 const StudentProjects = () => {
   const [isSyncing, setIsSyncing] = useState(true);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  const nodeFilters = [
+    { label: 'All Nodes',      value: 'all' },
+    { label: 'Software Node',  value: 'software' },
+    { label: 'Hardware Node',  value: 'hardware' },
+    { label: 'Embedded Node',  value: 'embedded' },
+  ];
 
   useEffect(() => {
     // Initializing high-performance logic nodes
@@ -69,57 +79,122 @@ const StudentProjects = () => {
   const projects = [
     {
       id: 1,
-      category: 'hardware',
-      title: "Smart Factory Predictive Maintenance",
-      student: "IoT Innovation Batch",
-      desc: "Industrial-grade vibration analysis node using ESP32. Identifies machinery failure before downtime with 98% accuracy.",
-      tools: ["ESP32", "MPU6050", "MQTT", "Python"],
-      image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070"
+      category: 'software',
+      title: "AI based Smart Medicine Remainder Android Application",
+      student: "Software Development Batch",
+      desc: "•Smart Reminders • Medicine Tracking • Missed Dose Alerts • Caregiver Notifications • Health Dashboard",
+      tools: [ "React Native","FastAPI","PostgreSQL","Twilio API","Expo Notifications" ],
+      images: [
+        "/project-images/ai-medicine/img1.jpg",
+        "/project-images/ai-medicine/img2.jpg",
+        "/project-images/ai-medicine/img3.jpg",
+        "/project-images/ai-medicine/img4.jpg",
+        "/project-images/ai-medicine/img5.jpg",
+        "/project-images/ai-medicine/img6.jpg",
+        "/project-images/ai-medicine/img7.jpg",
+        "/project-images/ai-medicine/img8.jpg",
+        "/project-images/ai-medicine/img9.jpg",
+      ]
     },
     {
       id: 2,
-      category: 'software',
-      title: "Enterprise HRM AI Dashboard",
-      student: "Full Stack Development",
-      desc: "Cloud-native management ecosystem with automated biometric hardware sync. Engineered for global organization scalability.",
-      tools: ["React", "Node.js", "MongoDB", "Redux"],
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026"
+      category: 'hardware',
+      title: "Crowd Safety Application based on Real Time Metro Station Monitoring",
+      student: "Hardware & IoT Batch",
+      desc: "•Live Crowd Detection • Real-Time Alerts  •Safety Threshold Monitoring •SMS Notifications •Analytics Dashboard •Automated Emergency Indications",
+      tools: ["Arduino Uno","I2C LCD Display","Buzzer","LED Indicators","Camera Module","React Native","FastAPI","OpenCV","Twilio API","Arduino IDE","Serial Communication"],
+      images: [
+        "/project-images/crowd-safety/img1.jpg",
+        "/project-images/crowd-safety/img2.jpg",
+        "/project-images/crowd-safety/img3.jpg",
+        "/project-images/crowd-safety/img4.jpg",
+        "/project-images/crowd-safety/img5.jpg",
+        "/project-images/crowd-safety/img6.jpg",
+        "/project-images/crowd-safety/img7.jpg",
+        "/project-images/crowd-safety/img8.jpg",
+      ]
     },
     {
       id: 3,
       category: 'embedded',
-      title: "Autonomous Hydroponics Node",
-      student: "Embedded Batch",
-      desc: "RTOS-based farming automation node that monitors pH/EC levels and controls nutrient dosing without human intervention.",
-      tools: ["STM32", "FreeRTOS", "Sensors", "Nextion"],
-      image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?q=80&w=1974"
+      title: "Smart Ring Application for Health Monitoring",
+      student: "Embedded Systems Batch",
+      desc: "•Yoga Posture Tracking • Activity Monitoring • Breathing Analysis • Real-Time Health Insights • Smart Notifications • Progress Analytics",
+      tools: ["Smart Sensor Ring", "Motion Sensors", "Bluetooth Module", "Health Monitoring Sensors", "React Native", "FastAPI", "Python", "IoT Sensors", "Bluetooth Communication", "Cloud Analytics"],
+      images: [
+        "/project-images/smart-ring/img1.jpg",
+        "/project-images/smart-ring/img2.jpg",
+        "/project-images/smart-ring/img3.jpg",
+        "/project-images/smart-ring/img4.jpg",
+        "/project-images/smart-ring/img5.jpg",
+      ]
     },
     {
       id: 4,
-      category: 'software',
-      title: "Blockchain Supply Chain Cluster",
-      student: "Web3 Batch",
-      desc: "Distributed ledger node for real-time asset tracking in international logistics, ensuring 100% data integrity.",
-      tools: ["Solidity", "Ether.js", "React", "Express"],
-      image: "https://images.unsplash.com/photo-1561414927-6d86591d0c4f?q=80&w=1973"
+      category: 'hardware',
+      title: "Fingerprint and iris voting system",
+      student: "Hardware Security Batch",
+      desc: " •Facial Recognition Authentication •Secure Vote Casting •Automated Voter Verification •Real-Time LCD Guidance System •Audio & Visual Alert System",
+      tools: ["ESP32-CAM Module","ESP32 DevKit V1","16x2 LCD Display with I2C Module","Push Buttons","Active Buzzer","LED Indicators","OV2640 Camera Sensor"],
+      images: [
+        "/project-images/iris-voting/img1.jpg",
+        "/project-images/iris-voting/img2.jpg",
+      ]
     },
     {
       id: 5,
-      category: 'hardware',
-      title: "LoRa Emergency Mesh System",
-      student: "Communication Batch",
-      desc: "Off-grid disaster management node that creates a private communication mesh over 10km using LoRa technology.",
-      tools: ["LoRa SX1278", "ESP32", "GPS", "Custom PCB"],
-      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070"
+      category: 'software',
+      title: "Maternal Health Tracker",
+      student: "Software Development Batch",
+      desc: " •Maternal Health Monitoring System •Real-Time Body Temperature Tracking •Automatic Fall Detection & Emergency Alerts •BLE-Based Mobile App Connectivity •Doctor & Patient Real-Time Monitoring Dashboard",
+      tools: ["ESP32 Development Board","MAX30102 Sensor","MPU6050 Sensor","Temperature Sensor","Li-ion Battery","React Native","Spring Boot","MySQL Database"],
+      images: [
+        "/project-images/maternal-health/img1.jpg",
+        "/project-images/maternal-health/img2.jpg",
+        "/project-images/maternal-health/img3.jpg",
+        "/project-images/maternal-health/img4.jpg",
+        "/project-images/maternal-health/img5.jpg",
+        "/project-images/maternal-health/img6.jpg",
+      ]
     },
     {
       id: 6,
       category: 'embedded',
-      title: "Biometric Door Lock Node",
-      student: "Security Batch",
-      desc: "Highly secure fingerprint and RFID based locking system with real-time logging via cloud dashboard.",
-      tools: ["Arduino", "AS608 Fingerprint", "Node.js", "Firebase"],
-      image: "https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=2070"
+      title: "Smart Plant Monitoring system using Raspberry pi and ESP32",
+      student: "Embedded Systems Batch",
+      desc: "•Dynamic Product Catalog System •Secure UPI Payment Verification •Automated WhatsApp Order Routing •Hyper-Local Multi-State SEO Optimization •Fully Responsive Cross-Browser Design",
+      tools: ["React.js","TailwindCSS","FramerMotion","Node.js","Express.js","MongoDB Atlas"],
+      images: [
+        "/project-images/smart-plant/img1.jpg",
+        "/project-images/smart-plant/img2.jpg",
+      ]
+    },
+    {
+      id: 7,
+      category: 'hardware',
+      title: "Intelligent Mobility and Safety Assistance System for Visually Impaired Individuals",
+      student: "Hardware & AI Batch",
+      desc: "•Real-Time Object Detection •Face Recognition System •OCR-Based Text Reading •Voice Command Navigation •Bluetooth Audio Assistance",
+      tools: ["Raspberry Pi", "Python", "TensorFlow", "Ultralytics", "EasyOCR", "Pyttsx3", "SpeechRecognition"],
+      images: [
+        "/project-images/safety-assist/img1.jpg",
+      ]
+    },
+    {
+      id: 8,
+      category: 'embedded',
+      title: "Smart Traffic Accident Hotspot Prediction and Prevention System",
+      student: "Embedded & Web Batch",
+      desc: "•Real-Time Safety Monitoring • Emergency Alerts • Sensor-Based Detection • Live Dashboard • Automated Notifications • Risk Analysis",
+      tools: [" Arduino/ESP32","Smoke Sensor","Temperature Sensor","Gas Sensor","Buzzer","LED Indicators","FastAPI","React","IoT Sensors","Arduino IDE","Cloud Monitoring Systems"],
+      images: [
+        "/project-images/traffic-accidents/img1.png",
+        "/project-images/traffic-accidents/img2.png",
+        "/project-images/traffic-accidents/img3.png",
+        "/project-images/traffic-accidents/img4.png",
+        "/project-images/traffic-accidents/img5.png",
+        "/project-images/traffic-accidents/img6.png",
+      ]
     }
   ];
 
@@ -224,13 +299,58 @@ const StudentProjects = () => {
 
       {/* 5. PROJECT REPOSITORY - REFINED COMPACT CARDS */}
       <section id="repository" className="max-w-7xl mx-auto px-6 py-32">
-        <div className="mb-16">
-          <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900 uppercase tracking-tight mb-2">Project Repository.</h2>
-          <p className="text-slate-400 font-extrabold uppercase text-[10px] tracking-[0.4em]">Active Knowledge Repository Hub</p>
+        <div className="mb-16 flex flex-col sm:flex-row sm:items-end gap-6 justify-between">
+          <div>
+            <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900 uppercase tracking-tight mb-2">Project Repository.</h2>
+            <p className="text-slate-400 font-extrabold uppercase text-[10px] tracking-[0.4em]">Active Knowledge Repository Hub</p>
+          </div>
+
+          {/* ── DROPDOWN FILTER ── */}
+          <div className="relative">
+            <button
+              onClick={() => setFilterOpen(prev => !prev)}
+              className="flex items-center gap-3 bg-white border border-slate-200 hover:border-indigo-400 shadow-sm px-5 py-3 rounded-xl font-extrabold text-[10px] uppercase tracking-widest text-slate-700 hover:text-indigo-600 transition-all min-w-[180px] justify-between"
+            >
+              <span>{nodeFilters.find(f => f.value === activeFilter)?.label}</span>
+              <svg
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${filterOpen ? 'rotate-180' : ''}`}
+                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <AnimatePresence>
+              {filterOpen && (
+                <motion.ul
+                  initial={{ opacity: 0, y: -6, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -6, scale: 0.97 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute right-0 mt-2 w-full bg-white border border-slate-100 rounded-xl shadow-2xl overflow-hidden z-50"
+                >
+                  {nodeFilters.map(f => (
+                    <li key={f.value}>
+                      <button
+                        onClick={() => { setActiveFilter(f.value); setFilterOpen(false); }}
+                        className={`w-full text-left px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest transition-colors
+                          ${activeFilter === f.value
+                            ? 'bg-indigo-600 text-white'
+                            : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-600'
+                          }`}
+                      >
+                        {f.label}
+                      </button>
+                    </li>
+                  ))}
+                </motion.ul>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
+          {projects.filter(p => activeFilter === 'all' || p.category === activeFilter).map((project) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -238,8 +358,8 @@ const StudentProjects = () => {
               className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all overflow-hidden flex flex-col group h-full"
             >
                <div className="h-56 overflow-hidden relative">
-                  <img src={project.image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={project.title} />
-                  <div className="absolute top-5 left-5">
+                  <ImageSlideshow images={project.images} interval={3500} className="w-full h-full" />
+                  <div className="absolute top-5 left-5 z-10">
                       <span className="bg-white/95 px-3 py-1.5 rounded-lg text-[9px] font-extrabold text-indigo-600 uppercase shadow-sm border border-indigo-50">
                           {project.category} node
                       </span>
