@@ -5,6 +5,23 @@ import { FaXTwitter } from 'react-icons/fa6';
 import { SiPython, SiDocker, SiNodedotjs, SiReact, SiGithub } from 'react-icons/si';
 import logo from '../assets/logo.png';
 
+const GoogleMapsIcon = ({ size = 18 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 48 48"
+    role="img"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path fill="#1A73E8" d="M24 2C15.2 2 8 9.1 8 17.9c0 11.9 16 28.1 16 28.1s16-16.2 16-28.1C40 9.1 32.8 2 24 2z" />
+    <path fill="#34A853" d="M40 17.9c0 11.9-16 28.1-16 28.1V29.8c5.7 0 10.4-4.7 10.4-10.4 0-2.5-.9-4.8-2.4-6.6l4.4-4.4c2.3 2.5 3.6 5.8 3.6 9.5z" />
+    <path fill="#FBBC04" d="M24 29.8V46S14.4 36.3 10 26.1l8.4-8.4c-.1.5-.2 1.1-.2 1.7 0 5.7 4.6 10.4 10.4 10.4z" />
+    <path fill="#EA4335" d="M10 26.1C8.8 23.2 8 20.4 8 17.9c0-4.4 1.8-8.4 4.7-11.2l8.2 8.2c-1.4.9-2.3 2.4-2.5 2.8L10 26.1z" />
+    <path fill="#FFFFFF" d="M24 11.8a7.6 7.6 0 1 1 0 15.2 7.6 7.6 0 0 1 0-15.2z" />
+  </svg>
+);
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -55,10 +72,10 @@ const Footer = () => {
                 href="https://maps.google.com/maps?q=Alpha+City+IT+Park+Navalur+Chennai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-dveinGreen text-white hover:scale-110 transition-transform shadow-sm"
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-white text-dveinGreen hover:scale-110 transition-transform shadow-sm"
                 title="Get Directions"
               >
-                <FaMapMarkerAlt size={14} />
+                <GoogleMapsIcon size={18} />
               </a>
             </div>
           </div>
