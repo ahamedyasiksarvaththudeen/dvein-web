@@ -120,7 +120,25 @@ a:hover {
   border: 2px solid #10B981;
 }
 
-/* --- 5. CLIENT MARQUEE --- */
+/* --- 5. FOOTER FLOATING ICONS --- */
+.floating-bubble,
+.floating-icon {
+  animation: float-motion 7s ease-in-out infinite;
+}
+.float-1 { animation-delay: 0s; }
+.float-2 { animation-delay: 0.8s; }
+.float-3 { animation-delay: 1.6s; }
+.float-4 { animation-delay: 2.4s; }
+
+@keyframes float-motion {
+  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+  20% { transform: translate(-2px, -8px) rotate(-1deg); }
+  40% { transform: translate(4px, -4px) rotate(1deg); }
+  60% { transform: translate(-3px, 3px) rotate(-0.5deg); }
+  80% { transform: translate(2px, 6px) rotate(0.5deg); }
+}
+
+/* --- 6. CLIENT MARQUEE --- */
 @keyframes marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }

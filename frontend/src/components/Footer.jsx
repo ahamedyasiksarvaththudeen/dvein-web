@@ -102,10 +102,10 @@ const Footer = () => {
         </div>
         {/* Floating icons (separate centered row inside footer) */}
         <div className="flex justify-center gap-3 mb-6">
-          <a href="https://www.python.org/downloads/" target="_blank" rel="noopener noreferrer" className="w-11 h-11 flex items-center justify-center rounded-full floating-bubble floating-icon float-1 bg-yellow-400" title="Python">
-            <SiPython size={18} color="#3776AB" />
+          <a href="https://www.python.org/downloads/" target="_blank" rel="noopener noreferrer" className="w-11 h-11 flex items-center justify-center rounded-full floating-bubble floating-icon float-1" title="Python">
+            <SiPython size={18} color="#148FF4" />
           </a>
-          <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="w-11 h-11 flex items-center justify-center rounded-full floating-bubble floating-icon float-2 bg-gray-900" title="GitHub">
+          <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="w-11 h-11 flex items-center justify-center rounded-full floating-bubble floating-icon float-2" title="GitHub">
             <SiGithub size={18} color="#FFFFFF" />
           </a>
           <a href="https://react.dev/learn/installation" target="_blank" rel="noopener noreferrer" className="w-11 h-11 flex items-center justify-center rounded-full floating-bubble floating-icon float-3" title="React">
