@@ -171,9 +171,9 @@ const Training = () => {
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900">Choose Your Internships</h2>
             <p className="text-gray-500 font-medium">Great courses built for high-performance careers.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {data.domains?.map((domain, index) => (
-              <motion.div key={domain._id} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: (index % 4) * 0.08 }} className="bg-white/70 backdrop-blur-md border border-white/50 rounded-[1.5rem] p-6 hover:shadow-xl transition-all group">
+              <motion.div key={domain._id} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: (index % 5) * 0.08 }} className="bg-white/70 backdrop-blur-md border border-white/50 rounded-[1.5rem] p-6 hover:shadow-xl transition-all group">
                 <div className={`w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-2xl ${domain.color} mb-6 group-hover:scale-110 transition-transform`}>{getIcon(domain.iconName)}</div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{domain.title}</h3>
                 <p className="text-gray-500 text-sm mb-8 leading-relaxed font-medium">{domain.desc}</p>
@@ -186,34 +186,6 @@ const Training = () => {
                 >Apply Now <FaIcons.FaArrowRight /></button>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* CURRICULUM */}
-      <div className="py-24 bg-[#0f172a] text-white rounded-[3rem] mx-4 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            <div>
-              <h2 className="text-3xl md:text-5xl font-black mb-6 leading-tight tracking-tight">What will you master?</h2>
-              <p className="text-gray-400 mb-10 leading-relaxed font-medium">Our curriculum is engineered backward from industry hiring requirements.</p>
-              <div className="flex gap-4">
-                <button onClick={() => setActiveTab('web')} className={`px-6 py-3 rounded-xl font-bold text-sm transition-all ${activeTab === 'web' ? 'bg-blue-600 text-white' : 'bg-white/5 text-gray-400 border border-white/10'}`}>Web Track</button>
-                <button onClick={() => setActiveTab('ai')}  className={`px-8 py-3 rounded-xl font-bold text-sm transition-all ${activeTab === 'ai'  ? 'bg-blue-600 text-white' : 'bg-white/5 text-gray-400 border border-white/10'}`}>AI Track</button>
-              </div>
-            </div>
-            <div className="space-y-8">
-              {data.curriculum && data.curriculum[activeTab]?.map((item, index) => (
-                <div key={item._id} className="flex gap-6 group">
-                  <div className="text-white/10 font-black text-3xl group-hover:text-blue-50 transition-colors">0{index + 1}</div>
-                  <div>
-                    <span className="text-blue-400 font-bold text-[10px] uppercase tracking-widest mb-1 block">{item.week}</span>
-                    <h4 className="text-lg font-bold mb-2">{item.title}</h4>
-                    <p className="text-gray-400 leading-relaxed text-xs font-medium">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
@@ -384,21 +356,6 @@ const Training = () => {
         </div>
       </div>
 
-      {/* PROJECTS */}
-      <div className="py-20 max-w-7xl mx-auto px-6">
-        <h2 className="text-3xl font-black text-center mb-14 tracking-tight">Industry Portfolio</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {data.projects?.map((project) => (
-            <div key={project._id} className="bg-white rounded-[1.5rem] p-8 border border-gray-100 shadow-sm flex flex-col justify-between">
-              <div>
-                <span className="text-[9px] font-black bg-blue-50 text-blue-600 px-3 py-1 rounded-full uppercase tracking-widest">Enterprise</span>
-                <h3 className="text-lg font-black mt-4 mb-2">{project.title}</h3>
-                <p className="text-gray-400 text-xs leading-relaxed">{project.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* FAQ */}
       <div className="py-20 max-w-3xl mx-auto px-6">

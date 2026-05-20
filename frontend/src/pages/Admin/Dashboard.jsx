@@ -31,6 +31,12 @@ const Dashboard = () => {
     const [productData, setProductData] = useState({ name: '', description: '', price: '', version: '1.0', category: 'Software', image: null });
     const [productPreview, setProductPreview] = useState(null);
 
+    // --- SUCCESS STORIES STATES ---
+    const [successStories, setSuccessStories] = useState([]);
+    const [showStoryForm, setShowStoryForm] = useState(false);
+    const [storyData, setStoryData] = useState({ title: '', description: '', videoUrl: '', image: null });
+    const [storyPreview, setStoryPreview] = useState(null);
+
     const fetchData = useCallback(() => {
         const token = localStorage.getItem('adminToken');
         const headers = { 'Authorization': `Bearer ${token}` };
@@ -41,6 +47,8 @@ const Dashboard = () => {
         fetch('http://localhost:5000/api/public/jobs').then(res => res.json()).then(data => setJobs(data)).catch(err => console.error(err));
         // Fetch Products
         fetch('http://localhost:5000/api/public/products').then(res => res.json()).then(data => setProducts(data)).catch(err => console.error(err));
+        // Fetch Success Stories
+        fetch('http://localhost:5000/api/public/success-stories').then(res => res.json()).then(data => setSuccessStories(data)).catch(err => console.error(err));
     }, []);
 
     useEffect(() => {
@@ -64,6 +72,25 @@ const Dashboard = () => {
     const handleDeleteApp = async (id) => { if (!window.confirm("Delete?")) return; const token = localStorage.getItem('adminToken'); await fetch(`http://localhost:5000/api/admin/applications/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } }); fetchData(); };
     const handleBulkDelete = async () => { if (!window.confirm("Bulk Delete?")) return; const token = localStorage.getItem('adminToken'); await fetch(`http://localhost:5000/api/admin/bulk-delete`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ ids: selectedIds }) }); setSelectedIds([]); fetchData(); };
     const handleLogout = () => { localStorage.clear(); navigate('/admin/login'); };
+
+    // --- SUCCESS STORY HANDLERS ---
+    const handleStorySubmit = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+        const data = new FormData();
+        data.append('title', storyData.title);
+        data.append('description', storyData.description);
+        data.append('videoUrl', storyData.videoUrl);
+        if (storyData.image) data.append('image', storyData.image);
+        const res = await fetch('http://localhost:5000/api/admin/success-stories', { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: data });
+        if (res.ok) { setShowStoryForm(false); setStoryData({ title: '', description: '', videoUrl: '', image: null }); setStoryPreview(null); fetchData(); }
+    };
+    const handleDeleteStory = async (id) => {
+        if (!window.confirm('Delete this story?')) return;
+        const token = localStorage.getItem('adminToken');
+        await fetch(`http://localhost:5000/api/admin/success-stories/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+        fetchData();
+    };
 
     // --- NEW PRODUCT HANDLERS (புதியது) ---
     const handleProductSubmit = async (e) => {
@@ -232,6 +259,56 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+
+                {/* Success Stories Section */}
+                <div className="mb-16 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <div className="flex justify-between items-center mb-8">
+                        <h2 className="text-sm font-black uppercase tracking-widest text-slate-700">Our Success Story ({successStories.length})</h2>
+                        <button onClick={() => setShowStoryForm(!showStoryForm)} className="bg-indigo-600 text-white px-5 py-2 rounded-xl font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-indigo-200">
+                            {showStoryForm ? <FaTimes /> : <FaPlus />} Add Story
+                        </button>
+                    </div>
+
+                    {showStoryForm && (
+                        <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-10 text-xs animate-fadeIn">
+                            <form onSubmit={handleStorySubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input required className="p-3 rounded-xl outline-none border border-slate-200" placeholder="Title (e.g. John's Placement at Google)" value={storyData.title} onChange={e => setStoryData({...storyData, title: e.target.value})} />
+                                <input className="p-3 rounded-xl outline-none border border-slate-200" placeholder="Video URL (YouTube embed, optional)" value={storyData.videoUrl} onChange={e => setStoryData({...storyData, videoUrl: e.target.value})} />
+                                <textarea required className="p-3 rounded-xl outline-none border border-slate-200 md:col-span-2" placeholder="Description / story text" rows="3" value={storyData.description} onChange={e => setStoryData({...storyData, description: e.target.value})} />
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Image (optional)</label>
+                                    <input type="file" accept="image/*" className="p-2 text-[10px]" onChange={e => { setStoryData({...storyData, image: e.target.files[0]}); setStoryPreview(URL.createObjectURL(e.target.files[0])); }} />
+                                    {storyPreview && <img src={storyPreview} alt="preview" className="h-20 w-20 object-cover rounded-lg shadow-sm mt-1" />}
+                                </div>
+                                <button type="submit" className="bg-indigo-600 text-white rounded-xl font-black uppercase tracking-widest py-3 flex items-center justify-center gap-2 self-end"><FaPlus /> Publish Story</button>
+                            </form>
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                        {successStories.map(story => (
+                            <div key={story._id} className="bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden group relative">
+                                {story.videoUrl ? (
+                                    <div className="w-full aspect-video bg-black">
+                                        <iframe src={story.videoUrl} className="w-full h-full" allowFullScreen title={story.title} />
+                                    </div>
+                                ) : story.image ? (
+                                    <div className="h-36 overflow-hidden">
+                                        <img src={story.image} alt={story.title} className="w-full h-full object-cover" />
+                                    </div>
+                                ) : (
+                                    <div className="h-20 bg-indigo-50 flex items-center justify-center text-indigo-300 text-3xl">📸</div>
+                                )}
+                                <div className="p-4">
+                                    <h4 className="font-bold text-slate-800 text-xs mb-1">{story.title}</h4>
+                                    <p className="text-[10px] text-slate-400 leading-relaxed line-clamp-2">{story.description}</p>
+                                </div>
+                                <button onClick={() => handleDeleteStory(story._id)} className="absolute top-2 right-2 p-2 bg-white rounded-full text-red-500 shadow-sm opacity-0 group-hover:opacity-100 transition"><FaTrash size={10}/></button>
+                            </div>
+                        ))}
+                        {successStories.length === 0 && <p className="text-slate-400 text-xs col-span-3 py-4">No stories yet. Add one above.</p>}
                     </div>
                 </div>
 

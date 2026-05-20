@@ -8,6 +8,9 @@ import {
 } from 'react-icons/fa';
 import clientImg from '../assets/client-img.jpg';
 import dveinLogo from '../assets/logo.png';
+import studentsImg from '../assets/students-img.jpeg';
+import vid1Src from '../assets/vid1.mp4';
+import vid2Src from '../assets/vid2.mp4';
 
 const WA_CAREER = '918667363896';
 
@@ -21,15 +24,44 @@ const CareerHub = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [liveJobs, setLiveJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [successStories, setSuccessStories] = useState([]);
   const [activeTab, setActiveTab] = useState('details');
   const dnaRef = useRef(null);
   const dnaInView = useInView(dnaRef, { once: true, margin: '-80px' });
+
+  // Media carousel for "Our Success Story"
+  const [mediaIndex, setMediaIndex] = useState(0);
+  const vid1Ref = useRef(null);
+  const vid2Ref = useRef(null);
+
+  const mediaItems = [
+    { type: 'image', src: studentsImg, alt: 'DVein Students' },
+    { type: 'video', src: vid1Src, ref: vid1Ref },
+    { type: 'video', src: vid2Src, ref: vid2Ref },
+  ];
+
+  const navigateMedia = (dir) => {
+    // Pause any playing video before switching
+    [vid1Ref, vid2Ref].forEach(r => {
+      if (r.current) { r.current.pause(); r.current.currentTime = 0; }
+    });
+    const newIndex = (mediaIndex + dir + mediaItems.length) % mediaItems.length;
+    setMediaIndex(newIndex);
+    // Auto-play if the new slide is a video
+    if (mediaItems[newIndex].type === 'video') {
+      setTimeout(() => { mediaItems[newIndex].ref.current?.play(); }, 80);
+    }
+  };
 
   useEffect(() => {
     fetch('http://localhost:5000/api/public/jobs')
       .then(res => res.json())
       .then(data => { setLiveJobs(data); setLoading(false); })
       .catch(err => { console.error(err); setLoading(false); });
+    fetch('http://localhost:5000/api/public/success-stories')
+      .then(res => res.json())
+      .then(data => setSuccessStories(data))
+      .catch(() => {});
   }, []);
 
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', portfolio: '', resume: null });
@@ -62,18 +94,18 @@ const CareerHub = () => {
   };
 
   return (
-    <div className="font-sans text-slate-900 bg-white min-h-screen pt-24 selection:bg-purple-600 selection:text-white overflow-x-hidden flex flex-col items-center">
+    <div className="font-sans text-slate-900 bg-gradient-to-br from-blue-50 via-white to-indigo-50 min-h-screen pt-24 selection:bg-purple-600 selection:text-white overflow-x-hidden flex flex-col items-center">
 
       {/* 1. HERO - simple header */}
       <section className="w-full max-w-5xl px-6 py-12 flex flex-col items-center text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center w-full">
-          <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-black leading-none mb-4">Build Your Career</h1>
-          <p className="text-slate-500 text-sm font-medium max-w-xl"></p>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-black leading-none mb-4">Build Your Career.</h1>
+          <p className="text-slate-500 text-base font-normal max-w-xl text-center">Upskill your career with DVein Innovations</p>
         </motion.div>
       </section>
 
       {/* 2. RECRUITMENT PANELS */}
-      <section className="w-full py-20 px-6 bg-white flex flex-col items-center rounded-t-[3rem] md:rounded-t-[5rem] mx-4 shadow-2xl">
+      <section className="w-full py-20 px-6 flex flex-col items-center">
         <div className="max-w-5xl w-full grid gap-6 md:grid-cols-2">
           <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 text-left shadow-sm">
             <div className="relative h-56 overflow-hidden rounded-[2rem] mb-6">
@@ -94,28 +126,126 @@ const CareerHub = () => {
         </div>
       </section>
 
-      {/* 3. MISSION */}
+      {/* 3. OUR SUCCESS STORY */}
       <section className="w-full py-20 px-6 bg-white border-y border-slate-50">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          <div className="relative group">
-            <div className="absolute inset-0 bg-slate-100 rounded-[2rem] rotate-3 group-hover:rotate-0 transition-transform duration-500"></div>
-            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=100&w=1200&auto=format&fit=crop" alt="Rich Content" className="w-full h-full object-cover rounded-[2rem] shadow-2xl relative z-10" />
+        <div className="max-w-7xl mx-auto">
+          {/* Centered heading */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none mb-4">Our Success Story.</h2>
+            <p className="text-slate-500 text-sm leading-relaxed font-normal max-w-xl mx-auto">Real stories from real people who built their careers with DVein Innovations. Every image, video, and milestone shared here is a testament to what dedication and the right guidance can achieve.</p>
           </div>
-          <div className="text-left space-y-8">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none">Engineering Excellence.</h2>
-            <div className="space-y-6 text-slate-600 text-sm md:text-base font-medium leading-relaxed">
-              <p>Our engineering culture is built on the principles of speed and radical ownership. We architect digital universes that solve real-world complexities at scale.</p>
-              <p>At Dvein, you are empowered to lead your own feature sets. From design patterns to global deployment, you own the entire lifecycle of the code you ship.</p>
-              <div className="grid grid-cols-1 gap-4 pt-4">
-                {[{i: <FaMicrochip/>, t: "R&D Focus", d: "We dedicate 20% of time to future frameworks and AI research labs."}, {i: <FaNetworkWired/>, t: "Scalable Nodes", d: "Systems designed for 10x growth with zero performance leaks."}].map((item, i) => (
-                  <div key={i} className="flex gap-4 items-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <div className="text-slate-700 text-xl">{item.i}</div>
-                    <div><h4 className="font-bold text-xs text-slate-900 uppercase">{item.t}</h4><p className="text-[11px] text-slate-400">{item.d}</p></div>
-                  </div>
-                ))}
-              </div>
+
+          {/* Media Carousel: students image + vid1 + vid2 */}
+          <div className="relative max-w-4xl mx-auto mb-14 select-none px-6">
+            {/* Tilt background only on image slide */}
+            {mediaItems[mediaIndex].type === 'image' && (
+              <div className="absolute inset-0 bg-blue-100 rounded-[2rem] rotate-3 transition-transform duration-500 pointer-events-none" />
+            )}
+
+            {/* Slides */}
+            <div className="relative z-10 rounded-[2rem] overflow-hidden shadow-2xl bg-black">
+              {mediaItems.map((item, idx) => (
+                <div key={idx} className={idx === mediaIndex ? 'block' : 'hidden'}>
+                  {item.type === 'image' ? (
+                    /* Landscape image — full width, 16:9 ratio, cover-cropped */
+                    <img
+                      src={item.src}
+                      alt={item.alt}
+                      className="w-full aspect-video object-cover"
+                    />
+                  ) : (
+                    /* Portrait video — natural aspect ratio, centred, never cropped */
+                    <div className="flex justify-center items-center bg-black w-full py-4">
+                      <video
+                        ref={item.ref}
+                        src={item.src}
+                        className="w-auto max-w-full"
+                        style={{ maxHeight: '70vh', height: '560px' }}
+                        controls
+                        playsInline
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Left Arrow */}
+            <button
+              onClick={() => navigateMedia(-1)}
+              aria-label="Previous"
+              className="absolute left-[-4px] top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center hover:bg-slate-50 active:scale-95 transition-all"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+
+            {/* Right Arrow */}
+            <button
+              onClick={() => navigateMedia(1)}
+              aria-label="Next"
+              className="absolute right-[-4px] top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center hover:bg-slate-50 active:scale-95 transition-all"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+
+            {/* Dot indicators */}
+            <div className="flex justify-center gap-2 mt-5">
+              {mediaItems.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    [vid1Ref, vid2Ref].forEach(r => { if (r.current) { r.current.pause(); r.current.currentTime = 0; } });
+                    setMediaIndex(idx);
+                    if (mediaItems[idx].type === 'video') {
+                      setTimeout(() => { mediaItems[idx].ref.current?.play(); }, 80);
+                    }
+                  }}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === mediaIndex ? 'bg-slate-800 scale-110' : 'bg-slate-300 hover:bg-slate-400'}`}
+                />
+              ))}
             </div>
           </div>
+
+          {/* Story Cards */}
+          {successStories.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {successStories.map((story, i) => (
+                <motion.div
+                  key={story._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.07 }}
+                  className="bg-slate-50 border border-slate-100 rounded-[1.5rem] overflow-hidden shadow-sm hover:shadow-lg transition-all"
+                >
+                  {/* Media: video takes priority over image */}
+                  {story.videoUrl ? (
+                    <div className="relative w-full aspect-video bg-black">
+                      <iframe
+                        src={story.videoUrl}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        title={story.title}
+                      />
+                    </div>
+                  ) : story.image ? (
+                    <div className="w-full h-48 overflow-hidden">
+                      <img src={story.image} alt={story.title} className="w-full h-full object-cover" />
+                    </div>
+                  ) : null}
+                  <div className="p-6">
+                    <h3 className="font-black text-slate-900 text-base mb-2">{story.title}</h3>
+                    <p className="text-slate-500 text-xs leading-relaxed">{story.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
         </div>
       </section>
 
