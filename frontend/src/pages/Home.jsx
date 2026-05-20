@@ -7,7 +7,6 @@ import HowWeDo from '../components/HowWeDo';
 import WhyChooseUs from '../components/WhyChooseUs';
 import ServiceHighlights from '../components/ServiceHighlights';
 import Stats from '../components/Stats';
-import TrainingHighlights from '../components/TrainingHighlights';
 import Testimonials from '../components/Testimonials';
 import Footer from '../components/Footer';
 import WhatsAppBtn from '../components/common/WhatsAppBtn';
@@ -31,7 +30,6 @@ const Home = () => {
         <WhyChooseUs />
         <ServiceHighlights />
         <Stats />
-        <TrainingHighlights />
         <Testimonials />
       </main>
       

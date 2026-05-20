@@ -294,13 +294,9 @@ const CareerHub = () => {
                 </div>
               </div>
             </motion.div>
-          </div>
+        </div>
         )}
       </AnimatePresence>
-
-      <footer className="w-full py-10 text-center border-t border-slate-100">
-        <p className="text-xs text-slate-400">2026 DVein Innovations - Career Hub</p>
-      </footer>
     </div>
   );
 };

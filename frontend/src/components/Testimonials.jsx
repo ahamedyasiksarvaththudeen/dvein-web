@@ -22,9 +22,9 @@ const Testimonials = () => {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-5 py-2 rounded-full shadow-sm mb-4 border border-white/50 cursor-pointer">
             <FaGoogle className="text-red-500 text-xl" />
-            <span className="font-bold text-gray-700">Rated 5.0 on Google Reviews</span>
+            <span className="font-bold text-black">Rated 5.0 on Google Reviews</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-heading">Loved by Clients & Students</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-black font-heading">Loved by Clients & Students</h2>
         </div>
 
         {/* Swiper with Strict Columns (No Half Cuts) */}
@@ -67,15 +67,15 @@ const Testimonials = () => {
                   {[...Array(review.rating)].map((_, i) => <FaStar key={i} />)}
                 </div>
                 
-                <p className="text-gray-600 mb-8 italic relative z-10 text-base leading-relaxed flex-grow">"{review.text}"</p>
+                <p className="text-black mb-8 italic relative z-10 text-base leading-relaxed flex-grow">"{review.text}"</p>
                 
                 <div className="flex items-center gap-4 mt-auto pt-4 border-t border-gray-100">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-dveinBlue to-cyan-500 flex items-center justify-center text-white font-bold text-lg shadow-md">
                     {review.name.charAt(0)}
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900 text-base font-heading">{review.name}</h4>
-                    <p className="text-xs text-dveinBlue font-medium">{review.role}</p>
+                    <h4 className="font-bold text-black text-base font-heading">{review.name}</h4>
+                    <p className="text-xs text-black font-medium">{review.role}</p>
                   </div>
                 </div>
               </div>

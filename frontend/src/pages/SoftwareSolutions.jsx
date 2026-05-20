@@ -64,7 +64,7 @@ const SoftwareSolutions = () => {
       {/* === HERO === */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 text-center">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <span className="inline-block py-1 px-3 rounded-full bg-white border border-blue-100 text-black text-sm font-bold tracking-wider mb-4 shadow-sm">
+          <span className="inline-block py-1.5 px-4 rounded-full bg-indigo-50 text-indigo-600 font-extrabold tracking-widest uppercase text-[10px] mb-8 border border-indigo-100">
             ENGINEERING EXCELLENCE
           </span>
           <h1 className="text-5xl md:text-6xl font-extrabold text-black font-heading mb-6 leading-tight">
@@ -257,7 +257,6 @@ const SoftwareSolutions = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };

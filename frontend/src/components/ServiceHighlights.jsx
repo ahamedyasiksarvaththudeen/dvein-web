@@ -57,8 +57,8 @@ const ServiceHighlights = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Our Expertise</h2>
-          <p className="mt-3 max-w-2xl mx-auto text-lg text-gray-500 sm:mt-4">
+          <h2 className="text-3xl font-extrabold text-black tracking-tight sm:text-4xl">Our Expertise</h2>
+          <p className="mt-3 max-w-2xl mx-auto text-lg text-black sm:mt-4">
             Solutions tailored for your business growth.
           </p>
         </div>
@@ -101,11 +101,11 @@ const ServiceHighlights = () => {
                   <div className="flex items-start justify-between mb-2">
                      <div className="flex items-center gap-2">
                         <span className="text-blue-600 text-lg">{getIcon(service.iconName)}</span>
-                        <h3 className="text-lg font-bold text-gray-900 line-clamp-1">{service.title}</h3>
+                        <h3 className="text-lg font-bold text-black line-clamp-1">{service.title}</h3>
                      </div>
                   </div>
                   
-                  <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 mb-4 flex-grow">
+                  <p className="text-sm text-black leading-relaxed line-clamp-3 mb-4 flex-grow">
                     {service.desc}
                   </p>
                   

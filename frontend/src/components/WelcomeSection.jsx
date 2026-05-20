@@ -20,13 +20,13 @@ const WelcomeSection = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <span className="text-dveinBlue font-bold tracking-widest uppercase text-sm mb-2 block">
+              <span className="text-black font-bold tracking-widest uppercase text-sm mb-2 block">
                 Who We Are
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 font-heading leading-tight">
-                Welcome To <span className="text-dveinBlue">DVein</span> Innovations
+              <h2 className="text-4xl md:text-5xl font-bold text-black mb-6 font-heading leading-tight">
+                Welcome To <span className="text-black">DVein</span> Innovations
               </h2>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              <p className="text-lg text-black mb-8 leading-relaxed">
                 We are a dynamic team of passionate tech professionals and educators. We don't just build software; we build careers. Our mission is to bridge the gap between
                 <b> Industry Requirements</b> and <b>Academic Learning</b>.
               </p>
@@ -57,8 +57,8 @@ const WelcomeSection = () => {
                   <FaCode />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Software Development</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <h3 className="text-xl font-bold text-black mb-2">Software Development</h3>
+                  <p className="text-black text-sm leading-relaxed">
                     Building scalable Web & Mobile applications, AI solutions, and Cloud infrastructure for modern businesses.
                   </p>
                 </div>
@@ -79,8 +79,8 @@ const WelcomeSection = () => {
                   <FaUserGraduate />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Skill Development</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <h3 className="text-xl font-bold text-black mb-2">Skill Development</h3>
+                  <p className="text-black text-sm leading-relaxed">
                     Providing hands-on internships and industry-standard training to shape the next generation of engineers.
                   </p>
                 </div>

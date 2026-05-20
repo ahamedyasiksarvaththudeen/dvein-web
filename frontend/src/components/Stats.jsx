@@ -24,7 +24,7 @@ const Stats = () => {
               <dd className="order-first text-4xl font-bold tracking-tight text-dveinBlue sm:text-5xl">
                 {stat.value}
               </dd>
-              <dt className="text-base leading-7 text-gray-600 font-semibold">{stat.name}</dt>
+              <dt className="text-base leading-7 text-black font-semibold">{stat.name}</dt>
             </motion.div>
           ))}
         </dl>

@@ -87,7 +87,8 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-[60] w-full bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300">
+      {/* ── BLACK HEADER ── */}
+      <nav className="sticky top-0 z-[60] w-full bg-black border-b border-gray-800 shadow-sm transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
 
@@ -101,18 +102,17 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden lg:flex items-center space-x-8 font-sans">
+            <div className="hidden lg:flex items-center gap-3 font-sans">
               {navLinks.map((item) => {
                 if (item.subLinks) {
                   return (
-                    <div key={item.name} className="relative h-full flex items-center" data-services-dropdown="true">
+                    <div key={item.name} className="relative flex items-center" data-services-dropdown="true">
                       <button
                         onClick={() => setDesktopServiceOpen((prev) => !prev)}
-                        className="flex items-center gap-1 text-gray-700 hover:text-dveinBlue font-extrabold text-[12px] uppercase tracking-wider transition-colors relative h-full"
+                        className="flex items-center gap-1.5 bg-white text-black px-4 py-2 rounded-lg font-extrabold text-[12px] uppercase tracking-wider hover:bg-gray-100 transition-colors"
                       >
                         {item.name}
-                        <HiChevronDown className={`text-lg mb-[2px] transition-transform duration-200 ${desktopServiceOpen ? 'rotate-180' : ''}`} />
-                        <span className={`absolute bottom-0 left-0 h-[3px] bg-dveinBlue transition-all duration-300 rounded-t-full ${desktopServiceOpen ? 'w-full' : 'w-0'}`}></span>
+                        <HiChevronDown className={`text-base transition-transform duration-200 ${desktopServiceOpen ? 'rotate-180' : ''}`} />
                       </button>
                       <AnimatePresence>
                         {desktopServiceOpen && (
@@ -121,14 +121,14 @@ const Navbar = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 8 }}
                             transition={{ duration: 0.18 }}
-                            className="absolute top-[80px] left-0 w-64 bg-white border border-gray-100 shadow-2xl rounded-b-2xl overflow-hidden z-50"
+                            className="absolute top-[calc(100%+8px)] left-0 w-64 bg-white border border-gray-100 shadow-2xl rounded-xl overflow-hidden z-50"
                           >
                             {item.subLinks.map((sub) => (
                               <Link
                                 key={sub.name}
                                 to={sub.path}
                                 onClick={() => setDesktopServiceOpen(false)}
-                                className="block px-6 py-4 text-gray-700 hover:bg-slate-50 hover:text-dveinBlue text-[11px] font-black transition-colors border-b border-gray-50 last:border-0 uppercase tracking-widest"
+                                className="block px-6 py-4 text-black hover:bg-gray-50 text-[11px] font-black transition-colors border-b border-gray-100 last:border-0 uppercase tracking-widest"
                               >
                                 {sub.name}
                               </Link>
@@ -143,11 +143,9 @@ const Navbar = () => {
                   <Link
                     key={item.name}
                     to={item.path}
-                    className="text-gray-700 hover:text-dveinBlue font-extrabold text-[12px] uppercase tracking-wider transition-colors relative group h-full flex items-center"
-                    style={{ fontFamily: "'Inter', sans-serif" }}
+                    className="bg-white text-black px-4 py-2 rounded-lg font-extrabold text-[12px] uppercase tracking-wider hover:bg-gray-100 transition-colors"
                   >
                     {item.name}
-                    <span className="absolute bottom-0 left-0 w-0 h-[3px] bg-dveinBlue transition-all duration-300 group-hover:w-full rounded-t-full"></span>
                   </Link>
                 );
               })}
@@ -155,7 +153,7 @@ const Navbar = () => {
 
             {/* Mobile Toggle */}
             <div className="lg:hidden z-[70]">
-              <button onClick={() => setIsOpen(true)} className="text-gray-800 hover:text-dveinBlue p-2 bg-gray-50 rounded-full transition-all">
+              <button onClick={() => setIsOpen(true)} className="text-white hover:text-gray-300 p-2 bg-white/10 rounded-full transition-all">
                 <HiMenuAlt3 size={28} />
               </button>
             </div>
@@ -182,7 +180,7 @@ const Navbar = () => {
                       <div className="space-y-2">
                         <button
                           onClick={() => setMobileServiceOpen(!mobileServiceOpen)}
-                          className="w-full flex items-center justify-between p-4 rounded-xl text-gray-700 font-extrabold hover:bg-slate-50 transition-all border border-gray-100 uppercase text-[11px] tracking-widest"
+                          className="w-full flex items-center justify-between p-4 rounded-xl text-black font-extrabold hover:bg-slate-50 transition-all border border-gray-100 uppercase text-[11px] tracking-widest"
                         >
                           {item.name}
                           <HiChevronDown className={`transition-transform duration-300 ${mobileServiceOpen ? 'rotate-180' : ''}`} />
@@ -191,7 +189,7 @@ const Navbar = () => {
                           {mobileServiceOpen && (
                             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden pl-4 space-y-2">
                               {item.subLinks.map((sub) => (
-                                <Link key={sub.name} to={sub.path} onClick={() => setIsOpen(false)} className="flex items-center justify-between p-4 rounded-xl text-gray-500 font-black hover:text-dveinBlue transition-all uppercase text-[10px] bg-gray-50/50 tracking-widest">
+                                <Link key={sub.name} to={sub.path} onClick={() => setIsOpen(false)} className="flex items-center justify-between p-4 rounded-xl text-black font-black hover:bg-gray-100 transition-all uppercase text-[10px] bg-gray-50/50 tracking-widest">
                                   {sub.name} <FaChevronRight size={8} />
                                 </Link>
                               ))}
@@ -200,7 +198,7 @@ const Navbar = () => {
                         </AnimatePresence>
                       </div>
                     ) : (
-                      <Link to={item.path} onClick={() => setIsOpen(false)} className="flex items-center justify-between p-4 rounded-xl text-gray-700 font-extrabold hover:bg-slate-50 hover:text-dveinBlue transition-all border border-gray-100 uppercase text-[11px] tracking-widest">
+                      <Link to={item.path} onClick={() => setIsOpen(false)} className="flex items-center justify-between p-4 rounded-xl text-black font-extrabold hover:bg-slate-50 transition-all border border-gray-100 uppercase text-[11px] tracking-widest">
                         {item.name} <FaChevronRight size={10} />
                       </Link>
                     )}
