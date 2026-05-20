@@ -29,8 +29,7 @@ const CareerHub = () => {
   const dnaRef = useRef(null);
   const dnaInView = useInView(dnaRef, { once: true, margin: '-80px' });
 
-  // Media carousel for "Our Success Story"
-  const [mediaIndex, setMediaIndex] = useState(0);
+  // Success Story — unified carousel (image + videos)
   const vid1Ref = useRef(null);
   const vid2Ref = useRef(null);
 
@@ -40,16 +39,16 @@ const CareerHub = () => {
     { type: 'video', src: vid2Src, ref: vid2Ref },
   ];
 
+  const [mediaIndex, setMediaIndex] = useState(0);
+
   const navigateMedia = (dir) => {
-    // Pause any playing video before switching
     [vid1Ref, vid2Ref].forEach(r => {
       if (r.current) { r.current.pause(); r.current.currentTime = 0; }
     });
-    const newIndex = (mediaIndex + dir + mediaItems.length) % mediaItems.length;
-    setMediaIndex(newIndex);
-    // Auto-play if the new slide is a video
-    if (mediaItems[newIndex].type === 'video') {
-      setTimeout(() => { mediaItems[newIndex].ref.current?.play(); }, 80);
+    const next = (mediaIndex + dir + mediaItems.length) % mediaItems.length;
+    setMediaIndex(next);
+    if (mediaItems[next].type === 'video') {
+      setTimeout(() => { mediaItems[next].ref.current?.play(); }, 80);
     }
   };
 
@@ -135,32 +134,27 @@ const CareerHub = () => {
             <p className="text-slate-500 text-sm leading-relaxed font-normal max-w-xl mx-auto">Real stories from real people who built their careers with DVein Innovations. Every image, video, and milestone shared here is a testament to what dedication and the right guidance can achieve.</p>
           </div>
 
-          {/* Media Carousel: students image + vid1 + vid2 */}
-          <div className="relative max-w-4xl mx-auto mb-14 select-none px-6">
-            {/* Tilt background only on image slide */}
-            {mediaItems[mediaIndex].type === 'image' && (
-              <div className="absolute inset-0 bg-blue-100 rounded-[2rem] rotate-3 transition-transform duration-500 pointer-events-none" />
-            )}
+          {/* Single unified carousel — aspect ratio adapts per slide */}
+          <div className="relative max-w-4xl mx-auto mb-14 select-none">
 
-            {/* Slides */}
-            <div className="relative z-10 rounded-[2rem] overflow-hidden shadow-2xl bg-black">
+            {/* Card — no fixed aspect ratio; each slide dictates its own height */}
+            <div className="rounded-[2rem] overflow-hidden shadow-2xl bg-black">
               {mediaItems.map((item, idx) => (
-                <div key={idx} className={idx === mediaIndex ? 'block' : 'hidden'}>
+                <div key={idx} className={idx === mediaIndex ? 'block w-full' : 'hidden'}>
                   {item.type === 'image' ? (
-                    /* Landscape image — full width, 16:9 ratio, cover-cropped */
+                    /* Image: natural landscape ratio, no black bars */
                     <img
                       src={item.src}
                       alt={item.alt}
                       className="w-full aspect-video object-cover"
                     />
                   ) : (
-                    /* Portrait video — natural aspect ratio, centred, never cropped */
-                    <div className="flex justify-center items-center bg-black w-full py-4">
+                    /* Video: half-height container, fills edge-to-edge with no black bars */
+                    <div className="w-full aspect-video overflow-hidden">
                       <video
                         ref={item.ref}
                         src={item.src}
-                        className="w-auto max-w-full"
-                        style={{ maxHeight: '70vh', height: '560px' }}
+                        className="w-full h-full object-cover"
                         controls
                         playsInline
                       />
@@ -171,43 +165,31 @@ const CareerHub = () => {
             </div>
 
             {/* Left Arrow */}
-            <button
-              onClick={() => navigateMedia(-1)}
-              aria-label="Previous"
-              className="absolute left-[-4px] top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center hover:bg-slate-50 active:scale-95 transition-all"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
+            <button onClick={() => navigateMedia(-1)} aria-label="Previous"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 border border-slate-200 shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
             </button>
 
             {/* Right Arrow */}
-            <button
-              onClick={() => navigateMedia(1)}
-              aria-label="Next"
-              className="absolute right-[-4px] top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center hover:bg-slate-50 active:scale-95 transition-all"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
+            <button onClick={() => navigateMedia(1)} aria-label="Next"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 border border-slate-200 shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
             </button>
 
-            {/* Dot indicators */}
+            {/* Dots */}
             <div className="flex justify-center gap-2 mt-5">
               {mediaItems.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    [vid1Ref, vid2Ref].forEach(r => { if (r.current) { r.current.pause(); r.current.currentTime = 0; } });
-                    setMediaIndex(idx);
-                    if (mediaItems[idx].type === 'video') {
-                      setTimeout(() => { mediaItems[idx].ref.current?.play(); }, 80);
-                    }
-                  }}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === mediaIndex ? 'bg-slate-800 scale-110' : 'bg-slate-300 hover:bg-slate-400'}`}
-                />
+                <button key={idx} onClick={() => {
+                  [vid1Ref, vid2Ref].forEach(r => { if (r.current) { r.current.pause(); r.current.currentTime = 0; } });
+                  setMediaIndex(idx);
+                  if (mediaItems[idx].type === 'video') {
+                    setTimeout(() => { mediaItems[idx].ref.current?.play(); }, 80);
+                  }
+                }}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === mediaIndex ? 'bg-slate-800 scale-110' : 'bg-slate-300 hover:bg-slate-400'}`} />
               ))}
             </div>
+
           </div>
 
           {/* Story Cards */}
