@@ -6,13 +6,15 @@ import {
   FaArrowRight, FaBolt,
   FaShieldAlt, FaUsers, FaMicrochip, FaNetworkWired
 } from 'react-icons/fa';
+import clientImg from '../assets/client-img.jpg';
+import dveinLogo from '../assets/logo.png';
 
 const WA_CAREER = '918667363896';
 
 const dnaDots = [
-  { icon: <FaBolt />,      label: 'SPEED',     desc: 'Fast execution over ego.',          color: 'bg-indigo-600' },
-  { icon: <FaShieldAlt />, label: 'TRUST',     desc: 'Extreme transparency always.',      color: 'bg-violet-600' },
-  { icon: <FaUsers />,     label: 'OWNERSHIP', desc: 'You are the founder here.',         color: 'bg-blue-600'   },
+  { icon: <FaBolt />,      label: 'DREAM',     desc: 'Ambition beyond features.',          color: 'bg-indigo-600' },
+  { icon: <FaShieldAlt />, label: 'DESIGN',    desc: 'Crafted systems, seamless journeys.', color: 'bg-violet-600' },
+  { icon: <FaUsers />,     label: 'DELIVERY',  desc: 'Relentless launch and impact.',      color: 'bg-blue-600'   },
 ];
 
 const CareerHub = () => {
@@ -65,13 +67,34 @@ const CareerHub = () => {
       {/* 1. HERO - simple header */}
       <section className="w-full max-w-5xl px-6 py-12 flex flex-col items-center text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center w-full">
-          <span className="py-1 px-3 rounded-full bg-purple-50 text-purple-600 text-[9px] font-black tracking-widest mb-6 border border-purple-100 uppercase">Careers 2.0</span>
-          <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-black leading-none mb-4">Career Hub</h1>
-          <p className="text-slate-500 text-sm font-medium max-w-xl">Join the collective defining the next generation of software engineering.</p>
+          <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-black leading-none mb-4">Build Your Career</h1>
+          <p className="text-slate-500 text-sm font-medium max-w-xl"></p>
         </motion.div>
       </section>
 
-      {/* 2. MISSION */}
+      {/* 2. RECRUITMENT PANELS */}
+      <section className="w-full py-20 px-6 bg-white flex flex-col items-center rounded-t-[3rem] md:rounded-t-[5rem] mx-4 shadow-2xl">
+        <div className="max-w-5xl w-full grid gap-6 md:grid-cols-2">
+          <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 text-left shadow-sm">
+            <div className="relative h-56 overflow-hidden rounded-[2rem] mb-6">
+              <img src={clientImg} alt="Client Companies Recruitment" className="w-full h-full object-cover" />
+            </div>
+            <span className="text-[11px] font-black uppercase tracking-[0.35em] text-slate-900 mb-3 block">CLIENT COMPANIES</span>
+            <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 mb-4">Recruitments</h2>
+            <p className="text-slate-600 text-sm leading-relaxed mb-6">Explore curated opportunities with our trusted clients. Roles in design, product, and growth teams.</p>
+          </div>
+          <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 text-left shadow-sm">
+            <div className="relative h-56 overflow-hidden rounded-[2rem] mb-6">
+              <img src={dveinLogo} alt="Dvein Innovations Recruitment" className="w-full h-full object-cover" />
+            </div>
+            <span className="text-[11px] font-black uppercase tracking-[0.35em] text-slate-900 mb-3 block">DVEIN INNOVATIONS</span>
+            <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 mb-4">Recruitments</h2>
+            <p className="text-slate-600 text-sm leading-relaxed mb-6">Discover internal openings at Dvein. Build products, systems, and strategy with our core team.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. MISSION */}
       <section className="w-full py-20 px-6 bg-white border-y border-slate-50">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div className="relative group">
@@ -96,7 +119,7 @@ const CareerHub = () => {
         </div>
       </section>
 
-      {/* 3. OUR DNA — Animated Roadmap */}
+      {/* 7. OUR DNA — Animated Roadmap */}
       <section
         ref={dnaRef}
         className="w-full py-24 bg-gradient-to-br from-slate-900 via-[#0f172a] to-slate-900 overflow-hidden flex flex-col items-center"
@@ -193,54 +216,16 @@ const CareerHub = () => {
         </div>
       </section>
 
-      {/* 4. VISION */}
-      <section className="w-full py-24 px-6 bg-white flex flex-col items-center">
-        <div className="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-          <div className="text-left">
-            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-10 text-black leading-[1]">THE UPGRADE YOU NEED.</h2>
-            <div className="space-y-8">
-              <p className="text-lg md:text-xl text-slate-500 font-bold leading-relaxed border-l-8 border-slate-200 pl-8">Join the collective defining the next generation of software engineering. High-impact missions only.</p>
-              <ul className="space-y-4 pt-6">
-                {['Global Remote Access', 'Hyper-Growth Maps', 'Equity Pool Access', 'Health Armor'].map((item, i) => (
-                  <li key={i} className="flex items-center gap-4 text-sm font-black uppercase tracking-widest text-slate-700">
-                    <FaCheckCircle className="text-slate-700" /> {item}
-                  </li>
-                ))}
-              </ul>
+      {/* 4. COLLECTIVE CONTACT */}
+      <section className="w-full py-20 px-6 bg-white flex flex-col items-center">
+        <div className="w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-[3rem] shadow-2xl p-8">
+          <div className="space-y-6 text-center flex flex-col items-center justify-center">
+            <span className="inline-block uppercase tracking-[0.45em] text-[10px] font-black text-slate-400"></span>
+            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white">chat us</h2>
+            <p className="text-slate-300 text-sm md:text-base leading-relaxed">Send a quick message and we will connect you.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button onClick={() => window.open('https://wa.me/' + WA_CAREER + '?text=' + encodeURIComponent('Hello DVein Team, I would like to discuss career opportunities.'), '_blank')} className="bg-white text-slate-950 px-10 py-4 rounded-full font-black uppercase tracking-[0.35em] text-[11px] hover:bg-slate-100 transition">WhatsApp the Team</button>
             </div>
-          </div>
-          <div className="relative">
-            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=100&w=1200&auto=format&fit=crop" alt="Team Vision" className="w-full rounded-[4rem] shadow-2xl border-2 border-slate-100 grayscale hover:grayscale-0 transition-all duration-700" />
-          </div>
-        </div>
-      </section>
-
-      {/* 5. OPEN MISSIONS */}
-      <section className="w-full py-20 px-6 bg-slate-900 flex flex-col items-center rounded-t-[3rem] md:rounded-t-[5rem] mx-4 shadow-2xl">
-        <div className="max-w-3xl w-full flex flex-col items-center text-center px-4">
-          <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-16 text-white">OPEN DROPS</h2>
-          <div className="grid gap-3 w-full">
-            {loading ? <div className="text-slate-500 font-black tracking-widest text-[9px] animate-pulse">Scanning...</div> :
-            liveJobs.map((job) => (
-              <motion.div whileHover={{ scale: 1.01, x: 5 }} key={job._id} onClick={() => { setSelectedJob(job); setActiveTab('details'); }} className="w-full bg-white/5 backdrop-blur-md p-6 rounded-[2rem] border border-white/10 hover:bg-white transition-all flex justify-between items-center group cursor-pointer text-left">
-                <div className="overflow-hidden pr-4">
-                  <h3 className="text-base md:text-xl font-black text-white group-hover:text-slate-900 uppercase truncate leading-none">{job.title}</h3>
-                  <p className="text-[9px] text-slate-400 group-hover:text-slate-500 font-bold uppercase tracking-widest mt-2">{job.department} • {job.location}</p>
-                </div>
-                <div className="bg-white/10 p-3 rounded-full text-white group-hover:bg-slate-900 transition-all"><FaArrowRight size={14}/></div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. CTA */}
-      <section className="w-full py-24 px-4 flex flex-col items-center bg-white">
-        <div className="w-full max-w-5xl relative rounded-[3rem] p-16 md:p-24 overflow-hidden bg-[#0a0f1c] text-center shadow-2xl flex flex-col items-center justify-center border border-white/5">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] pointer-events-none"></div>
-          <div className="relative z-10 flex flex-col items-center">
-            <h2 className="text-3xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter leading-none">JOIN THE COLLECTIVE.</h2>
-            <button onClick={() => window.open('https://wa.me/' + WA_CAREER + '?text=' + encodeURIComponent('Hello DVein Team, I want to join the collective!'), '_blank')} className="bg-white text-slate-900 px-12 py-4 rounded-full font-black text-[11px] uppercase tracking-[0.4em] hover:scale-105 transition-transform shadow-xl">Touch In Now</button>
           </div>
         </div>
       </section>
@@ -299,7 +284,7 @@ const CareerHub = () => {
       </AnimatePresence>
 
       <footer className="w-full py-10 text-center border-t border-slate-100">
-        <p className="text-xs text-slate-400">2026 DVein Innovations - Career Hub</p>
+        <p className="text-xs text-slate-400"></p>
       </footer>
     </div>
   );
