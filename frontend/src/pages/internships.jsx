@@ -8,6 +8,29 @@ const getIcon = (iconName) => {
   return IconComponent ? <IconComponent /> : <FaIcons.FaCode />;
 };
 
+const cardGradients = [
+  'from-blue-100 via-blue-50 to-indigo-50',
+  'from-emerald-100 via-green-50 to-teal-50',
+  'from-purple-100 via-violet-50 to-fuchsia-50',
+  'from-indigo-100 via-indigo-50 to-blue-50',
+  'from-teal-100 via-cyan-50 to-sky-50',
+  'from-orange-100 via-amber-50 to-yellow-50',
+  'from-slate-100 via-gray-50 to-zinc-50',
+  'from-sky-100 via-sky-50 to-blue-50',
+  'from-cyan-100 via-blue-50 to-indigo-50',
+  'from-pink-100 via-rose-50 to-fuchsia-50',
+  'from-blue-100 via-sky-50 to-cyan-50',
+  'from-green-100 via-emerald-50 to-teal-50',
+  'from-amber-100 via-yellow-50 to-orange-50',
+  'from-red-100 via-rose-50 to-pink-50',
+  'from-violet-100 via-purple-50 to-indigo-50',
+  'from-slate-100 via-blue-50 to-indigo-50',
+  'from-rose-100 via-pink-50 to-fuchsia-50',
+  'from-emerald-100 via-teal-50 to-cyan-50',
+  'from-orange-100 via-red-50 to-rose-50',
+  'from-cyan-100 via-teal-50 to-emerald-50',
+];
+
 const marqueeStyle = `
   @keyframes marquee {
     0% { transform: translateX(0%); }
@@ -179,7 +202,7 @@ const Training = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {(cms?.domains?.length ? cms.domains : data.domains)?.map((domain, index) => (
-              <motion.div key={domain._id} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: (index % 5) * 0.08 }} className="bg-white/70 backdrop-blur-md border border-white/50 rounded-[1.5rem] p-6 hover:shadow-xl transition-all group">
+              <motion.div key={domain._id} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: (index % 5) * 0.08 }} className={`bg-gradient-to-br ${cardGradients[index % cardGradients.length]} border border-white/80 rounded-[1.5rem] p-6 hover:shadow-xl transition-all group flex flex-col`}>
                 <div className={`w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-2xl ${domain.color} mb-6 group-hover:scale-110 transition-transform`}>{getIcon(domain.iconName)}</div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{domain.title}</h3>
                 <p className="text-gray-500 text-sm mb-8 leading-relaxed font-medium">{domain.desc}</p>
@@ -188,7 +211,7 @@ const Training = () => {
                 </div>
                 <button
                   onClick={() => document.getElementById('apply-section').scrollIntoView({ behavior: 'smooth' })}
-                  className="inline-flex items-center gap-2 text-blue-600 font-black text-xs uppercase tracking-widest"
+                  className="mt-auto inline-flex items-center gap-2 text-blue-600 font-black text-xs uppercase tracking-widest"
                 >Apply Now <FaIcons.FaArrowRight /></button>
               </motion.div>
             ))}
