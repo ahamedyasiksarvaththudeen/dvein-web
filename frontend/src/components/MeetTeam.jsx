@@ -4,46 +4,27 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import teamOne from '../assets/navin.png';
-import teamTwo from '../assets/selvamani.jpeg';
-import teamThree from '../assets/munik.jpeg';
-import teamFour from '../assets/jayasri.jpeg';
-import teamFive from '../assets/aruna.jpeg';
-import teamSix from '../assets/arsal.png';
-import teamSeven from '../assets/Yasik.png';
-import teamEight from '../assets/nivash.jpeg';
-import teamNine from '../assets/suriya.jpeg';
-import teamTen from '../assets/sidhar.jpeg';
-import teamEleven from '../assets/prasanth.jpeg';
-import teamTwelve from '../assets/dir.jpeg';
-import teamThirteen from '../assets/manager.jpeg';
-import teamFourteen from '../assets/executive.jpeg';
+import { useContent } from '../context/ContentContext';
 
-const teamMembers = [
-  { id: 1, name: 'Ms. Gopika Ayyavu', role: 'CEO & Founder', image: teamTwelve },
-  { id: 2, name: 'Mr. Logesh', role: 'Managing Director', image: teamThirteen },
-  { id: 3, name: 'Ms. Sahana', role: 'Executive Head', image: teamFourteen },
-  { id: 4, name: 'Ms. Jayasri', role: 'HR Executive', image: teamFour },
-  { id: 5, name: 'Ms. Aruna Devi', role: 'HR ', image: teamFive },
-  { id: 6, name: 'Ms. Gouwsalya', role: 'Data Analyst', image: teamSix },
-  { id: 7, name: 'Mr. Selvamani', role: 'Software Developer', image: teamTwo },
-  { id: 8, name: 'Mr. Navin', role: 'Software Developer', image: teamOne },
-  { id: 9, name: 'Mr. Muniyappan', role: 'Data Analyst', image: teamThree },
-  { id: 10, name: 'Mr. Sidharraj', role: 'Business Analyst', image: teamTen },
-  { id: 11, name: 'Mr. Yasik', role: 'Devops Engineer', image: teamSeven },
-  { id: 12, name: 'Mr. Suriya', role: 'Data Science Engineer', image: teamNine },
-  { id: 13, name: 'Mr. Nivash', role: 'Software Developer', image: teamEight },
-  { id: 14, name: 'Mr. Prasanth', role: 'Software Developer', image: teamEleven },
-  { id: 15, name: 'Mr. Arsal', role: 'Software Developer', image: teamSix },
-];
+const teamAssets = import.meta.glob('../assets/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' });
+
+const resolveTeamImage = (image) => {
+  if (!image) return '';
+  if (/^(data:|https?:|\/)/.test(image)) return image;
+  return teamAssets[`../assets/${image}`] || image;
+};
 
 const MeetTeam = () => {
+  const { content } = useContent();
+  const cms = content?.meetTeam || {};
+  const teamMembers = Array.isArray(cms.members) ? cms.members.filter(Boolean) : [];
+
   return (
     <section className="bg-white py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-dveinGreen mb-3">Our People</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-black font-heading">Meet the crew</h2>
+          <p className="text-sm font-black uppercase tracking-[0.28em] text-dveinGreen mb-3">{cms.eyebrow || 'Our People'}</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-black font-heading">{cms.heading || 'Meet the crew'}</h2>
         </div>
 
         <Swiper
@@ -60,7 +41,7 @@ const MeetTeam = () => {
           className="!pb-14 !px-2"
         >
           {teamMembers.map((member, index) => (
-            <SwiperSlide key={member.id} className="h-auto">
+            <SwiperSlide key={member.id || index} className="h-auto">
               <motion.article
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -71,14 +52,14 @@ const MeetTeam = () => {
                 <div className="mb-6 rounded-full bg-gradient-to-tr from-dveinBlue via-cyan-400 to-dveinGreen p-1.5 shadow-lg shadow-dveinBlue/10">
                   <div className="h-36 w-36 overflow-hidden rounded-full bg-gray-100 ring-4 ring-white sm:h-40 sm:w-40">
                     <img
-                      src={member.image}
-                      alt={member.name}
+                      src={resolveTeamImage(member.image)}
+                      alt={member.name || 'Team member'}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-black font-heading">{member.name}</h3>
-                <p className="mt-2 text-sm font-semibold text-dveinBlue">{member.role}</p>
+                <h3 className="text-xl font-bold text-black font-heading">{member.name || 'Team Member'}</h3>
+                <p className="mt-2 text-sm font-semibold text-dveinBlue">{member.role || 'Role'}</p>
               </motion.article>
             </SwiperSlide>
           ))}

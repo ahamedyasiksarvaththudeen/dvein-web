@@ -58,6 +58,27 @@ export const defaultContent = {
       { id: 6, name: "TechSolutions", role: "Corporate Client",     text: "Reliable development partner. They handle our cloud infrastructure efficiently.", rating: 5 }
     ]
   },
+  meetTeam: {
+    eyebrow: "Our People",
+    heading: "Meet the crew",
+    members: [
+      { id: 1, name: "Ms. Gopika Ayyavu", role: "CEO & Founder", image: "dir.jpeg" },
+      { id: 2, name: "Mr. Logesh", role: "Managing Director", image: "manager.jpeg" },
+      { id: 3, name: "Ms. Sahana", role: "Executive Head", image: "executive.jpeg" },
+      { id: 4, name: "Ms. Jayasri", role: "HR Executive", image: "jayasri.jpeg" },
+      { id: 5, name: "Ms. Aruna Devi", role: "HR", image: "aruna.jpeg" },
+      { id: 6, name: "Ms. Gouwsalya", role: "Data Analyst", image: "arsal.png" },
+      { id: 7, name: "Mr. Selvamani", role: "Software Developer", image: "selvamani.jpeg" },
+      { id: 8, name: "Mr. Navin", role: "Software Developer", image: "navin.png" },
+      { id: 9, name: "Mr. Muniyappan", role: "Data Analyst", image: "munik.jpeg" },
+      { id: 10, name: "Mr. Sidharraj", role: "Business Analyst", image: "sidhar.jpeg" },
+      { id: 11, name: "Mr. Yasik", role: "Devops Engineer", image: "Yasik.png" },
+      { id: 12, name: "Mr. Suriya", role: "Data Science Engineer", image: "suriya.jpeg" },
+      { id: 13, name: "Mr. Nivash", role: "Software Developer", image: "nivash.jpeg" },
+      { id: 14, name: "Mr. Prasanth", role: "Software Developer", image: "prasanth.jpeg" },
+      { id: 15, name: "Mr. Arsal", role: "Software Developer", image: "arsal.png" }
+    ]
+  },
   footer: {
     address: "Alpha City IT Park, No.25, OMR,\nNavalur, Chennai - 600130",
     phone: "+91 95001 81230",
@@ -371,6 +392,23 @@ export const defaultContent = {
 };
 
 // ─── CONTEXT ──────────────────────────────────────────────────────────────────
+const normalizeMeetTeam = (value = {}) => {
+  const base = defaultContent.meetTeam;
+  const members = Array.isArray(value.members) ? value.members : base.members;
+  return {
+    ...base,
+    ...value,
+    members: members
+      .filter(Boolean)
+      .map((member, index) => ({
+        id: member.id || Date.now() + index,
+        name: member.name || 'Team Member',
+        role: member.role || 'Role',
+        image: member.image || '',
+      })),
+  };
+};
+
 const ContentContext = createContext(null);
 
 export const ContentProvider = ({ children }) => {
@@ -392,6 +430,7 @@ export const ContentProvider = ({ children }) => {
         howWeDo:           { ...merge('howWeDo'), steps: p.howWeDo?.steps || defaultContent.howWeDo.steps },
         whyChooseUs:       { ...merge('whyChooseUs'), features: p.whyChooseUs?.features || defaultContent.whyChooseUs.features },
         testimonials:      { ...merge('testimonials'), reviews: p.testimonials?.reviews || defaultContent.testimonials.reviews },
+        meetTeam:          normalizeMeetTeam(p.meetTeam),
         footer:            merge('footer'),
         internships:       p.internships       ? { ...defaultContent.internships,       ...p.internships       } : defaultContent.internships,
         products:          p.products          ? { ...defaultContent.products,          ...p.products          } : defaultContent.products,
@@ -407,7 +446,8 @@ export const ContentProvider = ({ children }) => {
 
   const updateSection = (section, data) => {
     setContent(prev => {
-      const updated = { ...prev, [section]: data };
+      const nextData = section === 'meetTeam' ? normalizeMeetTeam(data) : data;
+      const updated = { ...prev, [section]: nextData };
       try { localStorage.setItem('dvein_cms_content', JSON.stringify(updated)); } catch {}
       return updated;
     });

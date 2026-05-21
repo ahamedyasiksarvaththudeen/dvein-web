@@ -348,6 +348,48 @@ const TestimonialsEditor = () => {
   );
 };
 
+const MeetTeamEditor = () => {
+  const {data,setData,save,reset,saved} = useSave('meetTeam');
+  if(!data) return null;
+  const members = Array.isArray(data.members) ? data.members : [];
+  const upMember = (i,k,v) => setData(p=>({...p,members:(Array.isArray(p.members) ? p.members : []).map((m,j)=>j===i?{...m,[k]:v}:m)}));
+  const addMember = () => setData(p=>({
+    ...p,
+    members: [
+      ...(Array.isArray(p.members) ? p.members : []),
+      { id: Date.now(), name: 'New Team Member', role: 'Role', image: '' }
+    ]
+  }));
+  const delMember = (i) => setData(p=>({...p,members:(Array.isArray(p.members) ? p.members : []).filter((_,j)=>j!==i)}));
+  return (
+    <div>
+      <SectionHeader title="Meet the Crew" iconD={IC.about} desc="Edit team carousel cards: image, name, role, add and delete." color="#06B6D4" />
+      <Card className="mb-4">
+        <Field label="Small Label" value={data.eyebrow} onChange={v=>setData(p=>({...p,eyebrow:v}))} />
+        <Field label="Section Heading" value={data.heading} onChange={v=>setData(p=>({...p,heading:v}))} />
+        <p className="text-[11px] text-gray-400 font-semibold">
+          For local images, use the asset file name only, for example: navin.png, nivash.jpeg, suriya.jpeg.
+        </p>
+      </Card>
+      <div className="space-y-3">
+        {members.map((m,i) => (
+          <Card key={m.id || i} className="relative">
+            <DelBtn onClick={()=>delMember(i)} />
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3">Team Card {i+1}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Field label="Name" value={m.name} onChange={v=>upMember(i,'name',v)} />
+              <Field label="Role" value={m.role} onChange={v=>upMember(i,'role',v)} />
+            </div>
+            <ImageField label="Image URL / Upload / Asset Filename" value={m.image} onChange={v=>upMember(i,'image',v)} placeholder="navin.png or https://..." />
+          </Card>
+        ))}
+      </div>
+      <AddBtn onClick={addMember} label="Add Team Card" />
+      <SaveBar onSave={save} onReset={reset} saved={saved} />
+    </div>
+  );
+};
+
 const FooterEditor = () => {
   const {data,setData,save,reset,saved} = useSave('footer');
   if(!data) return null;
@@ -953,6 +995,7 @@ const NAV_GROUPS = [
     { key:'howWeDo',      label:'How We Do It',     d:IC.process,   c:'#3B82F6' },
     { key:'whyChooseUs',  label:'Why Choose Us',    d:IC.star,      c:'#F59E0B' },
     { key:'testimonials', label:'Testimonials',     d:IC.star,      c:'#F59E0B' },
+    { key:'meetTeam',     label:'Meet the Crew',    d:IC.about,     c:'#06B6D4' },
     { key:'footer',       label:'Footer',           d:IC.map,       c:'#10B981' },
   ]},
   { group: 'Service Pages', items: [
@@ -972,7 +1015,7 @@ const NAV_GROUPS = [
 const EDITORS = {
   hero: HeroEditor, welcome: WelcomeEditor, stats: StatsEditor,
   howWeDo: HowWeDoEditor, whyChooseUs: WhyChooseEditor, testimonials: TestimonialsEditor,
-  footer: FooterEditor, internships: InternshipsEditor, products: ProductsEditor,
+  meetTeam: MeetTeamEditor, footer: FooterEditor, internships: InternshipsEditor, products: ProductsEditor,
   studentProjects: StudentProjectsEditor, softwareSolutions: SoftwareSolutionsEditor,
   courses: CoursesEditor, ourStory: OurStoryEditor, collaborations: CollaborationsEditor,
   contact: ContactEditor,
