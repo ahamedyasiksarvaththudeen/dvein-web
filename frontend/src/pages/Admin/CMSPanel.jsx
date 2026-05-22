@@ -913,25 +913,27 @@ const OurStoryEditor = () => {
 const CollaborationsEditor = () => {
   const {data,setData,save,reset,saved} = useSave('collaborations');
   if(!data) return null;
-  const setHero=(k,v)=>setData(p=>({...p,hero:{...p.hero,[k]:v}}));
-  const setMet=(i,k,v)=>setData(p=>({...p,metrics:p.metrics.map((m,j)=>j===i?{...m,[k]:v}:m)}));
-  const setTier=(i,k,v)=>setData(p=>({...p,tiers:p.tiers.map((t,j)=>j===i?{...t,[k]:v}:t)}));
-  const setFaq=(i,k,v)=>setData(p=>({...p,faqs:p.faqs.map((f,j)=>j===i?{...f,[k]:v}:f)}));
+  const setHero =(k,v)=>setData(p=>({...p,hero:{...p.hero,[k]:v}}));
+  const setMet  =(i,k,v)=>setData(p=>({...p,metrics:(p.metrics||[]).map((m,j)=>j===i?{...m,[k]:v}:m)}));
+  const setTier =(i,k,v)=>setData(p=>({...p,tiers:(p.tiers||[]).map((t,j)=>j===i?{...t,[k]:v}:t)}));
+  const setNode =(i,k,v)=>setData(p=>({...p,frameworkNodes:(p.frameworkNodes||[]).map((n,j)=>j===i?{...n,[k]:v}:n)}));
+  const setFaq  =(i,k,v)=>setData(p=>({...p,faqs:(p.faqs||[]).map((f,j)=>j===i?{...f,[k]:v}:f)}));
+  const nodes = data.frameworkNodes || [];
   return (
     <div>
       <SectionHeader title="Collaborations Page" iconD={IC.handshake} desc="Edit every section of the Collaborations page." color="#0056D2" />
       <Sub text="Hero Section" />
       <Card className="mb-5">
-        <Field label="Badge" value={data.hero.badge} onChange={v=>setHero('badge',v)} />
-        <Field label="Headline" value={data.hero.headline} onChange={v=>setHero('headline',v)} type="textarea" rows={2} />
-        <Field label="Description" value={data.hero.description} onChange={v=>setHero('description',v)} type="textarea" rows={2} />
-        <Field label="Primary Button" value={data.hero.primaryBtn} onChange={v=>setHero('primaryBtn',v)} />
+        <Field label="Badge" value={data.hero?.badge} onChange={v=>setHero('badge',v)} />
+        <Field label="Headline" value={data.hero?.headline} onChange={v=>setHero('headline',v)} type="textarea" rows={2} />
+        <Field label="Description" value={data.hero?.description} onChange={v=>setHero('description',v)} type="textarea" rows={2} />
+        <Field label="Primary Button" value={data.hero?.primaryBtn} onChange={v=>setHero('primaryBtn',v)} />
       </Card>
-      <Sub text={`Key Metrics (${data.metrics.length})`} />
+      <Sub text={`Key Metrics (${(data.metrics||[]).length})`} />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
-        {data.metrics.map((m,i) => (
-          <Card key={m._id} className="relative">
-            <DelBtn onClick={()=>setData(p=>({...p,metrics:p.metrics.filter((_,j)=>j!==i)}))} />
+        {(data.metrics||[]).map((m,i) => (
+          <Card key={m._id||i} className="relative">
+            <DelBtn onClick={()=>setData(p=>({...p,metrics:(p.metrics||[]).filter((_,j)=>j!==i)}))} />
             <div className="pr-8">
               <Field label="Label" value={m.label} onChange={v=>setMet(i,'label',v)} />
               <Field label="Count" value={m.count} onChange={v=>setMet(i,'count',v)} />
@@ -939,12 +941,12 @@ const CollaborationsEditor = () => {
           </Card>
         ))}
       </div>
-      <AddBtn onClick={()=>setData(p=>({...p,metrics:[...p.metrics,{_id:Date.now(),label:'New Metric',count:'0+'}]}))} label="Add Metric" />
-      <Sub text={`Partnership Tiers (${data.tiers.length})`} />
+      <AddBtn onClick={()=>setData(p=>({...p,metrics:[...(p.metrics||[]),{_id:Date.now(),label:'New Metric',count:'0+'}]}))} label="Add Metric" />
+      <Sub text={`Partnership Tiers (${(data.tiers||[]).length})`} />
       <div className="space-y-3 mb-2">
-        {data.tiers.map((t,i) => (
-          <Card key={t._id} className="relative">
-            <DelBtn onClick={()=>setData(p=>({...p,tiers:p.tiers.filter((_,j)=>j!==i)}))} />
+        {(data.tiers||[]).map((t,i) => (
+          <Card key={t._id||i} className="relative">
+            <DelBtn onClick={()=>setData(p=>({...p,tiers:(p.tiers||[]).filter((_,j)=>j!==i)}))} />
             <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3 pr-10">Tier {i+1}</p>
             <Field label="Title" value={t.title} onChange={v=>setTier(i,'title',v)} />
             <Field label="Description" value={t.desc} onChange={v=>setTier(i,'desc',v)} type="textarea" rows={3} />
@@ -956,19 +958,135 @@ const CollaborationsEditor = () => {
           </Card>
         ))}
       </div>
-      <AddBtn onClick={()=>setData(p=>({...p,tiers:[...p.tiers,{_id:Date.now(),title:'New Tier',desc:'Description.',features:['Feature 1','Feature 2']}]}))} label="Add Tier" />
+      <AddBtn onClick={()=>setData(p=>({...p,tiers:[...(p.tiers||[]),{_id:Date.now(),title:'New Tier',desc:'Description.',features:['Feature 1','Feature 2']}]}))} label="Add Tier" />
+      <Sub text={`Framework Nodes (${nodes.length})`} />
+      <div className="space-y-3 mb-2">
+        {nodes.map((n,i) => (
+          <Card key={n._id||i} className="relative">
+            <DelBtn onClick={()=>setData(p=>({...p,frameworkNodes:(p.frameworkNodes||[]).filter((_,j)=>j!==i)}))} />
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3 pr-10">Node {i+1}</p>
+            <Field label="Title" value={n.title} onChange={v=>setNode(i,'title',v)} />
+            <Field label="Detail" value={n.detail} onChange={v=>setNode(i,'detail',v)} type="textarea" rows={2} />
+          </Card>
+        ))}
+      </div>
+      <AddBtn onClick={()=>setData(p=>({...p,frameworkNodes:[...(p.frameworkNodes||[]),{_id:Date.now(),title:'New Node',detail:'Detail description.'}]}))} label="Add Framework Node" />
       <Sub text="FAQs" />
       <div className="space-y-3">
-        {data.faqs.map((f,i) => (
-          <Card key={f._id} className="relative">
-            <DelBtn onClick={()=>setData(p=>({...p,faqs:p.faqs.filter((_,j)=>j!==i)}))} />
+        {(data.faqs||[]).map((f,i) => (
+          <Card key={f._id||i} className="relative">
+            <DelBtn onClick={()=>setData(p=>({...p,faqs:(p.faqs||[]).filter((_,j)=>j!==i)}))} />
             <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3">FAQ {i+1}</p>
             <Field label="Question" value={f.question} onChange={v=>setFaq(i,'question',v)} />
             <Field label="Answer" value={f.answer} onChange={v=>setFaq(i,'answer',v)} type="textarea" rows={2} />
           </Card>
         ))}
       </div>
-      <AddBtn onClick={()=>setData(p=>({...p,faqs:[...p.faqs,{_id:Date.now(),question:'New question?',answer:'Answer.'}]}))} label="Add FAQ" />
+      <AddBtn onClick={()=>setData(p=>({...p,faqs:[...(p.faqs||[]),{_id:Date.now(),question:'New question?',answer:'Answer.'}]}))} label="Add FAQ" />
+      <SaveBar onSave={save} onReset={reset} saved={saved} />
+    </div>
+  );
+};
+
+// ─── CAREER HUB EDITOR ────────────────────────────────────────────────────────
+const CareerHubEditor = () => {
+  const {data,setData,save,reset,saved} = useSave('careerHub');
+  if(!data) return null;
+  const setH  =(k,v)=>setData(p=>({...p,hero:{...p.hero,[k]:v}}));
+  const setSS =(k,v)=>setData(p=>({...p,successStory:{...p.successStory,[k]:v}}));
+  const setDNA=(k,v)=>setData(p=>({...p,dna:{...p.dna,[k]:v}}));
+  const setDot=(i,k,v)=>setData(p=>({...p,dna:{...p.dna,dots:(p.dna?.dots||[]).map((d,j)=>j===i?{...d,[k]:v}:d)}}));
+  const setCtc=(k,v)=>setData(p=>({...p,contact:{...p.contact,[k]:v}}));
+  const setPanel=(i,k,v)=>setData(p=>({...p,panels:(p.panels||[]).map((pl,j)=>j===i?{...pl,[k]:v}:pl)}));
+  const panels = data.panels||[];
+  const dots   = data.dna?.dots||[];
+  return (
+    <div>
+      <SectionHeader title="Career Hub Page" iconD={IC.about} desc="Edit every section of the Career Hub page." color="#6366F1" />
+      <Sub text="Hero Section" />
+      <Card className="mb-5">
+        <Field label="Badge" value={data.hero?.badge} onChange={v=>setH('badge',v)} />
+        <Field label="Heading" value={data.hero?.heading} onChange={v=>setH('heading',v)} />
+        <Field label="Description" value={data.hero?.description} onChange={v=>setH('description',v)} type="textarea" rows={2} />
+      </Card>
+      <Sub text={`Recruitment Panels (${panels.length})`} />
+      <div className="space-y-3 mb-2">
+        {panels.map((pl,i)=>(
+          <Card key={pl._id||i} className="relative">
+            <DelBtn onClick={()=>setData(p=>({...p,panels:(p.panels||[]).filter((_,j)=>j!==i)}))} />
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3 pr-10">Panel {i+1}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Field label="Tag (small label)" value={pl.tag} onChange={v=>setPanel(i,'tag',v)} />
+              <Field label="Heading" value={pl.heading} onChange={v=>setPanel(i,'heading',v)} />
+            </div>
+            <Field label="Description" value={pl.description} onChange={v=>setPanel(i,'description',v)} type="textarea" rows={2} />
+            <ImageField label="Panel Image (URL / Upload / asset filename)" value={pl.image} onChange={v=>setPanel(i,'image',v)} placeholder="client-img.jpg or https://..." />
+          </Card>
+        ))}
+      </div>
+      <AddBtn onClick={()=>setData(p=>({...p,panels:[...(p.panels||[]),{_id:Date.now(),tag:'NEW TAG',heading:'Recruitments',description:'Description here.',image:''}]}))} label="Add Panel" />
+      <Sub text="Success Story Section" />
+      <Card className="mb-5">
+        <Field label="Heading" value={data.successStory?.heading} onChange={v=>setSS('heading',v)} />
+        <Field label="Description" value={data.successStory?.description} onChange={v=>setSS('description',v)} type="textarea" rows={3} />
+      </Card>
+      <Sub text="Our DNA Section" />
+      <Card className="mb-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="Badge" value={data.dna?.badge} onChange={v=>setDNA('badge',v)} />
+          <Field label="Heading" value={data.dna?.heading} onChange={v=>setDNA('heading',v)} />
+        </div>
+      </Card>
+      <div className="space-y-3 mb-2">
+        {dots.map((dot,i)=>(
+          <Card key={dot._id||i} className="relative">
+            <DelBtn onClick={()=>setData(p=>({...p,dna:{...p.dna,dots:(p.dna?.dots||[]).filter((_,j)=>j!==i)}}))} />
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3 pr-10">DNA Step {i+1}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Field label="Label" value={dot.label} onChange={v=>setDot(i,'label',v)} />
+              <Field label="Description" value={dot.desc} onChange={v=>setDot(i,'desc',v)} />
+            </div>
+          </Card>
+        ))}
+      </div>
+      <AddBtn onClick={()=>setData(p=>({...p,dna:{...p.dna,dots:[...(p.dna?.dots||[]),{_id:Date.now(),label:'STEP',desc:'Description.'}]}}))} label="Add DNA Step" />
+      <Sub text="Contact / WhatsApp Section" />
+      <Card>
+        <Field label="Heading" value={data.contact?.heading} onChange={v=>setCtc('heading',v)} />
+        <Field label="Description" value={data.contact?.description} onChange={v=>setCtc('description',v)} type="textarea" rows={2} />
+        <Field label="Button Text" value={data.contact?.buttonText} onChange={v=>setCtc('buttonText',v)} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="WhatsApp Number (with country code, no +)" value={data.contact?.whatsappNumber} onChange={v=>setCtc('whatsappNumber',v)} />
+          <Field label="WhatsApp Message" value={data.contact?.whatsappMessage} onChange={v=>setCtc('whatsappMessage',v)} />
+        </div>
+      </Card>
+      <SaveBar onSave={save} onReset={reset} saved={saved} />
+    </div>
+  );
+};
+
+// ─── CLIENTS EDITOR ───────────────────────────────────────────────────────────
+const ClientsEditor = () => {
+  const {data,setData,save,reset,saved} = useSave('clients');
+  if(!data) return null;
+  const names = Array.isArray(data.names) ? data.names : [];
+  return (
+    <div>
+      <SectionHeader title="Clients Ticker" iconD={IC.about} desc="Edit the scrolling client name ticker on the home page." color="#10B981" />
+      <Card className="mb-4">
+        <Field label="Section Heading" value={data.heading} onChange={v=>setData(p=>({...p,heading:v}))} />
+      </Card>
+      <Card>
+        <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">Client Names (one per line)</label>
+        <textarea
+          value={names.join('\n')}
+          onChange={e=>setData(p=>({...p,names:e.target.value.split('\n').map(s=>s.trim()).filter(Boolean)}))}
+          rows={12}
+          placeholder={"TechCorp Systems\nInnovate AI\nBuildIt Infra\n..."}
+          className="w-full bg-white border border-gray-200 text-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#10B981]/30 focus:border-[#10B981] resize-none shadow-sm"
+        />
+        <p className="mt-2 text-[11px] text-gray-400">Each line becomes one client name in the scrolling ticker.</p>
+      </Card>
       <SaveBar onSave={save} onReset={reset} saved={saved} />
     </div>
   );
@@ -1007,7 +1125,7 @@ const ContactEditor = () => {
   );
 };
 
-// ─── NAV CONFIG ───────────────────────────────────────────────────────────────
+// ─── NAV CONFIG ───────────────────────────────────────────────────────────────────────────────
 const NAV_GROUPS = [
   { group: 'Home Page', items: [
     { key:'hero',         label:'Hero Slider',      d:IC.hero,      c:'#0056D2' },
@@ -1017,6 +1135,7 @@ const NAV_GROUPS = [
     { key:'whyChooseUs',  label:'Why Choose Us',    d:IC.star,      c:'#F59E0B' },
     { key:'testimonials', label:'Testimonials',     d:IC.star,      c:'#F59E0B' },
     { key:'meetTeam',     label:'Meet the Crew',    d:IC.about,     c:'#06B6D4' },
+    { key:'clients',      label:'Clients Ticker',   d:IC.about,     c:'#10B981' },
     { key:'footer',       label:'Footer',           d:IC.map,       c:'#10B981' },
   ]},
   { group: 'Service Pages', items: [
@@ -1029,6 +1148,7 @@ const NAV_GROUPS = [
     { key:'studentProjects',label:'Student Projects',d:IC.flask,     c:'#0891B2' },
     { key:'ourStory',       label:'Our Story',       d:IC.story,     c:'#0891B2' },
     { key:'collaborations', label:'Collaborations',  d:IC.handshake, c:'#0056D2' },
+    { key:'careerHub',      label:'Career Hub',      d:IC.about,     c:'#6366F1' },
     { key:'contact',        label:'Contact Page',    d:IC.mail,      c:'#059669' },
   ]},
 ];
@@ -1036,13 +1156,14 @@ const NAV_GROUPS = [
 const EDITORS = {
   hero: HeroEditor, welcome: WelcomeEditor, stats: StatsEditor,
   howWeDo: HowWeDoEditor, whyChooseUs: WhyChooseEditor, testimonials: TestimonialsEditor,
-  meetTeam: MeetTeamEditor, footer: FooterEditor, internships: InternshipsEditor, products: ProductsEditor,
+  meetTeam: MeetTeamEditor, clients: ClientsEditor, footer: FooterEditor,
+  internships: InternshipsEditor, products: ProductsEditor,
   studentProjects: StudentProjectsEditor, softwareSolutions: SoftwareSolutionsEditor,
   courses: CoursesEditor, ourStory: OurStoryEditor, collaborations: CollaborationsEditor,
-  contact: ContactEditor,
+  careerHub: CareerHubEditor, contact: ContactEditor,
 };
 
-// ─── MAIN PANEL ───────────────────────────────────────────────────────────────
+// ─── MAIN PANEL ──────────────────────────────────────────────────────────────────────────────
 const CMSPanel = () => {
   const navigate = useNavigate();
   const { resetAll } = useContent();

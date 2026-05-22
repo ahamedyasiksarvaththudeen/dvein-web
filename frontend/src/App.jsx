@@ -22,9 +22,8 @@ import Privacy from './pages/Privacy';
 import AdminLogin from './pages/Admin/AdminLogin';
 import CMSPanel   from './pages/Admin/CMSPanel';
 
-// FOOTER & WHATSAPP
+// FOOTER
 import Footer from './components/Footer';
-import WhatsAppBtn from './components/common/WhatsAppBtn';
 
 const Layout = () => {
   const location = useLocation();
@@ -74,7 +73,6 @@ const Layout = () => {
       {!isHomePage && !isOurStoryPage && (
         <>
           <Footer />
-          <WhatsAppBtn />
         </>
       )}
     </>

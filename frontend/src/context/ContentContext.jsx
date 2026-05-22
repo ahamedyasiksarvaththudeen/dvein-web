@@ -433,29 +433,80 @@ export const defaultContent = {
       { _id: 2, title: "R&D Innovation Partnership",    desc: "A co-innovation framework for startups, labs, and product companies to jointly build next-gen solutions across IoT, Smart Manufacturing, AI, and Blockchain ecosystems.", features: ["Joint IP Ownership Models", "Rapid Prototyping Labs", "Secure Data Sandboxes", "Product Commercialization Support"] },
       { _id: 3, title: "Global Talent Synergy",         desc: "A talent bridge connecting verified student innovators and industry-ready engineers with international firms for project outsourcing, hiring pipelines, and digital transformation initiatives.", features: ["Vetted Developer Network", "Quality Assurance Gates", "Structured Onboarding", "Global Talent Pipelines"] },
     ],
+    frameworkNodes: [
+      { _id: 1, title: "Architecture Alignment",  detail: "We align our technical standards with your enterprise architecture to ensure seamless integration and long-term scalability." },
+      { _id: 2, title: "Innovation Hub Cluster",  detail: "High-availability backend clusters with managed databases and global load balancing for international performance." },
+      { _id: 3, title: "Financial Transparency",  detail: "Clear billing structures, milestone-based payouts, and automated financial audit synchronization." },
+      { _id: 4, title: "Logistics Sync Engine",   detail: "Integrated APIs for cross-border operations, supply chain tracking, and partner coordination." },
+      { _id: 5, title: "Neural Synergy Cloud",    detail: "Decentralized AI processing nodes for real-time analytics and localized data intelligence." },
+      { _id: 6, title: "Resilience Shield",        detail: "Zero-trust security architecture with continuous vulnerability assessments and regulatory compliance." },
+    ],
     faqs: [
-      { _id: 1, question: "What types of organisations do you collaborate with?",     answer: "We work with startups, SMEs, and enterprise companies across Tech, Manufacturing, Healthcare, and Education verticals." },
+      { _id: 1, question: "What industries do you collaborate with?",                  answer: "We work across fintech, edtech, healthtech, smart manufacturing, and enterprise SaaS. Our team adapts to sector-specific compliance and integration needs." },
       { _id: 2, question: "Is there a minimum engagement duration for partnerships?", answer: "Our Strategic Alliance model requires a minimum 6-month commitment. R&D and Talent Synergy programs can start with a 3-month pilot." },
       { _id: 3, question: "How do we get started?",                                   answer: "Reach out via WhatsApp or the contact form. Our partnerships team will schedule a discovery call within 48 hours." },
     ],
   },
 
-  // ─── CONTACT PAGE ─────────────────────────────────────────────────────────
+  // ─── CAREER HUB PAGE ──────────────────────────────────────
+  careerHub: {
+    hero: {
+      badge:       "Career Hub",
+      heading:     "Build Your Career",
+      description: "Upskill your career with DVein Innovations",
+    },
+    panels: [
+      { _id: 1, tag: "CLIENT COMPANIES",  heading: "Recruitments", description: "Explore curated opportunities with our trusted clients. Roles in design, product, and growth teams.", image: "client-img.jpg" },
+      { _id: 2, tag: "DVEIN INNOVATIONS", heading: "Recruitments", description: "Discover internal openings at DVein. Build products, systems, and strategy with our core team.",    image: "logo.png" },
+    ],
+    successStory: {
+      heading:     "Our Success Story",
+      description: "Real stories from real people who built their careers with DVein Innovations. Every image, video, and milestone shared here is a testament to what dedication and the right guidance can achieve.",
+    },
+    dna: {
+      badge:   "Who We Are",
+      heading: "OUR DNA",
+      dots: [
+        { _id: 1, label: "DREAM",    desc: "Ambition beyond features." },
+        { _id: 2, label: "DESIGN",   desc: "Crafted systems, seamless journeys." },
+        { _id: 3, label: "DELIVERY", desc: "Relentless launch and impact." },
+      ],
+    },
+    contact: {
+      heading:         "chat us",
+      description:     "Send a quick message and we will connect you.",
+      buttonText:      "WhatsApp the Team",
+      whatsappNumber:  "918667363896",
+      whatsappMessage: "Hello DVein Team, I would like to discuss career opportunities.",
+    },
+  },
+
+  // ─── CLIENTS TICKER ─────────────────────────────────────────────
+  clients: {
+    heading: "Trusted by Industry Leaders",
+    names: [
+      "TechCorp Systems", "Innovate AI", "BuildIt Infra", "CloudNine Networks",
+      "FutureGen Edu", "Alpha Data", "CyberSafe Solutions", "NextLevel Code",
+      "SkyHigh Developers", "Quantum Soft",
+    ],
+  },
+
+  // ─── CONTACT PAGE ──────────────────────────────────────────────────
   contact: {
     badge: "GET IN TOUCH",
     headline: "Let's Build Something\nAmazing Together",
-    description: "Whether you have a project in mind, want to collaborate, or just want to say hello — we'd love to hear from you.",
-    address: "Alpha City IT Park, No.25, OMR,\nNavalur, Chennai – 600130",
+    description: "Whether you have a project in mind, want to collaborate, or just want to say hello \u2014 we'd love to hear from you.",
+    address: "Alpha City IT Park, No.25, OMR,\nNavalur, Chennai \u2013 600130",
     phone: "+91 95001 81230",
     email: "info@dveininnovations.com",
-    hours: "Mon – Sat: 9 AM – 7 PM IST",
+    hours: "Mon \u2013 Sat: 9 AM \u2013 7 PM IST",
     formHeading: "Send Us a Message",
     formSubheading: "Fill in the form and we'll get back to you within 24 hours.",
     submitBtn: "Send Message",
   },
 };
 
-// ─── CONTEXT ──────────────────────────────────────────────────────────────────
+// ─── CONTEXT ──────────────────────────────────────────────────────────────────────────────
 const ContentContext = createContext(null);
 
 const buildContent = (p) => {
@@ -480,7 +531,21 @@ const buildContent = (p) => {
     softwareSolutions: p.softwareSolutions ? { ...defaultContent.softwareSolutions, ...p.softwareSolutions } : defaultContent.softwareSolutions,
     courses:           p.courses           ? { ...defaultContent.courses,           ...p.courses           } : defaultContent.courses,
     ourStory:          p.ourStory          ? { ...defaultContent.ourStory,          ...p.ourStory          } : defaultContent.ourStory,
-    collaborations:    p.collaborations    ? { ...defaultContent.collaborations,    ...p.collaborations    } : defaultContent.collaborations,
+    collaborations:    p.collaborations    ? {
+      ...defaultContent.collaborations,
+      ...p.collaborations,
+      metrics:        p.collaborations.metrics        || defaultContent.collaborations.metrics,
+      tiers:          p.collaborations.tiers          || defaultContent.collaborations.tiers,
+      frameworkNodes: p.collaborations.frameworkNodes || defaultContent.collaborations.frameworkNodes,
+      faqs:           p.collaborations.faqs           || defaultContent.collaborations.faqs,
+    } : defaultContent.collaborations,
+    careerHub:         p.careerHub ? {
+      ...defaultContent.careerHub,
+      ...p.careerHub,
+      panels: p.careerHub.panels || defaultContent.careerHub.panels,
+      dna: p.careerHub.dna ? { ...defaultContent.careerHub.dna, ...p.careerHub.dna, dots: p.careerHub.dna.dots || defaultContent.careerHub.dna.dots } : defaultContent.careerHub.dna,
+    } : defaultContent.careerHub,
+    clients:           p.clients ? { ...defaultContent.clients, ...p.clients } : defaultContent.clients,
     contact:           merge('contact'),
   };
 };
@@ -500,7 +565,7 @@ export const ContentProvider = ({ children }) => {
     (async () => {
       try {
         const ls = localStorage.getItem('dvein_cms_content');
-        if (ls) return; // localStorage already loaded — no need to check IDB
+        if (ls) return; // localStorage already loaded
       } catch {}
       const idb = await idbLoad();
       if (idb) setContent(buildContent(idb));

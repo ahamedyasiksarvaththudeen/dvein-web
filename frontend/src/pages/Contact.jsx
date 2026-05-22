@@ -308,9 +308,6 @@ const Contact = () => {
         </div>
       </div>
 
-      <footer className="py-12 text-center border-t border-gray-100 bg-white">
-        <p className="text-xs text-gray-400">Â© 2026 DVein Innovations Â· All Rights Reserved</p>
-      </footer>
     </div>
   );
 };

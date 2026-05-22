@@ -1,22 +1,21 @@
 import React from 'react';
-
-// Mock Client Names (Replace with Images later if needed)
-const clients = [
-  "TechCorp Systems", "Innovate AI", "BuildIt Infra", "CloudNine Networks", 
-  "FutureGen Edu", "Alpha Data", "CyberSafe Solutions", "NextLevel Code",
-  "SkyHigh Developers", "Quantum Soft"
-];
+import { useContent } from '../context/ContentContext';
 
 const Clients = () => {
-  // Duplicate the list to create a seamless loop
-  const loopedClients = [...clients, ...clients, ...clients]; 
+  const { content } = useContent();
+  const cms = content?.clients || {};
+  const clientNames = Array.isArray(cms.names) && cms.names.length > 0 ? cms.names : [
+    "TechCorp Systems", "Innovate AI", "BuildIt Infra", "CloudNine Networks",
+    "FutureGen Edu", "Alpha Data", "CyberSafe Solutions", "NextLevel Code",
+    "SkyHigh Developers", "Quantum Soft",
+  ];
+  const loopedClients = [...clientNames, ...clientNames, ...clientNames];
 
   return (
     <section className="py-16 bg-white border-b border-gray-100 overflow-hidden relative">
-      
       <div className="max-w-7xl mx-auto px-4 text-center mb-10">
         <h2 className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em] font-heading">
-          Trusted by Industry Leaders
+          {cms.heading || 'Trusted by Industry Leaders'}
         </h2>
       </div>
 

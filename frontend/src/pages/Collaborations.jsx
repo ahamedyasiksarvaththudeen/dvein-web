@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FaGlobeAmericas, FaHandshake, FaChartLine, FaNetworkWired, 
-  FaBuilding, FaMicrochip, FaShieldAlt, FaDatabase, 
+import {
+  FaGlobeAmericas, FaHandshake, FaChartLine, FaNetworkWired,
+  FaBuilding, FaMicrochip, FaShieldAlt, FaDatabase,
   FaCogs, FaWhatsapp, FaInfoCircle, FaCheck
 } from 'react-icons/fa';
+import { useContent } from '../context/ContentContext';
+
+// Icon pool for frameworkNodes (cycles by index so titles stay editable)
+const FW_ICONS = [<FaMicrochip />, <FaDatabase />, <FaCogs />, <FaNetworkWired />, <FaCogs />, <FaShieldAlt />];
+// Accent pool for tiers
+const TIER_ACCENTS = ['border-indigo-600', 'border-slate-900', 'border-indigo-400'];
 
 const Collaborations = () => {
+  const { content } = useContent();
+  const cms = content?.collaborations || {};
+  const cmsHero    = cms.hero           || {};
+  const cmsMetrics = Array.isArray(cms.metrics)        ? cms.metrics        : [];
+  const cmsTiers   = Array.isArray(cms.tiers)          ? cms.tiers          : [];
+  const cmsNodes   = Array.isArray(cms.frameworkNodes) ? cms.frameworkNodes : [];
+  const cmsFaqs    = Array.isArray(cms.faqs)           ? cms.faqs           : [];
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
 
@@ -21,64 +35,7 @@ const Collaborations = () => {
     );
   };
 
-  const globalMetrics = [
-    { label: "Enterprise Partners", count: "45+", icon: <FaBuilding /> },
-    { label: "Countries Served", count: "12+", icon: <FaGlobeAmericas /> },
-    { label: "Joint Projects Delivered", count: "150+", icon: <FaHandshake /> },
-    { label: "Uptime SLA", count: "99.9%", icon: <FaChartLine /> }
-  ];
-
-  const collaborationTiers = [
-    {
-      title: "Strategic Enterprise Alliance",
-      desc: "A long-term partnership model designed for multinational enterprises seeking a reliable offshore technology backbone. We deliver dedicated development clusters, secure cloud infrastructure, and SLA-driven performance monitoring.",
-      features: [
-        "Dedicated Engineering Pods",
-        "SLA-Backed Infrastructure",
-        "Cross-Border Compliance",
-        "Enterprise Support Desk"
-      ],
-      accent: "border-indigo-600"
-    },
-    {
-      title: "R&D Innovation Partnership",
-      desc: "A co-innovation framework for startups, labs, and product companies to jointly build next-gen solutions across IoT, Smart Manufacturing, AI, and Blockchain ecosystems.",
-      features: [
-        "Joint IP Ownership Models",
-        "Rapid Prototyping Labs",
-        "Secure Data Sandboxes",
-        "Product Commercialization Support"
-      ],
-      accent: "border-slate-900"
-    },
-    {
-      title: "Global Talent Synergy",
-      desc: "A talent bridge connecting verified student innovators and industry-ready engineers with international firms for project outsourcing, hiring pipelines, and digital transformation initiatives.",
-      features: [
-        "Vetted Developer Network",
-        "Quality Assurance Gates",
-        "Structured Onboarding",
-        "Cybersecurity Compliance"
-      ],
-      accent: "border-indigo-400"
-    }
-  ];
-
-  const frameworkNodes = [
-    { title: "Architecture Alignment", detail: "We align our technical standards with your enterprise architecture to ensure seamless integration and long-term scalability.", icon: <FaMicrochip /> },
-    { title: "Innovation Hub Cluster", detail: "High-availability backend clusters with managed databases and global load balancing for international performance.", icon: <FaDatabase /> },
-    { title: "Financial Transparency", detail: "Clear billing structures, milestone-based payouts, and automated financial audit synchronization.", icon: <FaCogs /> },
-    { title: "Logistics Sync Engine", detail: "Integrated APIs for cross-border operations, supply chain tracking, and partner coordination.", icon: <FaNetworkWired /> },
-    { title: "Neural Synergy Cloud", detail: "Decentralized AI processing nodes for real-time analytics and localized data intelligence.", icon: <FaCogs /> },
-    { title: "Resilience Shield", detail: "Zero-trust security architecture with continuous vulnerability assessments and regulatory compliance.", icon: <FaShieldAlt /> }
-  ];
-
-  const partnershipLogs = [
-    { q: "What is your typical collaboration onboarding timeline?", a: "We complete technical alignment, legal formalities, and team onboarding within 14–22 business days." },
-    { q: "How do you ensure data and IP protection?", a: "All projects operate under NDAs, encrypted repositories, controlled access policies, and continuous security audits." },
-    { q: "What service levels do you guarantee?", a: "We offer a 99.9% uptime SLA with proactive monitoring and 24/7 incident response." },
-    { q: "Do you support long-term enterprise contracts?", a: "Yes. We specialize in multi-year enterprise agreements with flexible scaling and pricing models." }
-  ];
+  // All data now comes from CMS (cmsMetrics, cmsTiers, cmsNodes, cmsFaqs defined above)
 
   return (
     <div className="font-sans text-slate-900 bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen pt-24 pb-16">
@@ -87,23 +44,17 @@ const Collaborations = () => {
       <section className="max-w-7xl mx-auto px-6 pt-10 pb-20 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={isLoaded ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}>
           <span className="inline-block py-1.5 px-4 rounded-full bg-white text-indigo-600 font-medium text-xs mb-6 border border-indigo-100">
-            Global Partnership Hub
+            {cmsHero.badge || 'Global Partnership Hub'}
           </span>
-
           <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6 tracking-tight">
-            Global Reach <span className="text-black">DVein Precision</span>
+            {cmsHero.headline || 'Building Tomorrow\'s Tech Ecosystem Together'}
           </h1>
-
           <p className="max-w-3xl mx-auto text-base text-slate-600 leading-relaxed font-medium mb-10">
-            DVein Innovations Pvt Ltd partners with global enterprises to design, build, and operate secure software platforms, intelligent infrastructure, and next-generation digital ecosystems. We help organizations scale faster, operate smarter, and innovate with confidence.
+            {cmsHero.description || ''}
           </p>
-
           <div className="flex justify-center gap-4">
-            <button
-              onClick={handleCollaborate}
-              className="inline-flex items-center gap-3 bg-indigo-600 text-white px-9 py-4 rounded-xl font-semibold text-sm transition-all shadow hover:bg-indigo-700"
-            >
-              <FaHandshake className="text-lg" /> Start a Collaboration
+            <button onClick={handleCollaborate} className="inline-flex items-center gap-3 bg-indigo-600 text-white px-9 py-4 rounded-xl font-semibold text-sm transition-all shadow hover:bg-indigo-700">
+              <FaHandshake className="text-lg" /> {cmsHero.primaryBtn || 'Start a Collaboration'}
             </button>
           </div>
         </motion.div>
@@ -111,9 +62,9 @@ const Collaborations = () => {
 
       {/* METRICS */}
       <section className="max-w-6xl mx-auto px-6 mb-24 grid grid-cols-2 lg:grid-cols-4 gap-6">
-        {globalMetrics.map((metric, i) => (
-          <motion.div key={i} whileHover={{ y: -5 }} className="bg-white p-8 rounded-2xl border border-slate-100 transition-all hover:shadow-lg text-center">
-            <div className="text-2xl text-indigo-600 mb-4 flex justify-center">{metric.icon}</div>
+        {cmsMetrics.map((metric, i) => (
+          <motion.div key={metric._id || i} whileHover={{ y: -5 }} className="bg-white p-8 rounded-2xl border border-slate-100 transition-all hover:shadow-lg text-center">
+            <div className="text-2xl text-indigo-600 mb-4 flex justify-center">{[<FaBuilding />, <FaGlobeAmericas />, <FaHandshake />, <FaChartLine />][i % 4]}</div>
             <h3 className="text-3xl font-semibold text-slate-900 mb-1">{metric.count}</h3>
             <p className="text-sm text-slate-500">{metric.label}</p>
           </motion.div>
@@ -158,8 +109,8 @@ const Collaborations = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {collaborationTiers.map((tier, i) => (
-              <motion.div key={i} whileHover={{ y: -8 }} className={`bg-white p-10 rounded-2xl border-t-4 ${tier.accent} shadow flex flex-col h-full`}>
+            {cmsTiers.map((tier, i) => (
+              <motion.div key={tier._id || i} whileHover={{ y: -8 }} className={`bg-white p-10 rounded-2xl border-t-4 ${TIER_ACCENTS[i % TIER_ACCENTS.length]} shadow flex flex-col h-full`}>
                 <h3 className="text-xl font-semibold text-slate-900 mb-4">{tier.title}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed mb-6 flex-grow">{tier.desc}</p>
 
@@ -195,9 +146,9 @@ const Collaborations = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {frameworkNodes.map((node, i) => (
-            <motion.div key={i} whileHover={{ scale: 1.02 }} className="flex gap-6 p-6 rounded-2xl bg-white border border-slate-100 hover:shadow-lg transition">
-              <div className="text-3xl text-indigo-600">{node.icon}</div>
+          {cmsNodes.map((node, i) => (
+            <motion.div key={node._id || i} whileHover={{ scale: 1.02 }} className="flex gap-6 p-6 rounded-2xl bg-white border border-slate-100 hover:shadow-lg transition">
+              <div className="text-3xl text-indigo-600">{FW_ICONS[i % FW_ICONS.length]}</div>
               <div>
                 <h4 className="text-lg font-semibold text-slate-900 mb-2">{node.title}</h4>
                 <p className="text-sm text-slate-600 leading-relaxed">{node.detail}</p>
@@ -215,13 +166,13 @@ const Collaborations = () => {
           </h2>
 
           <div className="space-y-4">
-            {partnershipLogs.map((faq, i) => (
-              <div key={i} className="bg-white rounded-xl border border-slate-100 overflow-hidden">
-                <button 
+            {cmsFaqs.map((faq, i) => (
+              <div key={faq._id || i} className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+                <button
                   onClick={() => setActiveFaq(activeFaq === i ? null : i)}
                   className="w-full flex justify-between items-center p-5 text-left font-medium text-slate-800"
                 >
-                  {faq.q} <FaInfoCircle className="text-indigo-600" />
+                  {faq.question || faq.q} <FaInfoCircle className="text-indigo-600" />
                 </button>
 
                 <AnimatePresence>
@@ -232,7 +183,7 @@ const Collaborations = () => {
                       exit={{ height: 0 }} 
                       className="px-5 pb-5 text-sm text-slate-600 leading-relaxed"
                     >
-                      {faq.a}
+                      {faq.answer || faq.a}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -259,9 +210,6 @@ const Collaborations = () => {
           <FaWhatsapp className="text-lg" /> Contact DVein Partnerships
         </button>
       </section>
-      <footer className="py-10 text-center border-t border-slate-100">
-        <p className="text-xs text-slate-400">© 2026 DVein Innovations · Collaborations</p>
-      </footer>
     </div>
   );
 };

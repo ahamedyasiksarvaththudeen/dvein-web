@@ -13,16 +13,31 @@ import img2Src from '../assets/img2.jpeg';
 import img3Src from '../assets/img3.jpeg';
 import vid1Src from '../assets/vid1.mp4';
 import vid2Src from '../assets/vid2.mp4';
+import { useContent } from '../context/ContentContext';
 
-const WA_CAREER = '918667363896';
+// Panel local assets for CMS image resolution
+const panelAssets = import.meta.glob('../assets/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' });
+const resolvePanel = (img) => {
+  if (!img) return '';
+  if (/^(data:|https?:|\/)/.test(img)) return img;
+  return panelAssets[`../assets/${img}`] || img;
+};
 
-const dnaDots = [
-  { icon: <FaBolt />,      label: 'DREAM',     desc: 'Ambition beyond features.',          color: 'bg-indigo-600' },
-  { icon: <FaShieldAlt />, label: 'DESIGN',    desc: 'Crafted systems, seamless journeys.', color: 'bg-violet-600' },
-  { icon: <FaUsers />,     label: 'DELIVERY',  desc: 'Relentless launch and impact.',      color: 'bg-blue-600'   },
-];
+// DNA dot icon pool (icons cycle by index so labels stay editable)
+const DNA_ICONS   = [<FaBolt />, <FaShieldAlt />, <FaUsers />, <FaMicrochip />, <FaNetworkWired />];
+const DNA_COLORS  = ['bg-indigo-600', 'bg-violet-600', 'bg-blue-600', 'bg-cyan-600', 'bg-purple-600'];
 
 const CareerHub = () => {
+  const { content } = useContent();
+  const cms = content?.careerHub || {};
+  const cmsHero         = cms.hero         || {};
+  const cmsPanels       = Array.isArray(cms.panels)  ? cms.panels  : [];
+  const cmsSuccessStory = cms.successStory  || {};
+  const cmsDna          = cms.dna           || {};
+  const cmsDots         = Array.isArray(cmsDna.dots) ? cmsDna.dots : [];
+  const cmsContact      = cms.contact       || {};
+  const WA_CAREER       = cmsContact.whatsappNumber || '918667363896';
+
   const [selectedJob, setSelectedJob] = useState(null);
   const [liveJobs, setLiveJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -90,34 +105,33 @@ const CareerHub = () => {
   return (
     <div className="font-sans text-slate-900 bg-gradient-to-br from-blue-50 via-white to-indigo-50 min-h-screen pt-24 selection:bg-purple-600 selection:text-white overflow-x-hidden flex flex-col items-center">
 
-      {/* 1. HERO - simple header */}
+      {/* 1. HERO */}
       <section className="w-full max-w-5xl px-6 py-12 flex flex-col items-center text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center w-full">
-          <span className="inline-block py-1 px-3 rounded-full bg-white border border-blue-100 text-blue-600 text-xs font-bold tracking-wider mb-4 shadow-sm uppercase">Career Hub</span>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-black leading-none mb-4">Build Your Career</h1>
-          <p className="text-slate-500 text-base font-normal max-w-xl text-center">Upskill your career with DVein Innovations</p>
+          <span className="inline-block py-1 px-3 rounded-full bg-white border border-blue-100 text-blue-600 text-xs font-bold tracking-wider mb-4 shadow-sm uppercase">{cmsHero.badge || 'Career Hub'}</span>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-black leading-none mb-4">{cmsHero.heading || 'Build Your Career'}</h1>
+          <p className="text-slate-500 text-base font-normal max-w-xl text-center">{cmsHero.description || 'Upskill your career with DVein Innovations'}</p>
         </motion.div>
       </section>
 
       {/* 2. RECRUITMENT PANELS */}
       <section className="w-full py-20 px-6 flex flex-col items-center">
         <div className="max-w-5xl w-full grid gap-6 md:grid-cols-2">
-          <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 text-left shadow-sm">
-            <div className="relative h-56 overflow-hidden rounded-[2rem] mb-6">
-              <img src={clientImg} alt="Client Companies Recruitment" className="w-full h-full object-cover" />
+          {cmsPanels.map((panel, i) => (
+            <div key={panel._id || i} className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 text-left shadow-sm">
+              <div className="relative h-56 overflow-hidden rounded-[2rem] mb-6">
+                <img
+                  src={resolvePanel(panel.image) || (i === 0 ? clientImg : dveinLogo)}
+                  alt={panel.tag}
+                  className="w-full h-full object-cover"
+                  onError={e => { e.target.src = i === 0 ? clientImg : dveinLogo; }}
+                />
+              </div>
+              <span className="text-[11px] font-black uppercase tracking-[0.35em] text-slate-900 mb-3 block">{panel.tag}</span>
+              <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 mb-4">{panel.heading}</h2>
+              <p className="text-slate-600 text-sm leading-relaxed mb-6">{panel.description}</p>
             </div>
-            <span className="text-[11px] font-black uppercase tracking-[0.35em] text-slate-900 mb-3 block">CLIENT COMPANIES</span>
-            <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 mb-4">Recruitments</h2>
-            <p className="text-slate-600 text-sm leading-relaxed mb-6">Explore curated opportunities with our trusted clients. Roles in design, product, and growth teams.</p>
-          </div>
-          <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 text-left shadow-sm">
-            <div className="relative h-56 overflow-hidden rounded-[2rem] mb-6">
-              <img src={dveinLogo} alt="Dvein Innovations Recruitment" className="w-full h-full object-cover" />
-            </div>
-            <span className="text-[11px] font-black uppercase tracking-[0.35em] text-slate-900 mb-3 block">DVEIN INNOVATIONS</span>
-            <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 mb-4">Recruitments</h2>
-            <p className="text-slate-600 text-sm leading-relaxed mb-6">Discover internal openings at Dvein. Build products, systems, and strategy with our core team.</p>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -126,8 +140,8 @@ const CareerHub = () => {
         <div className="max-w-7xl mx-auto">
           {/* Centered heading */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none mb-4">Our Success Story</h2>
-            <p className="text-slate-500 text-sm leading-relaxed font-normal max-w-xl mx-auto">Real stories from real people who built their careers with DVein Innovations. Every image, video, and milestone shared here is a testament to what dedication and the right guidance can achieve.</p>
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none mb-4">{cmsSuccessStory.heading || 'Our Success Story'}</h2>
+            <p className="text-slate-500 text-sm leading-relaxed font-normal max-w-xl mx-auto">{cmsSuccessStory.description || ''}</p>
           </div>
 
           {/* Media Cards — image and videos in separate cards */}
@@ -252,45 +266,24 @@ const CareerHub = () => {
           transition={{ duration: 0.6 }}
         >
           <span className="inline-block py-1 px-4 rounded-full bg-white/10 text-white/70 text-xs font-semibold tracking-widest uppercase mb-4">
-            Who We Are
+            {cmsDna.badge || 'Who We Are'}
           </span>
-          <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">OUR DNA</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">{cmsDna.heading || 'OUR DNA'}</h2>
         </motion.div>
 
         {/* Desktop: horizontal timeline */}
         <div className="max-w-3xl w-full mx-auto px-6 hidden md:block">
           <div className="relative flex items-start justify-between gap-0">
-            {/* Animated connecting line */}
             <div className="absolute top-8 left-[calc(100%/8)] right-[calc(100%/8)] h-0.5 bg-white/10 overflow-hidden">
-              <motion.div
-                className="h-full bg-blue-500"
-                initial={{ scaleX: 0 }}
-                animate={dnaInView ? { scaleX: 1 } : {}}
-                transition={{ duration: 1.2, ease: 'easeInOut', delay: 0.4 }}
-                style={{ originX: 0 }}
-              />
+              <motion.div className="h-full bg-blue-500" initial={{ scaleX: 0 }} animate={dnaInView ? { scaleX: 1 } : {}} transition={{ duration: 1.2, ease: 'easeInOut', delay: 0.4 }} style={{ originX: 0 }} />
             </div>
-
-            {dnaDots.map((dot, i) => (
-              <motion.div
-                key={i}
-                className="flex flex-col items-center text-center flex-1 relative z-10"
-                initial={{ opacity: 0, y: 30 }}
-                animate={dnaInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.55, delay: 0.25 + i * 0.18 }}
-              >
-                <motion.div
-                  className="relative mb-4"
-                  whileHover={{ scale: 1.12, rotate: 3 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  <div className={`w-16 h-16 rounded-2xl ${dot.color} flex items-center justify-center text-white text-2xl shadow-lg ring-4 ring-white/10`}>
-                    {dot.icon}
+            {cmsDots.map((dot, i) => (
+              <motion.div key={dot._id || i} className="flex flex-col items-center text-center flex-1 relative z-10" initial={{ opacity: 0, y: 30 }} animate={dnaInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.55, delay: 0.25 + i * 0.18 }}>
+                <motion.div className="relative mb-4" whileHover={{ scale: 1.12, rotate: 3 }} transition={{ type: 'spring', stiffness: 300 }}>
+                  <div className={`w-16 h-16 rounded-2xl ${DNA_COLORS[i % DNA_COLORS.length]} flex items-center justify-center text-white text-2xl shadow-lg ring-4 ring-white/10`}>
+                    {DNA_ICONS[i % DNA_ICONS.length]}
                   </div>
-                  {/* Number badge */}
-                  <div className="absolute -top-2 left-[60%] w-5 h-5 rounded-full bg-white text-slate-900 text-[10px] font-black flex items-center justify-center shadow">
-                    {i + 1}
-                  </div>
+                  <div className="absolute -top-2 left-[60%] w-5 h-5 rounded-full bg-white text-slate-900 text-[10px] font-black flex items-center justify-center shadow">{i + 1}</div>
                 </motion.div>
                 <h3 className="text-white font-black text-sm mb-1 tracking-widest uppercase">{dot.label}</h3>
                 <p className="text-slate-400 text-xs leading-relaxed px-3 max-w-[140px]">{dot.desc}</p>
@@ -303,27 +296,13 @@ const CareerHub = () => {
         <div className="max-w-md w-full mx-auto px-6 md:hidden">
           <div className="relative ml-8">
             <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-white/10 overflow-hidden">
-              <motion.div
-                className="w-full bg-blue-500"
-                initial={{ scaleY: 0 }}
-                animate={dnaInView ? { scaleY: 1 } : {}}
-                transition={{ duration: 1.4, ease: 'easeInOut', delay: 0.2 }}
-                style={{ originY: 0 }}
-              />
+              <motion.div className="w-full bg-blue-500" initial={{ scaleY: 0 }} animate={dnaInView ? { scaleY: 1 } : {}} transition={{ duration: 1.4, ease: 'easeInOut', delay: 0.2 }} style={{ originY: 0 }} />
             </div>
-            {dnaDots.map((dot, i) => (
-              <motion.div
-                key={i}
-                className="relative pl-8 pb-10 last:pb-0"
-                initial={{ opacity: 0, x: -20 }}
-                animate={dnaInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.15 + i * 0.13 }}
-              >
-                <div className={`absolute left-[-8px] top-1 w-4 h-4 rounded-full ${dot.color} ring-2 ring-white/20 shadow`} />
+            {cmsDots.map((dot, i) => (
+              <motion.div key={dot._id || i} className="relative pl-8 pb-10 last:pb-0" initial={{ opacity: 0, x: -20 }} animate={dnaInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5, delay: 0.15 + i * 0.13 }}>
+                <div className={`absolute left-[-8px] top-1 w-4 h-4 rounded-full ${DNA_COLORS[i % DNA_COLORS.length]} ring-2 ring-white/20 shadow`} />
                 <div className="flex items-start gap-4">
-                  <div className={`w-11 h-11 rounded-xl ${dot.color} flex items-center justify-center text-white text-lg shadow shrink-0`}>
-                    {dot.icon}
-                  </div>
+                  <div className={`w-11 h-11 rounded-xl ${DNA_COLORS[i % DNA_COLORS.length]} flex items-center justify-center text-white text-lg shadow shrink-0`}>{DNA_ICONS[i % DNA_ICONS.length]}</div>
                   <div>
                     <span className="text-white/40 text-[10px] font-bold block mb-1">STEP {i + 1}</span>
                     <h3 className="text-white font-black text-sm mb-1 uppercase tracking-widest">{dot.label}</h3>
@@ -340,11 +319,13 @@ const CareerHub = () => {
       <section className="w-full py-20 px-6 bg-white flex flex-col items-center">
         <div className="w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-[3rem] shadow-2xl p-8">
           <div className="space-y-6 text-center flex flex-col items-center justify-center">
-            <span className="inline-block uppercase tracking-[0.45em] text-[10px] font-black text-slate-400"></span>
-            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white">chat us</h2>
-            <p className="text-slate-300 text-sm md:text-base leading-relaxed">Send a quick message and we will connect you.</p>
+            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white">{cmsContact.heading || 'chat us'}</h2>
+            <p className="text-slate-300 text-sm md:text-base leading-relaxed">{cmsContact.description || 'Send a quick message and we will connect you.'}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={() => window.open('https://wa.me/' + WA_CAREER + '?text=' + encodeURIComponent('Hello DVein Team, I would like to discuss career opportunities.'), '_blank')} className="bg-white text-slate-950 px-10 py-4 rounded-full font-black uppercase tracking-[0.35em] text-[11px] hover:bg-slate-100 transition">WhatsApp the Team</button>
+              <button
+                onClick={() => window.open('https://wa.me/' + WA_CAREER + '?text=' + encodeURIComponent(cmsContact.whatsappMessage || 'Hello DVein Team, I would like to discuss career opportunities.'), '_blank')}
+                className="bg-white text-slate-950 px-10 py-4 rounded-full font-black uppercase tracking-[0.35em] text-[11px] hover:bg-slate-100 transition"
+              >{cmsContact.buttonText || 'WhatsApp the Team'}</button>
             </div>
           </div>
         </div>
