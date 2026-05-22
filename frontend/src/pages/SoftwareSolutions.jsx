@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useContent } from '../context/ContentContext';
 import ImageSlideshow from '../components/ImageSlideshow';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -13,25 +14,7 @@ import {
   SiDocker, SiTensorflow, SiFlutter, SiFirebase
 } from 'react-icons/si';
 import '../styles/software-solutions.css';
-import t1 from '../assets/T1.png';
-import t2 from '../assets/T2.png';
-import t3 from '../assets/T3.png';
-import t4 from '../assets/T4.png';
-import t5 from '../assets/T5.png';
-import t6 from '../assets/T6.png'; 
-import F1 from '../assets/F1.png';
-import F2 from '../assets/F2.png';
-import F3 from '../assets/F3.png';
-import SD1 from '../assets/Seller dash/S1.png';
-import SD2 from '../assets/Seller dash/S2.png';
-import SD3 from '../assets/Seller dash/S3.png';
-import SD4 from '../assets/Seller dash/S4.png';
-import SD5 from '../assets/Seller dash/S5.png';
-import SD6 from '../assets/Seller dash/S6.png';
-import EC1 from '../assets/ecommerce/e1.jpeg';
-import EC2 from '../assets/ecommerce/E2.jpeg';
-import EC3 from '../assets/ecommerce/E3.jpeg';
-import EC4 from '../assets/ecommerce/E4.jpeg';
+
 const BRAND = '#005ff7';
 
 const servicesList = [
@@ -76,6 +59,18 @@ const openWA_SS = (msg = 'Hello DVein Team, I am interested in your Software Sol
 
 const SoftwareSolutions = () => {
   const [activeAccordion, setActiveAccordion] = useState(null);
+  const { content } = useContent();
+  const cms = content.softwareSolutions;
+
+  // Merge CMS text over static data — icons stay hardcoded
+  const cmsServices = cms?.services?.length ? cms.services : servicesList.map(s => ({ title: s.title, desc: s.desc }));
+  const displayServices = servicesList.map((s, i) => ({ ...s, title: cmsServices[i]?.title ?? s.title, desc: cmsServices[i]?.desc ?? s.desc }));
+  const cmsFeatures = cms?.features?.length ? cms.features : features.map(f => ({ title: f.title, desc: f.desc }));
+  const displayFeatures = features.map((f, i) => ({ ...f, title: cmsFeatures[i]?.title ?? f.title, desc: cmsFeatures[i]?.desc ?? f.desc }));
+  const cmsIndustries = cms?.industries?.length ? cms.industries : industries.map(ind => ({ name: ind.name, desc: ind.desc }));
+  const displayIndustries = industries.map((ind, i) => ({ ...ind, name: cmsIndustries[i]?.name ?? ind.name, desc: cmsIndustries[i]?.desc ?? ind.desc }));
+  const cmsFaqs = cms?.faqs?.length ? cms.faqs : faqs.map(f => ({ question: f.question, answer: f.answer }));
+  const displayFaqs = faqs.map((f, i) => ({ ...f, question: cmsFaqs[i]?.question ?? f.question, answer: cmsFaqs[i]?.answer ?? f.answer }));
 
   return (
     <div className="ss-page font-sans text-gray-900 bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen pt-24 pb-16">
@@ -84,14 +79,13 @@ const SoftwareSolutions = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 text-center">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
           <span className="inline-block py-1.5 px-4 rounded-full bg-indigo-50 text-indigo-600 font-extrabold tracking-widest uppercase text-[10px] mb-8 border border-indigo-100">
-            ENGINEERING EXCELLENCE
+            {cms?.hero?.badge || 'ENGINEERING EXCELLENCE'}
           </span>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-black font-heading mb-6 leading-tight">
-            Transforming Ideas into <br/>
-            <span className="text-black">Digital Reality</span>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-black font-heading mb-6 leading-tight" style={{ whiteSpace: 'pre-line' }}>
+            {cms?.hero?.headline ? cms.hero.headline.replace(/\\n/g, '\n') : 'Transforming Ideas into\nDigital Reality'}
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-            We are a full-cycle software development company. From conceptualization to deployment, we build robust, scalable, and secure digital products.
+            {cms?.hero?.description || 'We are a full-cycle software development company. From conceptualization to deployment, we build robust, scalable, and secure digital products.'}
           </p>
           <div className="flex justify-center gap-4">
             <button
@@ -110,7 +104,7 @@ const SoftwareSolutions = () => {
       {/* === WHY CHOOSE US === */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-32">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, i) => (
+          {displayFeatures.map((feature, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
@@ -147,7 +141,7 @@ const SoftwareSolutions = () => {
           <p className="text-gray-600 max-w-2xl mx-auto">We leverage cutting-edge technology to solve complex challenges.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {servicesList.map((service, index) => (
+          {displayServices.map((service, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
@@ -179,33 +173,37 @@ const SoftwareSolutions = () => {
             </h2>
             <div className="w-16 h-1 mx-auto mt-4 rounded-full" style={{ backgroundColor: BRAND }}></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Temple Website",
-                desc: "•Admin panel •Donation system •Event calendar •Multilingual support •Virtual tours •Live streaming integration",
-                tags: ["HTML", "CSS", "JavaScript", "React", "Node.js", "express.js", "motion.js"],
-                images: [t1, t2, t3, t4, t5, t6
+                title: "E-Commerce Platform",
+                desc: "Full-stack multi-vendor marketplace with real-time inventory, payment gateway integration, and AI-powered product recommendations.",
+                tags: ["React", "Node.js", "MongoDB", "Stripe"],
+                images: [
+                  "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070",
+                  "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=2070",
+                  "https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=2070"
                 ]
               },
               {
-                title: "SARAL-X FERTILIZER WEBSITE",
-                desc: "•Dynamic Product Catalog Management •Secure UPI Payment Verification •Automated WhatsApp Order Processing •Hyper-Local SEO Optimization •Fully Responsive Cross-Browser Interface",
-                tags: ["React.js", "Tailwind CSS", "Framer Motion", "Node.js", "Express.js", "MongoDB", "UPI API Integration"],
+                title: "Healthcare Management System",
+                desc: "Telemedicine portal with appointment scheduling, EHR management, video consultation, and HIPAA-compliant data handling.",
+                tags: ["React", "FastAPI", "PostgreSQL", "WebRTC"],
                 images: [
-                  F1, F2, F3]
+                  "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070",
+                  "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=2031",
+                  "https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=2070"
+                ]
               },
               {
-                title: "Seller Dashboard",
-                desc: "•Seller Hub & Order Management •Admin Analytics Dashboard •Store Reels Manager •Financial Settlements & Payouts •Category & Inventory Management •Revenue Analytics & Reporting",
-                tags: ["React.js", "Node.js", "Express.js", "MongoDB", "Recharts", "Tailwind CSS"],
-                images: [SD1, SD2, SD3, SD4, SD5, SD6]
-              },
-              {
-                title: "E-Commerce Platform",
-                desc: "•Multi-vendor marketplace with seller onboarding •Secure UPI & card payment gateway •Real-time inventory & stock management •Order tracking with automated notifications •Seller analytics & revenue dashboard •Product catalog with category management",
-                tags: ["React.js", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "UPI API", "Framer Motion"],
-                images: [EC1, EC2, EC3, EC4]
+                title: "EdTech Learning Platform",
+                desc: "Interactive LMS with live virtual classrooms, progress analytics, automated assessments, and a student performance dashboard.",
+                tags: ["Next.js", "Python", "Firebase", "TensorFlow"],
+                images: [
+                  "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=2074",
+                  "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070",
+                  "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?q=80&w=2070"
+                ]
               }
             ].map((project, i) => (
               <motion.div
@@ -260,7 +258,7 @@ const SoftwareSolutions = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
         <h2 className="text-3xl font-bold text-center text-black mb-10">Frequently Asked Questions</h2>
         <div className="space-y-4">
-          {faqs.map((faq, index) => (
+          {displayFaqs.map((faq, index) => (
             <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               <button
                 onClick={() => setActiveAccordion(activeAccordion === index ? null : index)}

@@ -3,7 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenuAlt3, HiX, HiChevronDown } from 'react-icons/hi';
 import { FaChevronRight } from 'react-icons/fa';
-import logo from '../assets/logo.png';
+import logoIcon from '../assets/LOGO-ICON.png';
+import logoWhite from '../assets/LOGO-WHITE-V-AZURE.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,8 +63,9 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-20">
 
             {/* Logo */}
-            <Link to="/" className="flex-shrink-0 z-[70]">
-              <img src={logo} alt="DVein" className="h-10 md:h-12 w-auto object-contain" />
+            <Link to="/" className="flex flex-shrink-0 items-center gap-2 z-[70]" aria-label="DVein Innovations home">
+              <img src={logoIcon} alt="" className="h-12 w-12 md:h-14 md:w-14 object-contain" aria-hidden="true" />
+              <img src={logoWhite} alt="DVein Innovations" className="h-10 md:h-12 w-auto object-contain" />
             </Link>
 
             {/* Desktop Menu */}
@@ -133,8 +135,11 @@ const Navbar = () => {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsOpen(false)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
             <motion.div variants={sidebarVariants} initial="closed" animate="open" exit="closed" className="absolute top-0 right-0 w-[85%] max-w-sm h-full bg-white shadow-2xl flex flex-col">
 
-              <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
-                <img src={logo} alt="DVein" className="h-8 w-auto" />
+              <div className="flex justify-between items-center p-6 border-b border-gray-800 bg-black">
+                <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2" aria-label="DVein Innovations home">
+                  <img src={logoIcon} alt="" className="h-10 w-10 object-contain" aria-hidden="true" />
+                  <img src={logoWhite} alt="DVein Innovations" className="h-8 w-auto object-contain" />
+                </Link>
                 <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-red-500 bg-white p-2 rounded-full shadow-sm border border-gray-200"><HiX size={24} /></button>
               </div>
 

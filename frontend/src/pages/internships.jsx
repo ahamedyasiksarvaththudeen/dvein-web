@@ -1,11 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as FaIcons from 'react-icons/fa';
+import { useContent } from '../context/ContentContext';
 
 const getIcon = (iconName) => {
   const IconComponent = FaIcons[iconName];
   return IconComponent ? <IconComponent /> : <FaIcons.FaCode />;
 };
+
+const cardGradients = [
+  'from-blue-100 via-blue-50 to-indigo-50',
+  'from-emerald-100 via-green-50 to-teal-50',
+  'from-purple-100 via-violet-50 to-fuchsia-50',
+  'from-indigo-100 via-indigo-50 to-blue-50',
+  'from-teal-100 via-cyan-50 to-sky-50',
+  'from-orange-100 via-amber-50 to-yellow-50',
+  'from-slate-100 via-gray-50 to-zinc-50',
+  'from-sky-100 via-sky-50 to-blue-50',
+  'from-cyan-100 via-blue-50 to-indigo-50',
+  'from-pink-100 via-rose-50 to-fuchsia-50',
+  'from-blue-100 via-sky-50 to-cyan-50',
+  'from-green-100 via-emerald-50 to-teal-50',
+  'from-amber-100 via-yellow-50 to-orange-50',
+  'from-red-100 via-rose-50 to-pink-50',
+  'from-violet-100 via-purple-50 to-indigo-50',
+  'from-slate-100 via-blue-50 to-indigo-50',
+  'from-rose-100 via-pink-50 to-fuchsia-50',
+  'from-emerald-100 via-teal-50 to-cyan-50',
+  'from-orange-100 via-red-50 to-rose-50',
+  'from-cyan-100 via-teal-50 to-emerald-50',
+];
 
 const marqueeStyle = `
   @keyframes marquee {
@@ -17,11 +41,26 @@ const marqueeStyle = `
 
 const STATIC_DATA = {
   domains: [
-    { _id: 1, title: "Business Analytics", iconName: "FaChartLine", color: "text-blue-600", desc: "Drive strategic decisions through data-driven business modelling, KPIs, and BI dashboards.", skills: ["Strategy", "BI Tools", "KPIs", "Reporting"], contactName: "Business Analytics Lead", whatsappNumber: "918667363896" },
-    { _id: 2, title: "DevOps", iconName: "FaCogs", color: "text-slate-600", desc: "CI/CD pipelines, containerisation, and infrastructure automation for modern software delivery.", skills: ["Docker", "CI/CD", "Kubernetes", "Jenkins"], contactName: "DevOps Lead", whatsappNumber: "918667363896" },
-    { _id: 3, title: "Cloud Computing", iconName: "FaCloud", color: "text-sky-600", desc: "Deploy, scale, and manage applications on AWS, Azure, and GCP with cloud-native best practices.", skills: ["AWS", "Azure", "GCP", "Terraform"], contactName: "Cloud Computing Lead", whatsappNumber: "918667363896" },
-    { _id: 4, title: "MERN Stack", iconName: "FaLayerGroup", color: "text-blue-500", desc: "Full-stack web apps with MongoDB, Express, React, and Node.js in a cohesive modern workflow.", skills: ["MongoDB", "Express", "React", "Node.js"], contactName: "MERN Stack Lead", whatsappNumber: "918667363896" },
-    { _id: 5, title: "UI/UX Design and Prototyping", iconName: "FaDraftingCompass", color: "text-pink-600", desc: "Design intuitive user interfaces and interactive prototypes using Figma and design system principles.", skills: ["Figma", "Prototyping", "Wireframes", "User Research"], contactName: "UI/UX Lead", whatsappNumber: "918667363896" },
+    { _id: 1,  title: "Full Stack Java",               iconName: "FaCode",            color: "text-blue-600",    desc: "Build enterprise-grade applications with Java, Spring Boot, REST APIs, and scalable backend systems.",      skills: ["Java", "Spring Boot", "REST API", "MySQL"] },
+    { _id: 2,  title: "Full Stack Python",              iconName: "FaCode",            color: "text-green-600",   desc: "End-to-end Python development using Django, FastAPI, and modern frontend integration.",                   skills: ["Python", "Django", "FastAPI", "PostgreSQL"] },
+    { _id: 3,  title: "Data Science and AI",            iconName: "FaBrain",           color: "text-purple-600",  desc: "Explore data pipelines, statistical modelling, and AI-driven applications using Python and real datasets.", skills: ["Python", "Pandas", "Statistics", "Visualization"] },
+    { _id: 4,  title: "AI & Machine Learning",          iconName: "FaRobot",           color: "text-indigo-600",  desc: "Supervised, unsupervised, and deep learning models built for real production deployments.",                skills: ["TensorFlow", "PyTorch", "Scikit-learn", "LLMs"] },
+    { _id: 5,  title: "Data Analytics",                 iconName: "FaChartBar",        color: "text-teal-600",    desc: "Transform raw data into actionable insights using SQL, Excel, Power BI, and Tableau.",                   skills: ["SQL", "Excel", "Power BI", "Tableau"] },
+    { _id: 6,  title: "Business Analytics",             iconName: "FaChartLine",       color: "text-orange-600",  desc: "Drive strategic decisions through data-driven business modelling, KPIs, and BI dashboards.",             skills: ["Strategy", "BI Tools", "KPIs", "Reporting"] },
+    { _id: 7,  title: "DevOps",                         iconName: "FaCogs",            color: "text-slate-600",   desc: "CI/CD pipelines, containerisation, and infrastructure automation for modern software delivery.",         skills: ["Docker", "CI/CD", "Kubernetes", "Jenkins"] },
+    { _id: 8,  title: "Cloud Computing",                iconName: "FaCloud",           color: "text-sky-600",     desc: "Deploy, scale, and manage applications on AWS, Azure, and GCP with cloud-native best practices.",        skills: ["AWS", "Azure", "GCP", "Terraform"] },
+    { _id: 9,  title: "MERN Stack",                     iconName: "FaLayerGroup",      color: "text-blue-500",    desc: "Full-stack web apps with MongoDB, Express, React, and Node.js in a cohesive modern workflow.",           skills: ["MongoDB", "Express", "React", "Node.js"] },
+    { _id: 10, title: "UI/UX Design and Prototyping",   iconName: "FaDraftingCompass", color: "text-pink-600",    desc: "Design intuitive user interfaces and interactive prototypes using Figma and design system principles.",    skills: ["Figma", "Prototyping", "Wireframes", "User Research"] },
+    { _id: 11, title: "Web Development",                iconName: "FaGlobe",           color: "text-blue-600",    desc: "Core and advanced web development covering HTML, CSS, JavaScript, and modern frameworks.",               skills: ["HTML/CSS", "JavaScript", "React", "Responsive"] },
+    { _id: 12, title: "IOT",                            iconName: "FaMicrochip",       color: "text-green-600",   desc: "Connect physical devices to the internet with sensor integration, protocols, and cloud IoT platforms.",   skills: ["Arduino", "MQTT", "Sensors", "Cloud IoT"] },
+    { _id: 13, title: "Embedded Systems",               iconName: "FaMemory",          color: "text-amber-600",   desc: "Program microcontrollers, real-time systems, and low-level hardware interfaces for embedded applications.", skills: ["C/C++", "Microcontrollers", "RTOS", "PCB"] },
+    { _id: 14, title: "Cybersecurity",                  iconName: "FaShieldAlt",       color: "text-red-600",     desc: "Ethical hacking, threat analysis, and secure system design following OWASP and industry standards.",      skills: ["Ethical Hacking", "OWASP", "Pen Testing", "SIEM"] },
+    { _id: 15, title: "Big Data Analytics",             iconName: "FaDatabase",        color: "text-violet-600",  desc: "Process and analyse massive datasets using Hadoop, Spark, and distributed computing frameworks.",         skills: ["Hadoop", "Spark", "Hive", "Kafka"] },
+    { _id: 16, title: "HR - Operations",                iconName: "FaUserTie",         color: "text-slate-600",   desc: "Streamline HR workflows, talent acquisition, and workforce management with modern HR tools.",            skills: ["Talent Acquisition", "HRMS", "Onboarding", "Compliance"] },
+    { _id: 17, title: "HR - Marketing",                 iconName: "FaBullhorn",        color: "text-rose-600",    desc: "Employer branding, talent marketing strategies, and HR communication for modern organisations.",         skills: ["Employer Branding", "Recruitment Mktg", "LinkedIn", "Analytics"] },
+    { _id: 18, title: "HR - Finance & Accounting",      iconName: "FaMoneyBillWave",   color: "text-emerald-600", desc: "Payroll management, financial reporting, and accounting fundamentals for HR professionals.",            skills: ["Payroll", "Tally", "Budgeting", "Compliance"] },
+    { _id: 19, title: "Digital Marketing",              iconName: "FaBullseye",        color: "text-orange-500",  desc: "SEO, paid advertising, social media strategy, and analytics for impactful digital campaigns.",          skills: ["SEO", "Google Ads", "Social Media", "Analytics"] },
+    { _id: 20, title: "Software Testing",               iconName: "FaBug",             color: "text-cyan-600",    desc: "Manual and automated testing, test case design, and QA methodologies for production-grade software.",   skills: ["Manual Testing", "Selenium", "Jest", "Test Plans"] },
   ],
   curriculum: {
     web: [
@@ -48,6 +87,9 @@ const STATIC_DATA = {
 };
 
 const Training = () => {
+  const { content } = useContent();
+  const cms = content.internships;
+
   const [activeTab, setActiveTab] = useState('web');
   const [activeAccordion, setActiveAccordion] = useState(null);
   const [data, setData] = useState(STATIC_DATA);
@@ -60,11 +102,6 @@ const Training = () => {
   const [submitStatus, setSubmitStatus] = useState(null);
 
   const WA_NUMBER = '918667363896';
-
-  const getWhatsAppLink = (phone, title) => {
-    const text = `Hello DVein team, I am interested in the ${title} training program. Please share the details.`;
-    return `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(text)}`;
-  };
 
   useEffect(() => {
     fetch('http://localhost:5000/api/public/training-page')
@@ -122,13 +159,14 @@ const Training = () => {
       <div className="relative min-h-[70vh] flex flex-col justify-center pb-12 overflow-hidden px-6">
         <div className="max-w-7xl mx-auto text-center z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block py-1 px-3 rounded-full bg-white border border-blue-100 text-blue-600 text-xs font-bold tracking-wider mb-4 shadow-sm uppercase"></span>
+            <span className="inline-block py-1 px-3 rounded-full bg-white border border-blue-100 text-blue-600 text-xs font-bold tracking-wider mb-4 shadow-sm uppercase">{cms?.hero?.badge || 'Internships'}</span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-6 leading-tight text-gray-900">
-              Stop Learning Syntax. <br />
-              <span className="text-black">Start Building Projects.</span>
+              Stop Learning Syntax <br />
+              <span className="text-black">Start Building Projects</span>
             </h1>
             <p className="text-base md:text-lg text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-              Join the internship program designed by IT Professionals. Mastering the tech through intense execution and real-world deployment.            </p>
+              {cms?.hero?.description || 'Join the internship program designed by IT Professionals. Mastering the tech through intense execution and real-world deployment.'}
+            </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <button
                 onClick={() => document.getElementById('apply-section').scrollIntoView({ behavior: 'smooth' })}
@@ -151,6 +189,32 @@ const Training = () => {
               200+ Students &bull; 100+ Projects &bull; 20+ Courses &bull;
             </span>
           ))}
+        </div>
+      </div>
+
+      {/* DOMAINS */}
+      <div id="domains" className="py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900">{cms?.domainsHeading || 'Choose Your Internships'}</h2>
+            <p className="text-gray-500 font-medium">{cms?.domainsSubheading || 'Great courses built for high-performance careers.'}</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {(cms?.domains?.length ? cms.domains : data.domains)?.map((domain, index) => (
+              <motion.div key={domain._id} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: (index % 5) * 0.08 }} className={`bg-gradient-to-br ${cardGradients[index % cardGradients.length]} border border-white/80 rounded-[1.5rem] p-6 hover:shadow-xl transition-all group flex flex-col`}>
+                <div className={`w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-2xl ${domain.color} mb-6 group-hover:scale-110 transition-transform`}>{getIcon(domain.iconName)}</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{domain.title}</h3>
+                <p className="text-gray-500 text-sm mb-8 leading-relaxed font-medium">{domain.desc}</p>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {domain.skills?.map((s, i) => <span key={i} className="px-2.5 py-1 bg-white border border-gray-100 rounded-lg text-[10px] font-bold text-gray-500 uppercase">{s}</span>)}
+                </div>
+                <button
+                  onClick={() => document.getElementById('apply-section').scrollIntoView({ behavior: 'smooth' })}
+                  className="mt-auto inline-flex items-center gap-2 text-blue-600 font-black text-xs uppercase tracking-widest"
+                >Apply Now <FaIcons.FaArrowRight /></button>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -324,7 +388,7 @@ const Training = () => {
       {/* FAQ */}
       <div className="py-20 max-w-3xl mx-auto px-6">
         <div className="space-y-3">
-          {data.faqs?.map((faq, index) => (
+          {(cms?.faqs?.length ? cms.faqs : data.faqs)?.map((faq, index) => (
             <div key={faq._id} className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
               <button onClick={() => setActiveAccordion(activeAccordion === index ? null : index)} className="w-full flex justify-between items-center p-5 text-left font-bold text-sm text-gray-800">
                 {faq.question}
@@ -346,3 +410,4 @@ const Training = () => {
 };
 
 export default Training;
+                                                                                                                                                     

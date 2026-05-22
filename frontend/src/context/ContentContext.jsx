@@ -68,7 +68,7 @@ export const defaultContent = {
   // ─── INTERNSHIPS PAGE ─────────────────────────────────────────────────────
   internships: {
     hero: {
-      badge: "Internship Program 2025",
+      badge: "Internships",
       headline: "Stop Learning Syntax.\nStart Building Projects.",
       description: "Join the internship program designed by IT Professionals. Mastering the tech through intense execution and real-world deployment.",
       applyBtn: "Apply Now",
@@ -178,7 +178,7 @@ export const defaultContent = {
   studentProjects: {
     hero: {
       badge: "Innovation Hub Activated",
-      headline: "Engineering The Future\nOne Project Node at a Time",
+      headline: "Engineering The Future.\nOne Project Node at a Time.",
       description: "Bridging the gap between theoretical syntax and physical deployment. Our student ecosystem is architected for industrial mastery.",
       pdfBtn: "Download Project Ledger (PDF)",
       pdfLink: "/DVein_Projects_List.pdf"
@@ -189,7 +189,7 @@ export const defaultContent = {
       { _id: 3, label: "IoT Mesh Systems",  count: "110+" },
       { _id: 4, label: "Patent Drafts",     count: "30+"  }
     ],
-    whyHeading: "Why Students Choose DVein",
+    whyHeading: "Why Students Choose DVein.",
     whyFeatures: [
       { _id: 1, title: "Industrial Component Inventory",    desc: "Access production-grade hardware nodes like ESP32-S3, STM32 Nucleo, and industrial sensors. Build with actual hardware used in factories." },
       { _id: 2, title: "Enterprise Full-Stack Integration", desc: "Our unique methodology focuses on connecting physical hardware to massive cloud clusters using MERN stack and MQTT protocols for real-time telemetry." },
@@ -199,13 +199,13 @@ export const defaultContent = {
       { _id: 6, title: "Hybrid System Architecture",        desc: "Learn to architect complex systems that involve seamless cross-platform communication between mobile apps, web dashboards, and embedded nodes." }
     ],
     hardware: {
-      heading: "The Hardware\nNode Inventory",
+      heading: "The Hardware\nNode Inventory.",
       image: "https://images.unsplash.com/photo-1555664424-778a1e5e1b48?q=80&w=2070",
       badgeText: "Node Active Sync",
       nodes: ["Dual-Core ESP32", "LoRa SX1278", "Biometric Nodes", "RTOS Kernels", "STM32 Bluepill", "Telemetry Hub"]
     },
     repository: {
-      heading: "Project Repository",
+      heading: "Project Repository.",
       subtitle: "Active Knowledge Repository Hub",
       projects: [
         { _id: 1, category: "hardware",  title: "Smart Factory Predictive Maintenance", desc: "Industrial-grade vibration analysis node using ESP32. Identifies machinery failure before downtime with 98% accuracy.",                               tools: ["ESP32", "MPU6050", "MQTT", "Python"],       image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070" },
@@ -431,3 +431,4 @@ export const useContent = () => {
   if (!ctx) throw new Error('useContent must be used within <ContentProvider>');
   return ctx;
 };
+            

@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  FaGlobeAmericas, FaHandshake, FaChartLine, FaNetworkWired,
-  FaBuilding, FaMicrochip, FaShieldAlt, FaDatabase,
+import { 
+  FaGlobeAmericas, FaHandshake, FaChartLine, FaNetworkWired, 
+  FaBuilding, FaMicrochip, FaShieldAlt, FaDatabase, 
   FaCogs, FaWhatsapp, FaInfoCircle, FaCheck
 } from 'react-icons/fa';
-import { useContent } from '../context/ContentContext';
 
 const Collaborations = () => {
-  const { content } = useContent();
-  const cms = content.collaborations;
-
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
 
@@ -25,20 +21,14 @@ const Collaborations = () => {
     );
   };
 
-  const staticMetrics = [
+  const globalMetrics = [
     { label: "Enterprise Partners", count: "45+", icon: <FaBuilding /> },
     { label: "Countries Served", count: "12+", icon: <FaGlobeAmericas /> },
     { label: "Joint Projects Delivered", count: "150+", icon: <FaHandshake /> },
     { label: "Uptime SLA", count: "99.9%", icon: <FaChartLine /> }
   ];
 
-  const globalMetrics = staticMetrics.map((m, i) => ({
-    ...m,
-    count: cms?.metrics?.[i]?.count ?? m.count,
-    label: cms?.metrics?.[i]?.label ?? m.label,
-  }));
-
-  const staticTiers = [
+  const collaborationTiers = [
     {
       title: "Strategic Enterprise Alliance",
       desc: "A long-term partnership model designed for multinational enterprises seeking a reliable offshore technology backbone. We deliver dedicated development clusters, secure cloud infrastructure, and SLA-driven performance monitoring.",
@@ -74,22 +64,6 @@ const Collaborations = () => {
     }
   ];
 
-  const collaborationTiers = staticTiers.map((tier, i) => ({
-    ...tier,
-    title: cms?.tiers?.[i]?.title ?? tier.title,
-    desc: cms?.tiers?.[i]?.desc ?? tier.desc,
-    features: (cms?.tiers?.[i]?.features?.length ? cms.tiers[i].features : tier.features),
-  }));
-
-  const staticFaqs = [
-    { q: "What is your typical collaboration onboarding timeline?", a: "We complete technical alignment, legal formalities, and team onboarding within 14–22 business days." },
-    { q: "How do you ensure data and IP protection?", a: "All projects operate under NDAs, encrypted repositories, controlled access policies, and continuous security audits." },
-    { q: "What service levels do you guarantee?", a: "We offer a 99.9% uptime SLA with proactive monitoring and 24/7 incident response." },
-    { q: "Do you support long-term enterprise contracts?", a: "Yes. We specialize in multi-year enterprise agreements with flexible scaling and pricing models." }
-  ];
-
-  const partnershipLogs = (cms?.faqs?.length ? cms.faqs : staticFaqs);
-
   const frameworkNodes = [
     { title: "Architecture Alignment", detail: "We align our technical standards with your enterprise architecture to ensure seamless integration and long-term scalability.", icon: <FaMicrochip /> },
     { title: "Innovation Hub Cluster", detail: "High-availability backend clusters with managed databases and global load balancing for international performance.", icon: <FaDatabase /> },
@@ -99,6 +73,13 @@ const Collaborations = () => {
     { title: "Resilience Shield", detail: "Zero-trust security architecture with continuous vulnerability assessments and regulatory compliance.", icon: <FaShieldAlt /> }
   ];
 
+  const partnershipLogs = [
+    { q: "What is your typical collaboration onboarding timeline?", a: "We complete technical alignment, legal formalities, and team onboarding within 14–22 business days." },
+    { q: "How do you ensure data and IP protection?", a: "All projects operate under NDAs, encrypted repositories, controlled access policies, and continuous security audits." },
+    { q: "What service levels do you guarantee?", a: "We offer a 99.9% uptime SLA with proactive monitoring and 24/7 incident response." },
+    { q: "Do you support long-term enterprise contracts?", a: "Yes. We specialize in multi-year enterprise agreements with flexible scaling and pricing models." }
+  ];
+
   return (
     <div className="font-sans text-slate-900 bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen pt-24 pb-16">
 
@@ -106,15 +87,15 @@ const Collaborations = () => {
       <section className="max-w-7xl mx-auto px-6 pt-10 pb-20 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={isLoaded ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}>
           <span className="inline-block py-1.5 px-4 rounded-full bg-white text-indigo-600 font-medium text-xs mb-6 border border-indigo-100">
-            {cms?.hero?.badge || 'Global Partnership Hub'}
+            Global Partnership Hub
           </span>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6 tracking-tight" style={{ whiteSpace: 'pre-line' }}>
-            {cms?.hero?.headline || <>Global Reach. <span className="text-black">DVein Precision.</span></>}
+          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6 tracking-tight">
+            Global Reach <span className="text-black">DVein Precision</span>
           </h1>
 
           <p className="max-w-3xl mx-auto text-base text-slate-600 leading-relaxed font-medium mb-10">
-            {cms?.hero?.description || 'DVein Innovations Pvt Ltd partners with global enterprises to design, build, and operate secure software platforms, intelligent infrastructure, and next-generation digital ecosystems. We help organizations scale faster, operate smarter, and innovate with confidence.'}
+            DVein Innovations Pvt Ltd partners with global enterprises to design, build, and operate secure software platforms, intelligent infrastructure, and next-generation digital ecosystems. We help organizations scale faster, operate smarter, and innovate with confidence.
           </p>
 
           <div className="flex justify-center gap-4">

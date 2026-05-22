@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import { useContent } from '../context/ContentContext';
 import { FaXTwitter } from 'react-icons/fa6';
 import { SiPython, SiDocker, SiNodedotjs, SiReact, SiGithub } from 'react-icons/si';
-import logo from '../assets/logo.png';
+import logoIcon from '../assets/LOGO-ICON.png';
+import logoWhite from '../assets/LOGO-WHITE-V-LIGHT-GREEN.png';
 
 const GoogleMapsIcon = ({ size = 18 }) => (
   <svg
@@ -32,10 +33,11 @@ const Footer = () => {
   const clickTimerRef = useRef(null);
 
   // Hidden admin trigger: 5 rapid clicks on the logo
-  const handleLogoClick = () => {
+  const handleLogoClick = (event) => {
     clickCountRef.current += 1;
     clearTimeout(clickTimerRef.current);
     if (clickCountRef.current >= 5) {
+      event.preventDefault();
       clickCountRef.current = 0;
       navigate('/admin/login');
       return;
@@ -44,7 +46,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative bg-[#0B1120] text-gray-300 py-8 border-t border-dveinBlue/30">
+    <footer className="relative bg-black text-gray-300 py-8 border-t border-dveinBlue/30">
       {/* Floating icons inside footer (transparent bubbles) */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,14 +54,17 @@ const Footer = () => {
 
           {/* Left: Logo + Social Icons — centered */}
           <div className="flex flex-col items-center gap-4 text-center">
-            <img
-              src={logo}
-              alt="DVein"
-              className="h-10 w-auto object-contain cursor-pointer select-none"
+            <Link
+              to="/"
+              className="flex items-center justify-center gap-2 cursor-pointer select-none"
+              aria-label="DVein Innovations home"
               onClick={handleLogoClick}
               draggable={false}
               title=""
-            />
+            >
+              <img src={logoIcon} alt="" className="h-14 w-14 object-contain" aria-hidden="true" draggable={false} />
+              <img src={logoWhite} alt="DVein Innovations" className="h-14 w-auto object-contain" draggable={false} />
+            </Link>
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <a
                 href="https://www.facebook.com/share/1752aXvNUP/"

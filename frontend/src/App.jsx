@@ -4,7 +4,7 @@ import { ContentProvider } from './context/ContentContext';
 import ScrollToTop from './components/common/ScrollToTop';
 import Navbar from './components/Navbar';
 
-// PAGES
+// PUBLIC PAGES
 import Home from './pages/Home';
 import Training from './pages/internships';
 import Products from './pages/Products';
@@ -18,14 +18,34 @@ import Collaborations from './pages/Collaborations';
 import OurStory from './pages/OurStory';
 import Privacy from './pages/Privacy';
 
-// FOOTER
+// ADMIN PAGES
+import AdminLogin from './pages/Admin/AdminLogin';
+import CMSPanel   from './pages/Admin/CMSPanel';
+
+// FOOTER & WHATSAPP
 import Footer from './components/Footer';
+import WhatsAppBtn from './components/common/WhatsAppBtn';
 
 const Layout = () => {
   const location = useLocation();
 
-  const isHomePage = location.pathname === '/';
+  const isHomePage    = location.pathname === '/';
   const isOurStoryPage = location.pathname === '/our-story';
+  const isAdminPage   = location.pathname.startsWith('/admin');
+
+  // Admin pages render standalone — no navbar / footer / whatsapp btn
+  if (isAdminPage) {
+    return (
+      <>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/cms"   element={<CMSPanel />} />
+          <Route path="/admin"       element={<AdminLogin />} />
+        </Routes>
+      </>
+    );
+  }
 
   return (
     <>
@@ -54,6 +74,7 @@ const Layout = () => {
       {!isHomePage && !isOurStoryPage && (
         <>
           <Footer />
+          <WhatsAppBtn />
         </>
       )}
     </>

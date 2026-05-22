@@ -9,6 +9,8 @@ import {
 import clientImg from '../assets/client-img.jpg';
 import dveinLogo from '../assets/logo.png';
 import studentsImg from '../assets/students-img.jpeg';
+import img2Src from '../assets/img2.jpeg';
+import img3Src from '../assets/img3.jpeg';
 import vid1Src from '../assets/vid1.mp4';
 import vid2Src from '../assets/vid2.mp4';
 
@@ -29,28 +31,21 @@ const CareerHub = () => {
   const dnaRef = useRef(null);
   const dnaInView = useInView(dnaRef, { once: true, margin: '-80px' });
 
-  // Success Story — unified carousel (image + videos)
   const vid1Ref = useRef(null);
   const vid2Ref = useRef(null);
-
-  const mediaItems = [
-    { type: 'image', src: studentsImg, alt: 'DVein Students' },
-    { type: 'video', src: vid1Src, ref: vid1Ref },
-    { type: 'video', src: vid2Src, ref: vid2Ref },
+  const [videoIndex, setVideoIndex] = useState(0);
+  const images = [studentsImg, img2Src, img3Src];
+  const [imageIndex, setImageIndex] = useState(0);
+  const switchImage = (dir) => setImageIndex(i => (i + dir + images.length) % images.length);
+  const videos = [
+    { src: vid1Src, ref: vid1Ref },
+    { src: vid2Src, ref: vid2Ref },
   ];
-
-  const [mediaIndex, setMediaIndex] = useState(0);
-
-  const navigateMedia = (dir) => {
-    [vid1Ref, vid2Ref].forEach(r => {
-      if (r.current) { r.current.pause(); r.current.currentTime = 0; }
-    });
-    const next = (mediaIndex + dir + mediaItems.length) % mediaItems.length;
-    setMediaIndex(next);
-    if (mediaItems[next].type === 'video') {
-      setTimeout(() => { mediaItems[next].ref.current?.play(); }, 80);
-    }
+  const switchVideo = (dir) => {
+    [vid1Ref, vid2Ref].forEach(r => { if (r.current) { r.current.pause(); r.current.currentTime = 0; } });
+    setVideoIndex(i => (i + dir + videos.length) % videos.length);
   };
+
 
   useEffect(() => {
     fetch('http://localhost:5000/api/public/jobs')
@@ -98,7 +93,8 @@ const CareerHub = () => {
       {/* 1. HERO - simple header */}
       <section className="w-full max-w-5xl px-6 py-12 flex flex-col items-center text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center w-full">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-black leading-none mb-4">Build Your Career.</h1>
+          <span className="inline-block py-1 px-3 rounded-full bg-white border border-blue-100 text-blue-600 text-xs font-bold tracking-wider mb-4 shadow-sm uppercase">Career Hub</span>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-black leading-none mb-4">Build Your Career</h1>
           <p className="text-slate-500 text-base font-normal max-w-xl text-center">Upskill your career with DVein Innovations</p>
         </motion.div>
       </section>
@@ -130,65 +126,77 @@ const CareerHub = () => {
         <div className="max-w-7xl mx-auto">
           {/* Centered heading */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none mb-4">Our Success Story.</h2>
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none mb-4">Our Success Story</h2>
             <p className="text-slate-500 text-sm leading-relaxed font-normal max-w-xl mx-auto">Real stories from real people who built their careers with DVein Innovations. Every image, video, and milestone shared here is a testament to what dedication and the right guidance can achieve.</p>
           </div>
 
-          {/* Single unified carousel — aspect ratio adapts per slide */}
-          <div className="relative max-w-4xl mx-auto mb-14 select-none">
+          {/* Media Cards — image and videos in separate cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">
 
-            {/* Card — no fixed aspect ratio; each slide dictates its own height */}
-            <div className="rounded-[2rem] overflow-hidden shadow-2xl bg-black">
-              {mediaItems.map((item, idx) => (
-                <div key={idx} className={idx === mediaIndex ? 'block w-full' : 'hidden'}>
-                  {item.type === 'image' ? (
-                    /* Image: natural landscape ratio, no black bars */
-                    <img
-                      src={item.src}
-                      alt={item.alt}
-                      className="w-full aspect-video object-cover"
-                    />
-                  ) : (
-                    /* Video: half-height container, fills edge-to-edge with no black bars */
-                    <div className="w-full aspect-video overflow-hidden">
-                      <video
-                        ref={item.ref}
-                        src={item.src}
-                        className="w-full h-full object-cover"
-                        controls
-                        playsInline
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            {/* Image card — arrow to switch between images */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0 }}
+              className="relative rounded-[2rem] overflow-hidden shadow-xl border border-slate-100"
+            >
+              <img
+                src={images[imageIndex]}
+                alt="DVein Students"
+                className="w-full h-80 object-cover transition-opacity duration-300"
+              />
+              {/* Left arrow */}
+              <button onClick={() => switchImage(-1)} aria-label="Previous image"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 border border-slate-200 shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              {/* Right arrow */}
+              <button onClick={() => switchImage(1)} aria-label="Next image"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 border border-slate-200 shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+              {/* Dots */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                {images.map((_, i) => (
+                  <button key={i} onClick={() => setImageIndex(i)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${i === imageIndex ? 'bg-white scale-110' : 'bg-white/50 hover:bg-white/80'}`} />
+                ))}
+              </div>
+            </motion.div>
 
-            {/* Left Arrow */}
-            <button onClick={() => navigateMedia(-1)} aria-label="Previous"
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 border border-slate-200 shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
-            </button>
-
-            {/* Right Arrow */}
-            <button onClick={() => navigateMedia(1)} aria-label="Next"
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 border border-slate-200 shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-            </button>
-
-            {/* Dots */}
-            <div className="flex justify-center gap-2 mt-5">
-              {mediaItems.map((_, idx) => (
-                <button key={idx} onClick={() => {
-                  [vid1Ref, vid2Ref].forEach(r => { if (r.current) { r.current.pause(); r.current.currentTime = 0; } });
-                  setMediaIndex(idx);
-                  if (mediaItems[idx].type === 'video') {
-                    setTimeout(() => { mediaItems[idx].ref.current?.play(); }, 80);
-                  }
-                }}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === mediaIndex ? 'bg-slate-800 scale-110' : 'bg-slate-300 hover:bg-slate-400'}`} />
-              ))}
-            </div>
+            {/* Videos card — arrow to switch between videos */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
+              className="relative rounded-[2rem] overflow-hidden shadow-xl border border-slate-100 bg-black"
+            >
+              <div className="w-full h-80 flex items-center justify-center">
+                {videos.map((v, i) => (
+                  <video
+                    key={i}
+                    ref={v.ref}
+                    src={v.src}
+                    className={`w-full h-full object-contain ${i === videoIndex ? 'block' : 'hidden'}`}
+                    controls
+                    playsInline
+                  />
+                ))}
+              </div>
+              {/* Left arrow */}
+              <button onClick={() => switchVideo(-1)} aria-label="Previous video"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 border border-slate-200 shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              {/* Right arrow */}
+              <button onClick={() => switchVideo(1)} aria-label="Next video"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 border border-slate-200 shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+              {/* Dots */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                {videos.map((_, i) => (
+                  <button key={i} onClick={() => { [vid1Ref, vid2Ref].forEach(r => { if (r.current) { r.current.pause(); r.current.currentTime = 0; } }); setVideoIndex(i); }}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${i === videoIndex ? 'bg-white scale-110' : 'bg-white/50 hover:bg-white/80'}`} />
+                ))}
+              </div>
+            </motion.div>
 
           </div>
 
