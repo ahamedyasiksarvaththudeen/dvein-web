@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { useContent } from '../context/ContentContext';
 
 const defaultStats = [
-  { id: 1, name: 'Projects Completed', value: '200+' },
-  { id: 2, name: 'Students Trained', value: '500+' },
+  { id: 1, name: 'Projects Completed', value: '500+' },
+  { id: 2, name: 'Students Trained', value: '2000+' },
   { id: 3, name: 'Happy Clients', value: '50+' },
   { id: 4, name: 'Years of Innovation', value: '2+' },
 ];

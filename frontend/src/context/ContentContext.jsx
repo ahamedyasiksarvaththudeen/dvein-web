@@ -99,9 +99,9 @@ export const defaultContent = {
     card2Desc: "Providing hands-on internships and industry-standard training to shape the next generation of engineers."
   },
   stats: [
-    { id: 1, name: 'Projects Completed', value: '50+' },
-    { id: 2, name: 'Students Trained',   value: '200+' },
-    { id: 3, name: 'Happy Clients',      value: '20+' },
+    { id: 1, name: 'Projects Completed', value: '500+' },
+    { id: 2, name: 'Students Trained',   value: '2000+' },
+    { id: 3, name: 'Happy Clients',      value: '50+' },
     { id: 4, name: 'Years of Innovation',value: '2+' }
   ],
   howWeDo: {
