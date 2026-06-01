@@ -125,7 +125,7 @@ const ImageField = ({ label, value, onChange, placeholder = 'https://...' }) => 
 
 const SaveBar = ({ onSave, onReset, saved }) => (
   <div className="flex items-center gap-3 pt-5 border-t border-gray-100 mt-6">
-    <button onClick={onSave}
+    <button onClick={() => onSave()}
       className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md ${saved?'bg-[#10B981] text-white':'bg-[#0056D2] hover:bg-[#0046b0] text-white shadow-[#0056D2]/20'}`}>
       {saved ? <><Icon d={IC.check} size={12} /> Saved!</> : <><Icon d={IC.save} size={12} /> Save Changes</>}
     </button>

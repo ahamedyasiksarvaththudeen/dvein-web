@@ -46,8 +46,20 @@ const idbClear = () => new Promise((resolve) => {
   } catch { resolve(false); }
 });
 
+const safeStringify = (data) => {
+  const seen = new WeakSet();
+  return JSON.stringify(data, (key, value) => {
+    if (value instanceof Node || value instanceof Window) return undefined;
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) return undefined;
+      seen.add(value);
+    }
+    return value;
+  });
+};
+
 const persistContent = (data) => {
-  const json = JSON.stringify(data);
+  const json = safeStringify(data);
   try {
     localStorage.setItem('dvein_cms_content', json);
   } catch {
