@@ -5,7 +5,9 @@ GET  /api/public/services
 GET  /api/public/trainings
 GET  /api/public/products
 GET  /api/public/training-page
+GET  /api/public/success-stories
 POST /api/public/apply   (multipart - resume upload + email)
+POST /api/public/contact
 """
 import os
 import shutil
@@ -55,6 +57,12 @@ async def get_trainings(db=Depends(get_db)):
 async def get_products(db=Depends(get_db)):
     products = await db["products"].find().to_list(None)
     return [_doc(p) for p in products]
+
+
+@router.get("/success-stories")
+async def get_success_stories(db=Depends(get_db)):
+    stories = await db["success_stories"].find().sort("createdAt", -1).to_list(None)
+    return [_doc(s) for s in stories]
 
 
 @router.get("/training-page")

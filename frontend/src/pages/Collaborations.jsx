@@ -46,7 +46,7 @@ const Collaborations = () => {
           <span className="inline-block py-1.5 px-4 rounded-full bg-white text-indigo-600 font-medium text-xs mb-6 border border-indigo-100">
             {cmsHero.badge || 'Global Partnership Hub'}
           </span>
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6 tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6 tracking-tight font-heading">
             {cmsHero.headline || 'Building Tomorrow\'s Tech Ecosystem Together'}
           </h1>
           <p className="max-w-3xl mx-auto text-base text-slate-600 leading-relaxed font-medium mb-10">
@@ -65,7 +65,7 @@ const Collaborations = () => {
         {cmsMetrics.map((metric, i) => (
           <motion.div key={metric._id || i} whileHover={{ y: -5 }} className="bg-white p-8 rounded-2xl border border-slate-100 transition-all hover:shadow-lg text-center">
             <div className="text-2xl text-indigo-600 mb-4 flex justify-center">{[<FaBuilding />, <FaGlobeAmericas />, <FaHandshake />, <FaChartLine />][i % 4]}</div>
-            <h3 className="text-3xl font-semibold text-slate-900 mb-1">{metric.count}</h3>
+            <h3 className="font-heading text-3xl font-bold text-slate-900 mb-1">{metric.count}</h3>
             <p className="text-sm text-slate-500">{metric.label}</p>
           </motion.div>
         ))}
@@ -74,7 +74,7 @@ const Collaborations = () => {
       {/* VALUE PROPOSITION */}
       <section className="max-w-7xl mx-auto px-6 mb-24">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Why Global Enterprises Choose DVein
           </h2>
           <p className="text-sm text-slate-500">
@@ -89,7 +89,7 @@ const Collaborations = () => {
             {t:"Transparent Governance", d:"Milestone-driven execution, real-time reporting dashboards, and clear communication."}
           ].map((v,i)=>(
             <div key={i} className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">{v.t}</h3>
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-3">{v.t}</h3>
               <p className="text-sm text-slate-600 leading-relaxed">{v.d}</p>
             </div>
           ))}
@@ -100,7 +100,7 @@ const Collaborations = () => {
       <section className="bg-white/60 py-24 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 mb-3">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-3">
               Collaboration Models
             </h2>
             <p className="text-sm text-slate-500">
@@ -111,7 +111,7 @@ const Collaborations = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cmsTiers.map((tier, i) => (
               <motion.div key={tier._id || i} whileHover={{ y: -8 }} className={`bg-white p-10 rounded-2xl border-t-4 ${TIER_ACCENTS[i % TIER_ACCENTS.length]} shadow flex flex-col h-full`}>
-                <h3 className="text-xl font-semibold text-slate-900 mb-4">{tier.title}</h3>
+                <h3 className="font-heading text-xl font-bold text-slate-900 mb-4">{tier.title}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed mb-6 flex-grow">{tier.desc}</p>
 
                 <ul className="space-y-3 mb-8">
@@ -137,7 +137,7 @@ const Collaborations = () => {
       {/* FRAMEWORK */}
       <section className="py-28 max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Our Collaboration Framework
           </h2>
           <p className="text-sm text-slate-500">
@@ -150,7 +150,7 @@ const Collaborations = () => {
             <motion.div key={node._id || i} whileHover={{ scale: 1.02 }} className="flex gap-6 p-6 rounded-2xl bg-white border border-slate-100 hover:shadow-lg transition">
               <div className="text-3xl text-indigo-600">{FW_ICONS[i % FW_ICONS.length]}</div>
               <div>
-                <h4 className="text-lg font-semibold text-slate-900 mb-2">{node.title}</h4>
+                <h4 className="text-lg font-bold text-slate-900 mb-2 font-heading">{node.title}</h4>
                 <p className="text-sm text-slate-600 leading-relaxed">{node.detail}</p>
               </div>
             </motion.div>
@@ -161,7 +161,7 @@ const Collaborations = () => {
       {/* FAQ */}
       <section className="py-20 bg-white/50">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-2xl font-semibold text-center text-slate-900 mb-10">
+          <h2 className="font-heading text-2xl font-bold text-center text-slate-900 mb-10">
             Partnership FAQs
           </h2>
 
@@ -195,7 +195,7 @@ const Collaborations = () => {
 
       {/* FINAL CTA */}
       <section className="py-24 text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 mb-8">
+        <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-8">
           Ready to build a high-impact global partnership?
         </h2>
 

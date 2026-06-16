@@ -174,7 +174,7 @@ const SoftwareSolutions = () => {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight uppercase">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight font-heading">
               Software Projects
             </h2>
             <div className="w-16 h-1 mx-auto mt-4 rounded-full" style={{ backgroundColor: BRAND }}></div>

@@ -205,7 +205,7 @@ const StudentProjects = () => {
           <span className="inline-block py-1.5 px-4 rounded-full bg-indigo-50 text-indigo-600 font-extrabold tracking-widest uppercase text-[10px] mb-8 border border-indigo-100">
             {sp.hero.badge}
           </span>
-          <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight mb-8 tracking-tight uppercase">
+          <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight mb-8 tracking-tight font-heading">
             {heroLines.map((line, i) => (
               <React.Fragment key={i}>{line}{i < heroLines.length - 1 && <br />}</React.Fragment>
             ))}
@@ -240,7 +240,7 @@ const StudentProjects = () => {
       <section className="bg-slate-50 py-32 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 uppercase tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight font-heading">
               {sp.whyHeading}
             </h2>
             <div className="w-16 h-1.5 bg-indigo-600 mx-auto rounded-full"></div>
@@ -251,8 +251,8 @@ const StudentProjects = () => {
                 <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                   <FaCheckCircle />
                 </div>
-                <h3 className="text-sm font-black text-slate-900 mb-4 uppercase tracking-tight">{f.title}</h3>
-                <p className="text-[13px] text-slate-500 leading-relaxed font-bold">{f.desc}</p>
+                <h3 className="text-sm font-bold text-slate-900 mb-4 tracking-tight font-heading">{f.title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed font-medium">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -263,7 +263,7 @@ const StudentProjects = () => {
       <section className="bg-slate-900 text-white py-32 overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <div className="space-y-10">
-            <h2 className="text-3xl md:text-5xl font-extrabold uppercase mb-8 tracking-tight leading-tight">
+            <h2 className="text-3xl md:text-5xl font-extrabold mb-8 tracking-tight leading-tight font-heading">
               {hwLines.map((line, i) => (
                 <React.Fragment key={i}>{line}{i < hwLines.length - 1 && <br />}</React.Fragment>
               ))}
@@ -295,8 +295,8 @@ const StudentProjects = () => {
       <section id="repository" className="max-w-7xl mx-auto px-6 py-32">
         <div className="mb-16 flex flex-col sm:flex-row sm:items-end gap-6 justify-between">
           <div>
-            <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900 uppercase tracking-tight mb-2">Project Repository.</h2>
-            <p className="text-slate-400 font-extrabold uppercase text-[10px] tracking-[0.4em]">Active Knowledge Repository Hub</p>
+            <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-2 font-heading">Project Repository.</h2>
+            <p className="text-slate-400 font-semibold uppercase text-xs tracking-widest">Active Knowledge Repository Hub</p>
           </div>
 
           {/* ── DROPDOWN FILTER ── */}
@@ -359,8 +359,8 @@ const StudentProjects = () => {
                   </div>
                </div>
                <div className="p-10 flex-grow flex flex-col">
-                  <h3 className="text-xl font-extrabold text-slate-900 mb-3 uppercase tracking-tight">{project.title}</h3>
-                  <p className="text-[13px] text-slate-500 font-bold mb-6 leading-relaxed border-l-2 border-indigo-100 pl-4">{project.desc}</p>
+                  <h3 className="text-xl font-extrabold text-slate-900 mb-3 tracking-tight font-heading">{project.title}</h3>
+                  <p className="text-sm text-slate-500 font-medium mb-6 leading-relaxed border-l-2 border-indigo-100 pl-4">{project.desc}</p>
                   <div className="flex flex-wrap gap-2">
                       {project.tools.map((t, idx) => (
                         <span key={idx} className="bg-slate-50 text-slate-600 px-3 py-1 rounded-md text-[9px] font-extrabold uppercase tracking-tight">
@@ -394,10 +394,10 @@ const StudentProjects = () => {
             className="max-w-4xl mx-auto bg-slate-900 p-20 rounded-[4rem] shadow-4xl relative overflow-hidden text-white"
           >
              <FaRocket className="text-[15rem] text-indigo-600/10 absolute -top-20 -right-20 -rotate-45" />
-             <h2 className="text-4xl md:text-5xl font-extrabold mb-10 uppercase tracking-tighter">
+             <h2 className="text-4xl md:text-5xl font-extrabold mb-10 tracking-tight font-heading">
                 Activate Your <br/><span className="text-white">Project</span>
              </h2>
-             <p className="max-w-xl mx-auto text-slate-400 font-bold uppercase text-xs mb-12 tracking-widest">
+             <p className="max-w-xl mx-auto text-slate-400 font-medium text-base mb-12 leading-relaxed">
                Join our next batch of student innovators and turn your ideas into physical industrial mastery.
              </p>
              <a

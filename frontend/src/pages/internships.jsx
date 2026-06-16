@@ -104,7 +104,7 @@ const Training = () => {
   const WA_NUMBER = '918667363896';
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/public/training-page')
+    fetch('/api/public/training-page')
       .then(res => res.json())
       .then(apiData => { setData(apiData); })
       .catch(error => {
@@ -133,7 +133,7 @@ const Training = () => {
       const dataToSend = new FormData();
       Object.keys(formData).forEach(key => dataToSend.append(key, formData[key]));
       if (resume) dataToSend.append('resume', resume);
-      await fetch('http://localhost:5000/api/public/apply', {
+      await fetch('/api/public/apply', {
         method: 'POST',
         body: dataToSend,
         signal: AbortSignal.timeout(5000),
@@ -160,7 +160,7 @@ const Training = () => {
         <div className="max-w-7xl mx-auto text-center z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <span className="inline-block py-1 px-3 rounded-full bg-white border border-blue-100 text-blue-600 text-xs font-bold tracking-wider mb-4 shadow-sm uppercase">{cms?.hero?.badge || 'Internships'}</span>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-6 leading-tight text-gray-900">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight text-gray-900 font-heading">
               Stop Learning Syntax <br />
               <span className="text-black">Start Building Projects</span>
             </h1>

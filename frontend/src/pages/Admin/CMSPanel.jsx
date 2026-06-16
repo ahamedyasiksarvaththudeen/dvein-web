@@ -1174,7 +1174,7 @@ const CMSPanel = () => {
     if (!localStorage.getItem('adminToken')) navigate('/admin/login?redirect=/admin/cms');
   }, [navigate]);
 
-  const handleLogout = () => { localStorage.clear(); navigate('/admin/login'); };
+  const handleLogout = () => { localStorage.removeItem('adminToken'); navigate('/admin/login'); };
   const activeInfo = NAV_GROUPS.flatMap(g => g.items).find(n => n.key === active);
   const Editor = EDITORS[active] || null;
 

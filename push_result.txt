@@ -1,3 +1,0 @@
-Step 1: Stashing unstaged changes... 
-warning: in the working copy of 'final_push.bat', LF will be replaced by CRLF the next time Git touches it
-Saved working directory and index state WIP on main: 1422d15 imgs chg

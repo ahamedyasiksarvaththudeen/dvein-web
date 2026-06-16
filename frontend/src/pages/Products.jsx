@@ -73,7 +73,7 @@ const ProductsPage = () => {
   const [activeInventoryCard, setActiveInventoryCard] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/public/products')
+    fetch('/api/public/products')
       .then(res => res.json())
       .then(data => { setProducts(data); setLoading(false); })
       .catch(err => { console.error(err); setLoading(false); });
@@ -163,7 +163,7 @@ const ProductsPage = () => {
             {cms?.hero?.badge || 'Product Hub Node Activated'}
           </span>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6 tracking-tight" style={{ whiteSpace: 'pre-line' }}>
+          <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6 tracking-tight font-heading" style={{ whiteSpace: 'pre-line' }}>
             {cms?.hero?.headline || <>Future-Proof <br/><span className="text-black">Product Disruptors</span></>}
           </h1>
 
@@ -325,11 +325,11 @@ const ProductsPage = () => {
                       </div>
 
                       <div className="p-8 flex-grow flex flex-col">
-                        <h3 className="text-xl font-extrabold text-slate-900 mb-4 uppercase tracking-tight">
+                        <h3 className="text-xl font-extrabold text-slate-900 mb-4 tracking-tight font-heading">
                           {item.name}
                         </h3>
 
-                        <p className="text-[13px] text-slate-500 font-bold mb-6 leading-relaxed border-l-2 border-indigo-100 pl-4">
+                        <p className="text-sm text-slate-500 font-medium mb-6 leading-relaxed border-l-2 border-indigo-100 pl-4">
                           {item.description}
                         </p>
 

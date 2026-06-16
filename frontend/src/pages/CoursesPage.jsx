@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -83,7 +83,7 @@ const CoursesPage = () => {
       const data = new FormData();
       Object.entries(enrollForm).forEach(([k, v]) => data.append(k, v));
       data.append('jobTitle', selectedCourse);
-      await fetch('http://localhost:5000/api/public/apply', {
+      await fetch('/api/public/apply', {
         method: 'POST',
         body: data,
         signal: AbortSignal.timeout(5000),
@@ -123,7 +123,7 @@ const CoursesPage = () => {
   };
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/public/trainings')
+    fetch('/api/public/trainings')
       .then(res => res.json())
       .then(data => setTrainings(data.filter(item => item.category === 'course')))
       .catch(err => console.error(err));
@@ -162,7 +162,7 @@ const CoursesPage = () => {
             Academy Hub
           </span>
 
-          <h1 className="text-4xl md:text-6xl font-semibold text-slate-900 leading-tight mb-6 tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6 tracking-tight font-heading">
             Master the <br />
             <span className="text-black">Engineering Stack</span>
           </h1>
@@ -201,7 +201,7 @@ const CoursesPage = () => {
               className="bg-white/70 backdrop-blur-xl p-8 rounded-2xl border border-white shadow-md hover:shadow-xl transition-all text-center"
             >
               <div className="text-3xl text-indigo-600 mb-4">{feature.icon}</div>
-              <h3 className="font-semibold text-slate-900 text-lg mb-2">{feature.title}</h3>
+              <h3 className="font-bold text-slate-900 text-lg mb-2 font-heading">{feature.title}</h3>
               <p className="text-sm text-slate-600 leading-relaxed">{feature.desc}</p>
             </motion.div>
           ))}
@@ -223,7 +223,13 @@ const CoursesPage = () => {
 
       {/* COURSE APPLICATION FORM */}
       <section className="max-w-6xl mx-auto px-6 mb-28">
-        <div className="bg-white border border-slate-200 rounded-[2rem] shadow-2xl p-8 md:p-12">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="bg-white border border-slate-200 rounded-[2rem] shadow-2xl p-8 md:p-12"
+        >
           <div className="text-center mb-10">
             <h2 className="text-3xl font-black text-slate-900">Apply Now</h2>
             <p className="mt-2 text-sm text-slate-500">Fill the form — WhatsApp will open with your details ready to send.</p>
@@ -314,12 +320,12 @@ const CoursesPage = () => {
               </div>
             )}
           </form>
-        </div>
+        </motion.div>
       </section>
 
       {/* FAQ */}
       <section className="max-w-4xl mx-auto px-6 mb-24">
-        <h2 className="text-2xl font-semibold text-center text-slate-900 mb-10">
+        <h2 className="text-2xl font-bold text-center text-slate-900 mb-10 font-heading">
           Academy FAQs
         </h2>
         <div className="space-y-4">
@@ -355,22 +361,30 @@ const CoursesPage = () => {
 
       {/* CTA */}
       <section className="max-w-7xl mx-auto px-6 mb-20">
-        <div className="rounded-3xl p-12 md:p-20 bg-gradient-to-r from-indigo-900 to-slate-900 text-center shadow-2xl">
-          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+          className="rounded-3xl p-12 md:p-20 bg-gradient-to-r from-indigo-900 to-slate-900 text-center shadow-2xl"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 font-heading">
             Ready to start your engineering journey?
           </h2>
           <p className="text-sm text-slate-300 mb-10 max-w-2xl mx-auto">
-            Let’s discuss your goals and activate your learning path.
+            Let's discuss your goals and activate your learning path.
           </p>
           <Link to="/training">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.97 }}
               className="px-10 py-4 rounded-xl font-medium text-sm transition flex items-center gap-3 mx-auto shadow"
               style={{ backgroundColor: '#005ff7', color: '#ffffff' }}
             >
               Join DVein Academy <FaArrowRight />
-            </button>
+            </motion.button>
           </Link>
-        </div>
+        </motion.div>
       </section>
 
       {/* ── Enrollment Modal ─────────────────────────────────────────────── */}
@@ -430,9 +444,13 @@ const CoursesPage = () => {
                   <input placeholder="Portfolio / LinkedIn (optional)"
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
                     onChange={e => setEnrollForm(p => ({...p, portfolio: e.target.value}))} />
-                  <button type="submit" disabled={enrollSubmitting}
-                    className="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition flex items-center justify-center gap-2 disabled:opacity-60">
-                    {enrollSubmitting ? 'Opening WhatsApp…' : 'Confirm Enrollment'}
+                  <button
+                    type="submit"
+                    disabled={enrollSubmitting}
+                    className="w-full py-3 rounded-xl font-bold text-sm text-white transition disabled:opacity-60"
+                    style={{ backgroundColor: '#005ff7' }}
+                  >
+                    {enrollSubmitting ? 'Opening WhatsApp...' : 'Enroll via WhatsApp'}
                   </button>
                 </form>
               )}
@@ -440,6 +458,7 @@ const CoursesPage = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
     </div>
   );
 };

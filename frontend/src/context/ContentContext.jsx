@@ -84,7 +84,7 @@ export const defaultContent = {
     slides: [
       { id: 1, image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=100&w=2070&auto=format&fit=crop", smallTag: "Welcome to DVein Innovations", title: "Empowering Innovation through Technology", description: "Your partner for custom software solutions and engineering training.", primaryBtn: "Explore Services", primaryLink: "/student-projects", secondaryBtn: "Contact Us", secondaryLink: "/contact" },
       { id: 2, image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=100&w=2070&auto=format&fit=crop", smallTag: "Software Solutions", title: "Custom Software built for Business Growth", description: "We build digital ecosystems. From Web and Mobile Apps to AI/ML solutions.", primaryBtn: "View Solutions", primaryLink: "/services/software", secondaryBtn: "Get a Quote", secondaryLink: "/contact" },
-      { id: 3, image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=100&w=2070&auto=format&fit=crop", smallTag: "Training and Development", title: "Shaping Future Tech Leaders", description: "Industry-relevant training programs designed by experts for students.", primaryBtn: "View Courses", primaryLink: "/services/courses", secondaryBtn: "Apply Internship", secondaryLink: "/register" }
+      { id: 3, image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=100&w=2070&auto=format&fit=crop", smallTag: "Training and Development", title: "Shaping Future Tech Leaders", description: "Industry-relevant training programs designed by experts for students.", primaryBtn: "View Courses", primaryLink: "/services/courses", secondaryBtn: "Apply Internship", secondaryLink: "/training" }
     ]
   },
   welcome: {

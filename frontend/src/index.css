@@ -76,9 +76,39 @@ a:hover {
 
 /* --- 3. SWIPER CUSTOMIZATION (Dots Only) --- */
 
-/* Hide Arrows Completely */
+/* Hide Swiper default arrows globally — components that need arrows use custom buttons */
 .swiper-button-next, .swiper-button-prev {
   display: none !important;
+}
+
+/* Re-enable arrows only inside .swiper-with-nav wrappers */
+.swiper-with-nav .swiper-button-next,
+.swiper-with-nav .swiper-button-prev {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  color: #1f2937;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  top: 42%;
+}
+.swiper-with-nav .swiper-button-next:hover,
+.swiper-with-nav .swiper-button-prev:hover {
+  background: #0056D2;
+  color: #ffffff;
+  border-color: #0056D2;
+  box-shadow: 0 4px 16px rgba(0,86,210,0.25);
+  transform: scale(1.08);
+}
+.swiper-with-nav .swiper-button-next::after,
+.swiper-with-nav .swiper-button-prev::after {
+  font-size: 0.85rem;
+  font-weight: 900;
 }
 
 /* Show & Style Dots (Pagination) */

@@ -191,7 +191,7 @@ const OurStory = () => {
           <span className="inline-block py-1.5 px-5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 font-bold tracking-[0.25em] uppercase text-xs mb-6">
             {cms?.badge || 'Our Origin'}
           </span>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-black mb-6 leading-tight tracking-tight" style={{ whiteSpace: 'pre-line' }}>
+          <h1 className="text-4xl md:text-6xl font-extrabold text-black mb-6 leading-tight tracking-tight font-heading" style={{ whiteSpace: 'pre-line' }}>
             {cms?.headline || <>Our <span className="text-black">Story</span></>}
           </h1>
           <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 to-blue-500 mx-auto rounded-full" />

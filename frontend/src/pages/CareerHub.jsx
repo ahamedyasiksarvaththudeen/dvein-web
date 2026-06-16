@@ -63,11 +63,11 @@ const CareerHub = () => {
 
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/public/jobs')
+    fetch('/api/public/jobs')
       .then(res => res.json())
       .then(data => { setLiveJobs(data); setLoading(false); })
       .catch(err => { console.error(err); setLoading(false); });
-    fetch('http://localhost:5000/api/public/success-stories')
+    fetch('/api/public/success-stories')
       .then(res => res.json())
       .then(data => setSuccessStories(data))
       .catch(() => {});
@@ -94,7 +94,7 @@ const CareerHub = () => {
       Object.keys(formData).forEach(key => { if (key !== 'resume') data.append(key, formData[key]); });
       data.append('jobTitle', selectedJob.title);
       if (formData.resume) data.append('resume', formData.resume);
-      await fetch('http://localhost:5000/api/public/apply', { method: 'POST', body: data, signal: AbortSignal.timeout(5000) });
+      await fetch('/api/public/apply', { method: 'POST', body: data, signal: AbortSignal.timeout(5000) });
     } catch (_) {}
     window.open('https://wa.me/' + WA_CAREER + '?text=' + encodeURIComponent(waText), '_blank');
     setSubmitStatus('success');
@@ -109,7 +109,7 @@ const CareerHub = () => {
       <section className="w-full max-w-5xl px-6 py-12 flex flex-col items-center text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center w-full">
           <span className="inline-block py-1 px-3 rounded-full bg-white border border-blue-100 text-blue-600 text-xs font-bold tracking-wider mb-4 shadow-sm uppercase">{cmsHero.badge || 'Career Hub'}</span>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-black leading-none mb-4">{cmsHero.heading || 'Build Your Career'}</h1>
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-black leading-tight mb-4 font-heading">{cmsHero.heading || 'Build Your Career'}</h1>
           <p className="text-slate-500 text-base font-normal max-w-xl text-center">{cmsHero.description || 'Upskill your career with DVein Innovations'}</p>
         </motion.div>
       </section>
@@ -128,7 +128,7 @@ const CareerHub = () => {
                 />
               </div>
               <span className="text-[11px] font-black uppercase tracking-[0.35em] text-slate-900 mb-3 block">{panel.tag}</span>
-              <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 mb-4">{panel.heading}</h2>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4 font-heading">{panel.heading}</h2>
               <p className="text-slate-600 text-sm leading-relaxed mb-6">{panel.description}</p>
             </div>
           ))}
@@ -140,7 +140,7 @@ const CareerHub = () => {
         <div className="max-w-7xl mx-auto">
           {/* Centered heading */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none mb-4">{cmsSuccessStory.heading || 'Our Success Story'}</h2>
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-black leading-tight mb-4 font-heading">{cmsSuccessStory.heading || 'Our Success Story'}</h2>
             <p className="text-slate-500 text-sm leading-relaxed font-normal max-w-xl mx-auto">{cmsSuccessStory.description || ''}</p>
           </div>
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { Link } from 'react-router-dom';
@@ -40,7 +41,7 @@ const ServiceHighlights = () => {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/public/services')
+    fetch('/api/public/services')
       .then(res => res.json())
       .then(data => setServices(data))
       .catch(err => console.error(err));
@@ -56,12 +57,18 @@ const ServiceHighlights = () => {
       <style>{styles}</style>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-10"
+        >
           <h2 className="text-3xl font-extrabold text-black tracking-tight sm:text-4xl">Our Expertise</h2>
           <p className="mt-3 max-w-2xl mx-auto text-lg text-black sm:mt-4">
             Solutions tailored for your business growth.
           </p>
-        </div>
+        </motion.div>
 
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
@@ -75,11 +82,18 @@ const ServiceHighlights = () => {
             1024: { slidesPerView: 3, spaceBetween: 24 },
             1280: { slidesPerView: 3, spaceBetween: 30 },
           }}
-          className="pb-4 px-2"
+          className="swiper-with-nav pb-4 !px-10"
         >
-          {services.map((service) => (
+          {services.map((service, idx) => (
             <SwiperSlide key={service._id} className="h-auto py-2">
-              <div className="flex flex-col h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: idx * 0.07 }}
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(0,0,0,0.10)' }}
+                className="flex flex-col h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300"
+              >
                 
                 {/* IMAGE SECTION - Reduced Height */}
                 <div className="relative h-40 w-full bg-gray-100 flex-shrink-0 overflow-hidden">
@@ -120,7 +134,7 @@ const ServiceHighlights = () => {
                   </div>
                 </div>
 
-              </div>
+              </motion.div>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -131,5 +145,4 @@ const ServiceHighlights = () => {
     </div>
   );
 };
-
 export default ServiceHighlights;

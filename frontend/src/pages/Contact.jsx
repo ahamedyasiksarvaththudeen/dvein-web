@@ -39,7 +39,7 @@ const Contact = () => {
       data.append('email', formState.email);
       data.append('service', formState.service || 'General Enquiry');
       data.append('message', formState.message);
-      await fetch('http://localhost:5000/api/public/contact', {
+      await fetch('/api/public/contact', {
         method: 'POST', body: data, signal: AbortSignal.timeout(5000),
       });
     } catch (error) {
@@ -89,7 +89,7 @@ const Contact = () => {
           <span className="inline-block py-1 px-4 rounded-full bg-white border border-gray-200 text-dveinBlue text-xs font-bold tracking-[0.2em] uppercase mb-6 shadow-sm">
             {cms?.badge || 'Available for New Projects'}
           </span>
-          <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6" style={{ whiteSpace: 'pre-line' }}>
+          <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6 font-heading" style={{ whiteSpace: 'pre-line' }}>
             {cms?.headline
               ? cms.headline.replace(/\\n/g, '\n')
               : <>Let's Build the <br className="hidden md:block"/>
