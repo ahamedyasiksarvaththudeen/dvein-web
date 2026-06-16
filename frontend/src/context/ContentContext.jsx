@@ -60,6 +60,7 @@ const safeStringify = (data) => {
 
 const persistContent = (data) => {
   const json = safeStringify(data);
+  // ── 1. Local cache ──────────────────────────────────────────────────────────
   try {
     localStorage.setItem('dvein_cms_content', json);
   } catch {
@@ -67,6 +68,17 @@ const persistContent = (data) => {
     try { localStorage.removeItem('dvein_cms_content'); } catch {}
     idbSave(data);
   }
+  // ── 2. Backend sync (only when logged in as admin) ─────────────────────────
+  try {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      fetch('/api/public/cms/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+        body: json,
+      }).catch((err) => console.warn('CMS backend sync failed:', err));
+    }
+  } catch {}
 };
 
 const loadPersistedContent = async () => {
@@ -576,12 +588,27 @@ export const ContentProvider = ({ children }) => {
     return defaultContent;
   });
 
-  // On mount, also check IndexedDB (for when localStorage was full)
+  // On mount: 1) try backend (source of truth for all visitors)
+  //            2) fall back to IndexedDB if localStorage was full
   useEffect(() => {
     (async () => {
+      // ── Backend is the authoritative source ────────────────────────────────
+      try {
+        const res = await fetch('/api/public/cms/content');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Object.keys(data).length > 0) {
+            setContent(buildContent(data));
+            // Update local cache so next page load is instant
+            try { localStorage.setItem('dvein_cms_content', safeStringify(data)); } catch {}
+            return;
+          }
+        }
+      } catch {}
+      // ── IndexedDB fallback (localStorage already loaded in useState) ───────
       try {
         const ls = localStorage.getItem('dvein_cms_content');
-        if (ls) return; // localStorage already loaded
+        if (ls) return;
       } catch {}
       const idb = await idbLoad();
       if (idb) setContent(buildContent(idb));
@@ -601,6 +628,17 @@ export const ContentProvider = ({ children }) => {
     try { localStorage.removeItem('dvein_cms_content'); } catch {}
     idbClear();
     setContent(defaultContent);
+    // Also clear backend so visitors see defaults too
+    try {
+      const token = localStorage.getItem('adminToken');
+      if (token) {
+        fetch('/api/public/cms/content', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+          body: '{}',
+        }).catch(() => {});
+      }
+    } catch {}
   };
 
   return (

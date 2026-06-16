@@ -1247,7 +1247,7 @@ const CMSPanel = () => {
               <>
                 <Icon d={activeInfo.d} size={13} className="text-gray-400" />
                 <span className="text-sm font-bold text-gray-700">{activeInfo.label}</span>
-                <span className="ml-auto text-[10px] font-bold text-gray-300 uppercase tracking-widest hidden sm:block">Auto-saved · localStorage</span>
+                <span className="ml-auto text-[10px] font-bold text-gray-300 uppercase tracking-widest hidden sm:block">Auto-saved · Synced to Server</span>
               </>
             )}
           </div>

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 import os
@@ -9,6 +10,11 @@ load_dotenv()
 
 from database import JsonDatabase
 from routers import public
+
+# Resolve the frontend dist directory once at startup
+_DIST_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+)
 
 
 @asynccontextmanager
@@ -31,25 +37,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ── Serve uploaded files ────────────────────────────────────────────────────────
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
+# ── Serve built frontend static assets (JS / CSS / images) ────────────────────
+if os.path.isdir(_DIST_DIR):
+    try:
+        app.mount("/assets", StaticFiles(directory=os.path.join(_DIST_DIR, "assets")), name="assets")
+    except Exception:
+        pass
+
+# ── API routes ─────────────────────────────────────────────────────────────────
 app.include_router(public.router, prefix="/api/public")
 
 
-@app.get("/")
-async def root():
-    dist_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
-    index_path = os.path.join(dist_dir, "index.html")
+# ── SPA catch-all — serves index.html for every non-API path ──────────────────
+# This is critical for React Router (BrowserRouter): direct navigation to
+# /training, /contact, /admin/login, etc. must return index.html so the
+# client-side router can take over.
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    # 1. Try the exact static file first (favicon.ico, robots.txt, etc.)
+    candidate = os.path.join(_DIST_DIR, full_path)
+    if os.path.isfile(candidate):
+        return FileResponse(candidate)
+
+    # 2. Fall back to index.html for all SPA routes
+    index_path = os.path.join(_DIST_DIR, "index.html")
     if os.path.exists(index_path):
-        from fastapi.responses import FileResponse
         return FileResponse(index_path, media_type="text/html")
-    return {"message": "DVein FastAPI Backend Running"}
 
-
-# Mount frontend static files (if present) to serve built assets.
-dist_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
-if os.path.isdir(dist_dir):
-    try:
-        app.mount("/", StaticFiles(directory=dist_dir, html=True), name="frontend")
-    except Exception:
-        pass
+    # 3. Backend not yet built — return a helpful message
+    return {"message": "Frontend not built. Run: cd frontend && npm run build"}

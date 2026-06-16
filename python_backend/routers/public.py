@@ -11,8 +11,10 @@ POST /api/public/contact
 """
 import os
 import shutil
+import json as _json
+from pathlib import Path
 from typing import Optional
-from fastapi import APIRouter, Depends, File, Form, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -380,3 +382,40 @@ async def contact_form(
             pass
 
     return {"success": True, "message": "Message sent! We will get back to you within 2 hours."}
+
+
+# ── CMS Content endpoints ───────────────────────────────────────────────────────
+# GET  /api/public/cms/content  — returns saved CMS content (public, for all visitors)
+# POST /api/public/cms/content  — saves CMS content (admin-only, requires X-Admin-Token)
+
+_CMS_FILE = Path("data/cms_content.json")
+_ADMIN_TOKEN = "dvein_admin_token_secure"
+
+
+@router.get("/cms/content")
+async def get_cms_content():
+    """Return the persisted CMS content so all visitors see admin-saved data."""
+    try:
+        if _CMS_FILE.exists():
+            return _json.loads(_CMS_FILE.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"CMS content load error: {e}")
+    return {}
+
+
+@router.post("/cms/content")
+async def save_cms_content(request: Request):
+    """Persist the full CMS content object to disk. Requires admin token."""
+    token = request.headers.get("x-admin-token", "")
+    if token != _ADMIN_TOKEN:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    try:
+        body = await request.json()
+        _CMS_FILE.parent.mkdir(exist_ok=True)
+        _CMS_FILE.write_text(
+            _json.dumps(body, indent=2, default=str), encoding="utf-8"
+        )
+        return {"success": True}
+    except Exception as e:
+        print(f"CMS content save error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to save content")

@@ -2,7 +2,9 @@ services:
   - type: web
     name: dvein-fastapi-backend
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    # Build frontend first (from project root), then install backend deps
+    # Render root dir is assumed to be python_backend/
+    buildCommand: cd ../frontend && npm install && npm run build && cd ../python_backend && pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: EMAIL_USER
