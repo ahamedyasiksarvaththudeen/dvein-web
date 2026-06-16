@@ -511,11 +511,18 @@ export const defaultContent = {
 
   // ─── CLIENTS TICKER ─────────────────────────────────────────────
   clients: {
-    heading: "Trusted by Industry Leaders",
+    heading: "Trusted by Industry Sectors",
     names: [
-      "TechCorp Systems", "Innovate AI", "BuildIt Infra", "CloudNine Networks",
-      "FutureGen Edu", "Alpha Data", "CyberSafe Solutions", "NextLevel Code",
-      "SkyHigh Developers", "Quantum Soft",
+      "Information Technology & Software",
+      "Healthcare",
+      "EdTech",
+      "Banking & Financial Services",
+      "E-Commerce",
+      "Manufacturing",
+      "Logistics & Supply Chain",
+      "Smart Farming",
+      "HR Tech",
+      "Real Estate & Construction",
     ],
   },
 
@@ -573,7 +580,7 @@ const buildContent = (p) => {
       panels: p.careerHub.panels || defaultContent.careerHub.panels,
       dna: p.careerHub.dna ? { ...defaultContent.careerHub.dna, ...p.careerHub.dna, dots: p.careerHub.dna.dots || defaultContent.careerHub.dna.dots } : defaultContent.careerHub.dna,
     } : defaultContent.careerHub,
-    clients:           p.clients ? { ...defaultContent.clients, ...p.clients } : defaultContent.clients,
+    clients:           defaultContent.clients,
     contact:           merge('contact'),
   };
 };

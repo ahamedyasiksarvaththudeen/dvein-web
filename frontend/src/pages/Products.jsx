@@ -171,18 +171,12 @@ const ProductsPage = () => {
             {cms?.hero?.description || 'We build high-performance software nodes designed for enterprise stability. Deploy disruptive kernels globally with zero-latency sync.'}
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4">
-            <button 
-              onClick={() => document.getElementById('inventory').scrollIntoView({ behavior: 'smooth' })} 
+          <div className="flex justify-center">
+            <button
+              onClick={() => document.getElementById('inventory').scrollIntoView({ behavior: 'smooth' })}
               className="bg-indigo-600 text-white px-10 py-4 rounded-xl font-semibold text-sm transition-all shadow-xl hover:bg-slate-900 hover:-translate-y-1"
             >
               Explore Inventory
-            </button>
-
-            <button 
-              className="bg-white text-slate-900 border border-slate-200 hover:bg-slate-50 px-10 py-4 rounded-xl font-semibold text-sm transition-all hover:border-indigo-400"
-            >
-              Technical Docs
             </button>
           </div>
         </motion.div>

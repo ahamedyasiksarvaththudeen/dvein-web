@@ -27,7 +27,7 @@ const GoogleMapsIcon = ({ size = 18 }) => (
 const Footer = () => {
   const { content } = useContent();
   const cms = content.footer;
-  const currentYear = new Date().getFullYear();
+  const currentYear = 2025;
   const navigate = useNavigate();
   const clickCountRef = useRef(0);
   const clickTimerRef = useRef(null);

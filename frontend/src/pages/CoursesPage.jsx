@@ -34,7 +34,7 @@ const CoursesPage = () => {
   const WA_NUMBER = '918667363896';
   const [enrollModal, setEnrollModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState('DVein Academy — Full Program');
-  const [enrollForm, setEnrollForm] = useState({ firstName: '', lastName: '', email: '', phone: '', portfolio: '' });
+  const [enrollForm, setEnrollForm] = useState({ firstName: '', lastName: '', email: '', phone: '', course: '', portfolio: '' });
   const [enrollSubmitting, setEnrollSubmitting] = useState(false);
   const [enrollStatus, setEnrollStatus] = useState(null); // null | 'success'
 
@@ -57,7 +57,7 @@ const CoursesPage = () => {
   const openEnroll = (courseTitle = 'DVein Course') => {
     setSelectedCourse(courseTitle);
     setEnrollStatus(null);
-    setEnrollForm({ firstName: '', lastName: '', email: '', phone: '', portfolio: '' });
+    setEnrollForm({ firstName: '', lastName: '', email: '', phone: '', course: courseTitle !== 'DVein Academy — Full Program' ? courseTitle : '', portfolio: '' });
     setEnrollModal(true);
   };
 
@@ -69,7 +69,7 @@ const CoursesPage = () => {
     const waText = [
       `*New Course Enrollment — DVein Innovations*`,
       ``,
-      `*Course:* ${selectedCourse}`,
+      `*Selected Course:* ${enrollForm.course || selectedCourse}`,
       `*Name:* ${enrollForm.firstName} ${enrollForm.lastName}`,
       `*Email:* ${enrollForm.email}`,
       `*Phone:* ${enrollForm.phone}`,
@@ -441,6 +441,17 @@ const CoursesPage = () => {
                   <input required placeholder="Phone / WhatsApp"
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
                     onChange={e => setEnrollForm(p => ({...p, phone: e.target.value}))} />
+                  <select
+                    required
+                    value={enrollForm.course}
+                    onChange={e => setEnrollForm(p => ({...p, course: e.target.value}))}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200 text-slate-700"
+                  >
+                    <option value="" disabled>Select a Course</option>
+                    {staticCourses.map(course => (
+                      <option key={course._id} value={course.title}>{course.title}</option>
+                    ))}
+                  </select>
                   <input placeholder="Portfolio / LinkedIn (optional)"
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
                     onChange={e => setEnrollForm(p => ({...p, portfolio: e.target.value}))} />

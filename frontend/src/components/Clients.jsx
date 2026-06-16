@@ -6,9 +6,16 @@ const Clients = () => {
   const { content } = useContent();
   const cms = content?.clients || {};
   const clientNames = Array.isArray(cms.names) && cms.names.length > 0 ? cms.names : [
-    "TechCorp Systems", "Innovate AI", "BuildIt Infra", "CloudNine Networks",
-    "FutureGen Edu", "Alpha Data", "CyberSafe Solutions", "NextLevel Code",
-    "SkyHigh Developers", "Quantum Soft",
+    "Information Technology & Software",
+    "Healthcare",
+    "EdTech",
+    "Banking & Financial Services",
+    "E-Commerce",
+    "Manufacturing",
+    "Logistics & Supply Chain",
+    "Smart Farming",
+    "HR Tech",
+    "Real Estate & Construction",
   ];
   const loopedClients = [...clientNames, ...clientNames, ...clientNames];
 
@@ -23,7 +30,7 @@ const Clients = () => {
         className="max-w-7xl mx-auto px-4 text-center mb-10"
       >
         <h2 className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em] font-heading">
-          {cms.heading || 'Trusted by Industry Leaders'}
+          {cms.heading || 'Trusted by Industry Sectors'}
         </h2>
       </motion.div>
 

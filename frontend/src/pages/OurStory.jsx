@@ -131,29 +131,25 @@ const TechieBackground = () => {
 };
 
 const storyParagraphs = [
-  `DVein Innovations was not born in a boardroom. It was born in a garage.`,
+  `Every successful company begins with a dream.\nOurs began with a belief — that technology should not just solve problems, but create possibilities for the future.\nThat belief became DVein Innovations Pvt. Ltd.\nA name built with purpose.`,
 
-  `It started with a few passionate engineers who were frustrated. Frustrated with the gap between what academia taught and what the industry demanded. Frustrated that brilliant students were graduating with degrees but no real-world engineering experience. Frustrated that the tools, mentorship, and opportunities needed to build something meaningful were locked behind expensive institutions or inaccessible networks.`,
+  `"D" stands for Dream, Design, and Deliver.\nBecause every innovation starts with a dream, grows through thoughtful design, and earns its value only when it is delivered with impact.`,
 
-  `So they decided to build something different.`,
+  `And "Vein" represents the leaf vein — the invisible network that carries life, connection, and growth.\nJust like those veins, data flows silently through the world around us. At DVein, we transform that flow into intelligence, automation, and future-ready innovation powered by AI and technology.`,
 
-  `In the early days, DVein was just a small team — a handful of engineers, designers, and thinkers who believed that great technology could come from anywhere, and that talent had no address. They set up shop with minimal resources but maximum resolve. Their lab was a mix of salvaged hardware, open-source software, and an unshakeable belief that engineering was the language of the future.`,
+  `What started as a vision slowly became a mission.\nLong nights. Endless learning. Experiments that failed. Ideas that evolved. Projects built from scratch. Challenges that tested patience, courage, and consistency.`,
 
-  `The name "DVein" came from the idea of veins — the networks that carry life through a body. They wanted to be that invisible infrastructure. The connective tissue that carries ideas, talent, and innovation through the ecosystem of technology. D for Digital. Vein for the network that runs through everything.`,
+  `But through every stage, one thing remained unchanged — the determination to build something meaningful.`,
 
-  `Their first project was a student initiative — helping final-year engineering students build projects that actually worked in the real world. Not demo projects. Not placeholder code. Real systems. Embedded hardware. Full-stack applications. IoT nodes. Production-ready code reviewed by practicing engineers.`,
+  `DVein was never created to be "just another software company."\nIt was built to become a platform where creativity meets technology, where young talents are empowered, and where innovation becomes accessible to businesses, students, and society.`,
 
-  `Word spread fast. Students who went through DVein's programs started getting noticed. Companies started asking: "Where are these engineers coming from?" The team grew. The programs expanded. And the mission became clearer with every student who launched a project that changed how they saw themselves — not as a student, but as an engineer.`,
+  `From AI-driven solutions to real-time applications, from student mentoring to enterprise software development, every step of our journey reflects growth, resilience, and belief in continuous innovation.`,
 
-  `DVein expanded into software development — taking on real client projects, building enterprise-grade systems for startups, SMEs, and growing businesses. Every client project was treated as a dual-purpose mission: deliver great software, and give team members the opportunity to work on live production systems. This wasn't outsourcing. This was engineering with purpose.`,
+  `Under the leadership of Logesh Ramamoorthy, DVein continues to move forward with a vision of creating impactful technological solutions that shape the future.`,
 
-  `Then came the courses. Not the typical tutorial-based, watch-and-forget online content. DVein's training programs were built around one principle: you learn by building. Every module ended not with a quiz, but with a deployment. Students didn't just learn React — they shipped a real React application. They didn't just learn about databases — they designed, built, and secured one. The curriculum was built with engineers, for engineers, by engineers who had done it themselves.`,
+  `Today, DVein stands not only as a company, but as a story of ambition, passion, learning, and transformation.`,
 
-  `Collaborations followed. Universities, corporates, research institutions, and government programs started partnering with DVein — not just to train talent, but to co-create technology. The team built custom solutions for industries ranging from agriculture to aerospace, always staying true to their core identity: practical, precise, and production-grade.`,
-
-  `Today, DVein Innovations operates across multiple verticals — software solutions, academy training, student project mentorship, hardware prototyping, product development, and collaborative R&D. The garage is long gone. But the spirit that built it? That's in every commit, every PCB trace, every line of code that leaves this team's hands.`,
-
-  `We are DVein. We don't just talk about the future. We engineer it.`,
+  `A story that tells every dreamer:\nYou don't need a perfect beginning to create an extraordinary future.\nYou only need the courage to start.\nAnd this is just the beginning of the DVein journey.`,
 ];
 
 const OurStory = () => {
@@ -198,7 +194,7 @@ const OurStory = () => {
         </motion.div>
 
         {/* Story paragraphs */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {displayParagraphs.map((para, idx) => (
             <motion.div
               key={idx}
@@ -206,19 +202,39 @@ const OurStory = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: idx * 0.08 }}
             >
-              <p
-                className={`leading-relaxed font-medium ${
-                  idx === 0
-                    ? 'text-2xl md:text-3xl text-indigo-700 font-bold text-center'
-                    : idx === displayParagraphs.length - 1
-                    ? 'text-xl md:text-2xl text-slate-900 font-extrabold text-center uppercase tracking-widest border border-indigo-100 bg-indigo-50 px-8 py-6 rounded-2xl'
-                    : idx === 2
-                    ? 'text-xl text-slate-700 font-bold text-center'
-                    : 'text-base md:text-lg text-slate-700'
-                }`}
-              >
-                {para}
-              </p>
+              {idx === 0 ? (
+                <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl px-8 py-8 text-center shadow-lg">
+                  {para.split('\n').map((line, i) => (
+                    <p key={i} className={`font-bold text-white ${i === 0 ? 'text-xl md:text-2xl mb-2' : i === para.split('\n').length - 1 ? 'text-lg text-indigo-200 mt-2' : 'text-base text-indigo-100'}`}>
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              ) : idx === displayParagraphs.length - 1 ? (
+                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl px-8 py-8 text-center shadow-lg border border-indigo-500/30">
+                  {para.split('\n').map((line, i) => (
+                    <p key={i} className={`font-bold ${i === 0 ? 'text-indigo-400 text-sm uppercase tracking-widest mb-4' : i === 1 ? 'text-white text-lg md:text-xl mb-2' : 'text-slate-300 text-base'}`}>
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              ) : idx === 4 ? (
+                <div className="bg-amber-50 border-l-4 border-amber-400 rounded-xl px-6 py-5">
+                  <p className="text-amber-900 font-semibold text-base md:text-lg leading-relaxed">{para}</p>
+                </div>
+              ) : idx % 3 === 1 ? (
+                <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-6 py-5">
+                  <p className="text-indigo-900 font-medium text-base md:text-lg leading-relaxed whitespace-pre-line">{para}</p>
+                </div>
+              ) : idx % 3 === 2 ? (
+                <div className="bg-slate-50 border border-slate-200 rounded-xl px-6 py-5">
+                  <p className="text-slate-700 font-medium text-base md:text-lg leading-relaxed whitespace-pre-line">{para}</p>
+                </div>
+              ) : (
+                <div className="bg-white border border-slate-100 rounded-xl px-6 py-5 shadow-sm">
+                  <p className="text-slate-700 font-medium text-base md:text-lg leading-relaxed whitespace-pre-line">{para}</p>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
