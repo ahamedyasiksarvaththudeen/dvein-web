@@ -156,12 +156,12 @@ const CareerHub = () => {
           </div>
 
           {/* Media Cards — image and videos in separate cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-14">
 
             {/* Image card — arrow to switch between images */}
             <motion.div
               initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0 }}
-              className="relative rounded-[2rem] overflow-hidden shadow-xl border border-slate-100"
+              className="relative w-full md:w-[560px] rounded-[2rem] overflow-hidden shadow-xl border border-slate-100"
             >
               <img
                 src={cmsImages[imageIndex]}
@@ -187,18 +187,18 @@ const CareerHub = () => {
               </div>
             </motion.div>
 
-            {/* Videos card — arrow to switch between videos */}
+            {/* Videos card — portrait, fixed frame; arrow to switch between videos */}
             <motion.div
               initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
-              className="relative rounded-[2rem] overflow-hidden shadow-xl border border-slate-100 bg-black"
+              className="relative w-60 h-[460px] rounded-[2rem] overflow-hidden shadow-xl border border-slate-100 bg-black"
             >
-              <div className="w-full h-80 flex items-center justify-center">
+              <div className="w-full h-full flex items-center justify-center">
                 {cmsVideoSrcs.map((src, i) => (
                   <video
                     key={i}
                     ref={el => { videoRefs.current[i] = el; }}
                     src={src}
-                    className={`w-full h-full object-contain ${i === videoIndex ? 'block' : 'hidden'}`}
+                    className={`w-full h-full object-cover scale-[1.2] ${i === videoIndex ? 'block' : 'hidden'}`}
                     controls
                     playsInline
                   />
