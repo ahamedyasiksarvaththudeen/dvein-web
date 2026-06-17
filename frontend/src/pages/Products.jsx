@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaRocket, FaShieldAlt, FaSync, FaBolt, FaDatabase,
@@ -72,11 +72,14 @@ const ProductsPage = () => {
   const [ecommerceImageIndex, setEcommerceImageIndex] = useState(0);
   const [activeInventoryCard, setActiveInventoryCard] = useState(0);
 
+  // CP-20: useRef for smooth-scroll instead of document.getElementById
+  const inventoryRef = useRef(null);
+
   useEffect(() => {
-    fetch('/api/public/products')
+    fetch('https://backend-dvein-2.onrender.com/api/public/products')
       .then(res => res.json())
       .then(data => { setProducts(data); setLoading(false); })
-      .catch(err => { console.error(err); setLoading(false); });
+      .catch(() => { setLoading(false); });
   }, []);
 
   useEffect(() => {
@@ -173,7 +176,7 @@ const ProductsPage = () => {
 
           <div className="flex justify-center">
             <button
-              onClick={() => document.getElementById('inventory').scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => inventoryRef.current?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-indigo-600 text-white px-10 py-4 rounded-xl font-semibold text-sm transition-all shadow-xl hover:bg-slate-900 hover:-translate-y-1"
             >
               Explore Inventory
@@ -217,7 +220,7 @@ const ProductsPage = () => {
       </div>
 
       {/* INVENTORY */}
-      <div id="inventory" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-32">
+      <div id="inventory" ref={inventoryRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-32">
         <div className="text-center mb-20 px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
             Active Inventory
@@ -450,7 +453,6 @@ const ProductsPage = () => {
           Request Custom Node Activation <FaArrowRight className="inline ml-3" />
         </button>
         <p className="mt-12 text-xs font-medium text-slate-300 tracking-wide">
-          Â© 2026 DVEIN â¢ PRODUCT INFRASTRUCTURE
         </p>
       </div>
     </div>

@@ -12,10 +12,10 @@ const TrainingHighlights = () => {
   const [trainings, setTrainings] = useState([]);
 
   useEffect(() => {
-    fetch('/api/public/trainings')
+    fetch('https://backend-dvein-2.onrender.com/api/public/trainings')
       .then(res => res.json())
       .then(data => setTrainings(data))
-      .catch(err => console.error(err));
+      .catch(() => { /* renders empty if backend unavailable */ });
   }, []);
 
   const filteredData = trainings.filter(item => item.category === activeTab);

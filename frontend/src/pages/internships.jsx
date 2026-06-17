@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as FaIcons from 'react-icons/fa';
 import { useContent } from '../context/ContentContext';
+import { submitApplication } from '../lib/firebaseService';
 
 const getIcon = (iconName) => {
   const IconComponent = FaIcons[iconName];
@@ -38,6 +39,8 @@ const marqueeStyle = `
   }
   .animate-marquee { animation: marquee 30s linear infinite; }
 `;
+
+const GMAIL_EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
 const STATIC_DATA = {
   domains: [
@@ -97,23 +100,44 @@ const Training = () => {
   const [formData, setFormData] = useState({
     firstName: '', lastName: '', email: '', phone: '', portfolio: '', jobTitle: ''
   });
-  const [resume, setResume] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+
+  // CP-20: useRef for smooth-scroll targets instead of document.getElementById
+  const applySectionRef = useRef(null);
+  const domainsRef      = useRef(null);
+
+  const scrollToApply   = () => applySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToDomains = () => domainsRef.current?.scrollIntoView({ behavior: 'smooth' });
 
   const WA_NUMBER = '918667363896';
 
   useEffect(() => {
-    fetch('/api/public/training-page')
+    fetch('https://backend-dvein-2.onrender.com/api/public/training-page')
       .then(res => res.json())
       .then(apiData => { setData(apiData); })
-      .catch(error => {
-        console.warn('Could not load training page from backend.', error);
-      });
+      .catch(() => { /* CMS content used as primary source */ });
   }, []);
 
   const handleApply = async (e) => {
     e.preventDefault();
+    const normalizedEmail = formData.email.trim().toLowerCase();
+
+    if (!GMAIL_EMAIL_PATTERN.test(normalizedEmail)) {
+      e.target.email.setCustomValidity('Please enter a Gmail address ending with @gmail.com.');
+      e.target.email.reportValidity();
+      return;
+    }
+
+    e.target.email.setCustomValidity('');
+
+    if (!/^\d{10}$/.test(formData.phone)) {
+      e.target.phone.setCustomValidity('Please enter exactly 10 digits.');
+      e.target.phone.reportValidity();
+      return;
+    }
+
+    e.target.phone.setCustomValidity('');
     setSubmitting(true);
     setSubmitStatus(null);
 
@@ -129,24 +153,21 @@ const Training = () => {
       `_Sent from DVein Website_`,
     ].join('\n');
 
-    try {
-      const dataToSend = new FormData();
-      Object.keys(formData).forEach(key => dataToSend.append(key, formData[key]));
-      if (resume) dataToSend.append('resume', resume);
-      await fetch('/api/public/apply', {
-        method: 'POST',
-        body: dataToSend,
-        signal: AbortSignal.timeout(5000),
-      });
-    } catch (error) {
-      console.warn('Could not save internship application to backend before opening WhatsApp.', error);
-    }
+    // Save to Firestore silently
+    submitApplication({
+      firstName: formData.firstName,
+      lastName:  formData.lastName,
+      email:     formData.email,
+      phone:     formData.phone,
+      portfolio: formData.portfolio || '',
+      jobTitle:  formData.jobTitle,
+      resume:    null,
+    }).catch(err => console.warn('[Internships] Firestore save failed:', err));
 
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waText)}`, '_blank');
 
     setSubmitStatus('success');
     setFormData({ firstName: '', lastName: '', email: '', phone: '', portfolio: '', jobTitle: '' });
-    setResume(null);
     e.target.reset();
     setSubmitting(false);
   };
@@ -169,11 +190,11 @@ const Training = () => {
             </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <button
-                onClick={() => document.getElementById('apply-section').scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => scrollToApply()}
                 className="px-8 py-3.5 bg-blue-600 text-white rounded-xl font-bold shadow-lg hover:bg-blue-700 transition-all"
               >Apply Now</button>
               <button
-                onClick={() => document.getElementById('domains').scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => scrollToDomains()}
                 className="px-8 py-3.5 bg-white text-gray-800 border border-gray-200 rounded-xl font-bold shadow-sm hover:bg-gray-50 transition-all"
               >Explore Tracks</button>
             </div>
@@ -193,7 +214,7 @@ const Training = () => {
       </div>
 
       {/* DOMAINS */}
-      <div id="domains" className="py-24">
+      <div id="domains" ref={domainsRef} className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900">{cms?.domainsHeading || 'Choose Your Internships'}</h2>
@@ -209,7 +230,7 @@ const Training = () => {
                   {domain.skills?.map((s, i) => <span key={i} className="px-2.5 py-1 bg-white border border-gray-100 rounded-lg text-[10px] font-bold text-gray-500 uppercase">{s}</span>)}
                 </div>
                 <button
-                  onClick={() => document.getElementById('apply-section').scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => scrollToApply()}
                   className="mt-auto inline-flex items-center gap-2 text-blue-600 font-black text-xs uppercase tracking-widest"
                 >Apply Now <FaIcons.FaArrowRight /></button>
               </motion.div>
@@ -219,7 +240,7 @@ const Training = () => {
       </div>
 
       {/* APPLICATION FORM */}
-      <div id="apply-section" className="py-24 max-w-4xl mx-auto px-6">
+      <div id="apply-section" ref={applySectionRef} className="py-24 max-w-4xl mx-auto px-6">
         <div className="bg-white p-8 md:p-14 rounded-[2.5rem] shadow-2xl border border-blue-50 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-500 rounded-t-[2.5rem]" />
 
@@ -261,7 +282,10 @@ const Training = () => {
                   <input
                     type="text" required
                     value={formData.firstName}
-                    onChange={e => setFormData(p => ({ ...p, firstName: e.target.value }))}
+                    onChange={e => {
+                      const val = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                      setFormData(p => ({ ...p, firstName: val }));
+                    }}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                     placeholder="Arjun"
                   />
@@ -271,7 +295,10 @@ const Training = () => {
                   <input
                     type="text" required
                     value={formData.lastName}
-                    onChange={e => setFormData(p => ({ ...p, lastName: e.target.value }))}
+                    onChange={e => {
+                      const val = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                      setFormData(p => ({ ...p, lastName: val }));
+                    }}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                     placeholder="Kumar"
                   />
@@ -282,9 +309,15 @@ const Training = () => {
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Email Address *</label>
                   <input
+                    name="email"
                     type="email" required
+                    pattern="^[a-zA-Z0-9._%+\-]+@gmail\.com$"
+                    title="Please enter a Gmail address ending with @gmail.com."
                     value={formData.email}
-                    onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
+                    onChange={e => {
+                      e.target.setCustomValidity('');
+                      setFormData(p => ({ ...p, email: e.target.value }));
+                    }}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                     placeholder="arjun@gmail.com"
                   />
@@ -292,9 +325,18 @@ const Training = () => {
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Phone Number *</label>
                   <input
+                    name="phone"
                     type="tel" required
+                    inputMode="numeric"
+                    maxLength={10}
+                    pattern="^\d{10}$"
+                    title="Please enter exactly 10 digits."
                     value={formData.phone}
-                    onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
+                    onChange={e => {
+                      e.target.setCustomValidity('');
+                      const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                      setFormData(p => ({ ...p, phone: val }));
+                    }}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                     placeholder="+91 98765 43210"
                   />
@@ -344,18 +386,6 @@ const Training = () => {
                   onChange={e => setFormData(p => ({ ...p, portfolio: e.target.value }))}
                   className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                   placeholder="https://github.com/yourname"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  Resume <span className="text-gray-300 font-normal">(optional, PDF/DOC)</span>
-                </label>
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx"
-                  onChange={e => setResume(e.target.files[0])}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition-all text-sm text-gray-600 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700"
                 />
               </div>
 

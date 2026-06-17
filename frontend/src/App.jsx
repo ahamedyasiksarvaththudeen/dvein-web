@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { ContentProvider } from './context/ContentContext';
 import ScrollToTop from './components/common/ScrollToTop';
 import Navbar from './components/Navbar';
+import WhatsAppBtn from './components/common/WhatsAppBtn';
 
 // PUBLIC PAGES
 import Home from './pages/Home';
 import Training from './pages/internships';
 import Products from './pages/Products';
 import CareerHub from './pages/CareerHub';
+import CareerHubRequirementDetails from './pages/CareerHubRequirementDetails';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 import SoftwareSolutions from './pages/SoftwareSolutions';
@@ -60,6 +62,7 @@ const Layout = () => {
         <Route path="/training"          element={<Training />} />
         <Route path="/products"          element={<Products />} />
         <Route path="/career-hub"        element={<CareerHub />} />
+        <Route path="/career-hub/requirements/:id" element={<CareerHubRequirementDetails />} />
         <Route path="/contact"           element={<Contact />} />
         <Route path="/student-projects"  element={<StudentProjects />} />
         <Route path="/collaboration"     element={<Collaborations />} />
@@ -70,11 +73,9 @@ const Layout = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {!isHomePage && !isOurStoryPage && (
-        <>
-          <Footer />
-        </>
-      )}
+      {!isHomePage && !isOurStoryPage && <Footer />}
+
+      <WhatsAppBtn />
     </>
   );
 };

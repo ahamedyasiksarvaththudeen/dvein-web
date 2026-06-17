@@ -41,10 +41,10 @@ const ServiceHighlights = () => {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
-    fetch('/api/public/services')
+    fetch('https://backend-dvein-2.onrender.com/api/public/services')
       .then(res => res.json())
       .then(data => setServices(data))
-      .catch(err => console.error(err));
+      .catch(() => { /* renders empty if backend unavailable */ });
   }, []);
 
   const getIcon = (iconName) => {

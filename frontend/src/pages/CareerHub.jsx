@@ -8,12 +8,14 @@ import {
 } from 'react-icons/fa';
 import clientImg from '../assets/client-img.jpg';
 import dveinLogo from '../assets/logo.png';
+// Bundled assets — used as fallback when no CMS images/videos are configured
 import studentsImg from '../assets/students-img.jpeg';
 import img2Src from '../assets/img2.jpeg';
 import img3Src from '../assets/img3.jpeg';
 import vid1Src from '../assets/vid1.mp4';
 import vid2Src from '../assets/vid2.mp4';
 import { useContent } from '../context/ContentContext';
+import { getJobs, getSuccessStories, submitApplication } from '../lib/firebaseService';
 
 // Panel local assets for CMS image resolution
 const panelAssets = import.meta.glob('../assets/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' });
@@ -46,31 +48,32 @@ const CareerHub = () => {
   const dnaRef = useRef(null);
   const dnaInView = useInView(dnaRef, { once: true, margin: '-80px' });
 
-  const vid1Ref = useRef(null);
-  const vid2Ref = useRef(null);
+  // ── CMS-managed media (falls back to bundled assets when arrays are empty) ──
+  const cmsImages = Array.isArray(cmsSuccessStory.images) && cmsSuccessStory.images.length > 0
+    ? cmsSuccessStory.images
+    : [studentsImg, img2Src, img3Src];
+  const cmsVideoSrcs = Array.isArray(cmsSuccessStory.videos) && cmsSuccessStory.videos.length > 0
+    ? cmsSuccessStory.videos
+    : [vid1Src, vid2Src];
+
+  const videoRefs = useRef([]);
   const [videoIndex, setVideoIndex] = useState(0);
-  const images = [studentsImg, img2Src, img3Src];
   const [imageIndex, setImageIndex] = useState(0);
-  const switchImage = (dir) => setImageIndex(i => (i + dir + images.length) % images.length);
-  const videos = [
-    { src: vid1Src, ref: vid1Ref },
-    { src: vid2Src, ref: vid2Ref },
-  ];
+
+  const switchImage = (dir) => setImageIndex(i => (i + dir + cmsImages.length) % cmsImages.length);
   const switchVideo = (dir) => {
-    [vid1Ref, vid2Ref].forEach(r => { if (r.current) { r.current.pause(); r.current.currentTime = 0; } });
-    setVideoIndex(i => (i + dir + videos.length) % videos.length);
+    videoRefs.current.forEach(el => { if (el) { el.pause(); el.currentTime = 0; } });
+    setVideoIndex(i => (i + dir + cmsVideoSrcs.length) % cmsVideoSrcs.length);
   };
 
 
   useEffect(() => {
-    fetch('/api/public/jobs')
-      .then(res => res.json())
+    getJobs()
       .then(data => { setLiveJobs(data); setLoading(false); })
-      .catch(err => { console.error(err); setLoading(false); });
-    fetch('/api/public/success-stories')
-      .then(res => res.json())
+      .catch(err => { console.error('[CareerHub] getJobs failed:', err); setLoading(false); });
+    getSuccessStories()
       .then(data => setSuccessStories(data))
-      .catch(() => {});
+      .catch(err => console.error('[CareerHub] getSuccessStories failed:', err));
   }, []);
 
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', portfolio: '', resume: null });
@@ -89,13 +92,16 @@ const CareerHub = () => {
       `*Portfolio:* ${formData.portfolio || 'Not provided'}`, '',
       '_Sent from DVein Career Hub_',
     ].join('\n');
-    try {
-      const data = new FormData();
-      Object.keys(formData).forEach(key => { if (key !== 'resume') data.append(key, formData[key]); });
-      data.append('jobTitle', selectedJob.title);
-      if (formData.resume) data.append('resume', formData.resume);
-      await fetch('/api/public/apply', { method: 'POST', body: data, signal: AbortSignal.timeout(5000) });
-    } catch (_) {}
+    // Save application to Firestore (includes email + file type validation)
+    await submitApplication({
+      firstName: formData.firstName,
+      lastName:  formData.lastName,
+      email:     formData.email,
+      phone:     formData.phone,
+      portfolio: formData.portfolio,
+      jobTitle:  selectedJob.title,
+      resume:    formData.resume,
+    }).catch(err => console.error('[CareerHub] submitApplication failed:', err));
     window.open('https://wa.me/' + WA_CAREER + '?text=' + encodeURIComponent(waText), '_blank');
     setSubmitStatus('success');
     setTimeout(() => { setSubmitStatus(null); setSelectedJob(null); }, 4000);
@@ -119,14 +125,19 @@ const CareerHub = () => {
         <div className="max-w-5xl w-full grid gap-6 md:grid-cols-2">
           {cmsPanels.map((panel, i) => (
             <div key={panel._id || i} className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 text-left shadow-sm">
-              <div className="relative h-56 overflow-hidden rounded-[2rem] mb-6">
+              <Link to={`/career-hub/requirements/${panel._id ?? i}`} className="relative h-56 overflow-hidden rounded-[2rem] mb-6 block group cursor-pointer">
                 <img
                   src={resolvePanel(panel.image) || (i === 0 ? clientImg : dveinLogo)}
                   alt={panel.tag}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   onError={e => { e.target.src = i === 0 ? clientImg : dveinLogo; }}
                 />
-              </div>
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white text-slate-900 text-[11px] font-black uppercase tracking-widest px-5 py-2.5 rounded-full shadow-lg">
+                    View Requirements
+                  </span>
+                </div>
+              </Link>
               <span className="text-[11px] font-black uppercase tracking-[0.35em] text-slate-900 mb-3 block">{panel.tag}</span>
               <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4 font-heading">{panel.heading}</h2>
               <p className="text-slate-600 text-sm leading-relaxed mb-6">{panel.description}</p>
@@ -153,7 +164,7 @@ const CareerHub = () => {
               className="relative rounded-[2rem] overflow-hidden shadow-xl border border-slate-100"
             >
               <img
-                src={images[imageIndex]}
+                src={cmsImages[imageIndex]}
                 alt="DVein Students"
                 className="w-full h-80 object-cover transition-opacity duration-300"
               />
@@ -169,7 +180,7 @@ const CareerHub = () => {
               </button>
               {/* Dots */}
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-                {images.map((_, i) => (
+                {cmsImages.map((_, i) => (
                   <button key={i} onClick={() => setImageIndex(i)}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${i === imageIndex ? 'bg-white scale-110' : 'bg-white/50 hover:bg-white/80'}`} />
                 ))}
@@ -182,11 +193,11 @@ const CareerHub = () => {
               className="relative rounded-[2rem] overflow-hidden shadow-xl border border-slate-100 bg-black"
             >
               <div className="w-full h-80 flex items-center justify-center">
-                {videos.map((v, i) => (
+                {cmsVideoSrcs.map((src, i) => (
                   <video
                     key={i}
-                    ref={v.ref}
-                    src={v.src}
+                    ref={el => { videoRefs.current[i] = el; }}
+                    src={src}
                     className={`w-full h-full object-contain ${i === videoIndex ? 'block' : 'hidden'}`}
                     controls
                     playsInline
@@ -205,8 +216,11 @@ const CareerHub = () => {
               </button>
               {/* Dots */}
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-                {videos.map((_, i) => (
-                  <button key={i} onClick={() => { [vid1Ref, vid2Ref].forEach(r => { if (r.current) { r.current.pause(); r.current.currentTime = 0; } }); setVideoIndex(i); }}
+                {cmsVideoSrcs.map((_, i) => (
+                  <button key={i} onClick={() => {
+                    videoRefs.current.forEach(el => { if (el) { el.pause(); el.currentTime = 0; } });
+                    setVideoIndex(i);
+                  }}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${i === videoIndex ? 'bg-white scale-110' : 'bg-white/50 hover:bg-white/80'}`} />
                 ))}
               </div>

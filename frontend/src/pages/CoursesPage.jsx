@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { submitApplication } from '../lib/firebaseService';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -39,15 +40,17 @@ const CoursesPage = () => {
   const [enrollStatus, setEnrollStatus] = useState(null); // null | 'success'
 
   const [courseForm, setCourseForm] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     course: staticCourses[0]?.title || '',
     portfolio: '',
-    resume: null,
   });
   const [courseSubmitting, setCourseSubmitting] = useState(false);
   const [courseSuccess, setCourseSuccess] = useState(false);
+  const [courseEmailError, setCourseEmailError] = useState('');
+  const [enrollEmailError, setEnrollEmailError] = useState('');
 
   const getWhatsAppLink = (phone, title) => {
     const text = `Hello DVein team, I am interested in the ${title} program. Please share the details.`;
@@ -63,6 +66,11 @@ const CoursesPage = () => {
 
   const handleEnroll = async (e) => {
     e.preventDefault();
+    if (!enrollForm.email.toLowerCase().endsWith('@gmail.com')) {
+      setEnrollEmailError('Only @gmail.com addresses are accepted.');
+      return;
+    }
+    setEnrollEmailError('');
     setEnrollSubmitting(true);
 
     // ── Build WhatsApp message ──
@@ -78,17 +86,16 @@ const CoursesPage = () => {
       `_Sent from DVein Website_`,
     ].join('\n');
 
-    // ── Save to backend silently ──
-    try {
-      const data = new FormData();
-      Object.entries(enrollForm).forEach(([k, v]) => data.append(k, v));
-      data.append('jobTitle', selectedCourse);
-      await fetch('/api/public/apply', {
-        method: 'POST',
-        body: data,
-        signal: AbortSignal.timeout(5000),
-      });
-    } catch (_) { /* silent */ }
+    // Save to Firestore silently
+    submitApplication({
+      firstName: enrollForm.firstName,
+      lastName:  enrollForm.lastName,
+      email:     enrollForm.email,
+      phone:     enrollForm.phone,
+      portfolio: enrollForm.portfolio || '',
+      jobTitle:  selectedCourse,
+      resume:    null,
+    }).catch(() => { /* silent */ });
 
     // ── Open WhatsApp ──
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waText)}`, '_blank');
@@ -99,6 +106,11 @@ const CoursesPage = () => {
 
   const handleCourseSubmit = (e) => {
     e.preventDefault();
+    if (!courseForm.email.toLowerCase().endsWith('@gmail.com')) {
+      setCourseEmailError('Only @gmail.com addresses are accepted.');
+      return;
+    }
+    setCourseEmailError('');
     setCourseSubmitting(true);
 
     const selected = selectedCourseItem || { title: courseForm.course, whatsappNumber: WA_NUMBER };
@@ -106,11 +118,11 @@ const CoursesPage = () => {
       `*Course Application — DVein Innovations*`,
       ``,
       `*Course:* ${selected.title}`,
-      `*Name:* ${courseForm.name}`,
+      `*Name:* ${courseForm.firstName} ${courseForm.lastName}`,
       `*Email:* ${courseForm.email}`,
       `*Phone:* ${courseForm.phone}`,
       `*Portfolio:* ${courseForm.portfolio || 'Not provided'}`,
-      `*Resume:* ${courseForm.resume?.name || 'Not provided'}`,
+      `*Resume:* Not provided`,
       ``,
       `_Sent from DVein Website_`,
     ].join('\n');
@@ -123,10 +135,10 @@ const CoursesPage = () => {
   };
 
   useEffect(() => {
-    fetch('/api/public/trainings')
+    fetch('https://backend-dvein-2.onrender.com/api/public/trainings')
       .then(res => res.json())
       .then(data => setTrainings(data.filter(item => item.category === 'course')))
-      .catch(err => console.error(err));
+      .catch(() => { /* falls back to staticCourses */ });
   }, []);
 
   const coursesToDisplay = trainings.length > 0
@@ -222,7 +234,7 @@ const CoursesPage = () => {
       />
 
       {/* COURSE APPLICATION FORM */}
-      <section className="max-w-6xl mx-auto px-6 mb-28">
+      <section className="max-w-6xl mx-auto px-6 mt-16 mb-28">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -236,56 +248,93 @@ const CoursesPage = () => {
           </div>
 
           <form onSubmit={handleCourseSubmit} className="space-y-6">
+            {/* Row 1 — First Name | Last Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Name *</span>
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">First Name *</span>
                 <input
                   required
-                  value={courseForm.name}
-                  onChange={e => setCourseForm(p => ({ ...p, name: e.target.value }))}
+                  value={courseForm.firstName}
+                  onChange={e => {
+                    const val = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                    setCourseForm(p => ({ ...p, firstName: val }));
+                  }}
                   className="mt-2 w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
-                  placeholder="Your Name"
+                  placeholder="First Name"
                 />
               </label>
+              <label className="block">
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Last Name *</span>
+                <input
+                  required
+                  value={courseForm.lastName}
+                  onChange={e => {
+                    const val = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                    setCourseForm(p => ({ ...p, lastName: val }));
+                  }}
+                  className="mt-2 w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
+                  placeholder="Last Name"
+                />
+              </label>
+            </div>
+
+            {/* Row 2 — Email | Phone */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <label className="block">
                 <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Email *</span>
                 <input
                   type="email"
                   required
                   value={courseForm.email}
-                  onChange={e => setCourseForm(p => ({ ...p, email: e.target.value }))}
-                  className="mt-2 w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
-                  placeholder="you@example.com"
+                  onChange={e => {
+                    const val = e.target.value;
+                    setCourseForm(p => ({ ...p, email: val }));
+                    if (val && !val.toLowerCase().endsWith('@gmail.com')) {
+                      setCourseEmailError('Only @gmail.com addresses are accepted.');
+                    } else {
+                      setCourseEmailError('');
+                    }
+                  }}
+                  className={`mt-2 w-full bg-slate-50 border rounded-2xl px-4 py-4 text-sm outline-none focus:ring-2 ${courseEmailError ? 'border-red-400 focus:ring-red-200' : 'border-slate-200 focus:ring-indigo-200'}`}
+                  placeholder="you@gmail.com"
                 />
+                {courseEmailError && (
+                  <p className="mt-1 text-xs text-red-500">{courseEmailError}</p>
+                )}
               </label>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Phone no *</span>
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Phone No *</span>
                 <input
                   required
+                  type="tel"
+                  maxLength={10}
                   value={courseForm.phone}
-                  onChange={e => setCourseForm(p => ({ ...p, phone: e.target.value }))}
+                  onChange={e => {
+                    const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    setCourseForm(p => ({ ...p, phone: val }));
+                  }}
                   className="mt-2 w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
-                  placeholder="+91 98765 43210"
+                  placeholder="98765 43210"
                 />
-              </label>
-              <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Course *</span>
-                <select
-                  required
-                  value={courseForm.course}
-                  onChange={e => setCourseForm(p => ({ ...p, course: e.target.value }))}
-                  className="mt-2 w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
-                >
-                  {coursesToDisplay.map(course => (
-                    <option key={course._id} value={course.title}>{course.title}</option>
-                  ))}
-                </select>
               </label>
             </div>
 
+            {/* Row 3 — Course */}
+            <label className="block">
+              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Course *</span>
+              <select
+                required
+                value={courseForm.course}
+                onChange={e => setCourseForm(p => ({ ...p, course: e.target.value }))}
+                className="mt-2 w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
+              >
+                {coursesToDisplay.map(course => (
+                  <option key={course._id} value={course.title}>{course.title}</option>
+                ))}
+              </select>
+            </label>
+
+            {/* Row 4 — Portfolio */}
             <label className="block">
               <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Portfolio / LinkedIn / GitHub (optional)</span>
               <input
@@ -293,16 +342,6 @@ const CoursesPage = () => {
                 onChange={e => setCourseForm(p => ({ ...p, portfolio: e.target.value }))}
                 className="mt-2 w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
                 placeholder="https://github.com/yourname"
-              />
-            </label>
-
-            <label className="block">
-              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Resume (optional, PDF/DOC)</span>
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx"
-                onChange={e => setCourseForm(p => ({ ...p, resume: e.target.files?.[0] || null }))}
-                className="mt-2 w-full text-sm text-slate-700"
               />
             </label>
 
@@ -430,19 +469,46 @@ const CoursesPage = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <input required placeholder="First Name"
                       className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200 w-full"
-                      onChange={e => setEnrollForm(p => ({...p, firstName: e.target.value}))} />
+                      value={enrollForm.firstName}
+                      onChange={e => {
+                        const val = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                        setEnrollForm(p => ({...p, firstName: val}));
+                      }} />
                     <input required placeholder="Last Name"
                       className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200 w-full"
-                      onChange={e => setEnrollForm(p => ({...p, lastName: e.target.value}))} />
+                      value={enrollForm.lastName}
+                      onChange={e => {
+                        const val = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                        setEnrollForm(p => ({...p, lastName: val}));
+                      }} />
                   </div>
-                  <input required type="email" placeholder="Email Address"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
-                    onChange={e => setEnrollForm(p => ({...p, email: e.target.value}))} />
+                  <div>
+                    <input required type="email" placeholder="Email Address (Gmail only)"
+                      className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 ${enrollEmailError ? 'border-red-400 focus:ring-red-200' : 'border-slate-200 focus:ring-indigo-200'}`}
+                      value={enrollForm.email}
+                      onChange={e => {
+                        const val = e.target.value;
+                        setEnrollForm(p => ({...p, email: val}));
+                        if (val && !val.toLowerCase().endsWith('@gmail.com')) {
+                          setEnrollEmailError('Only @gmail.com addresses are accepted.');
+                        } else {
+                          setEnrollEmailError('');
+                        }
+                      }} />
+                    {enrollEmailError && (
+                      <p className="mt-1 text-xs text-red-500">{enrollEmailError}</p>
+                    )}
+                  </div>
                   <input required placeholder="Phone / WhatsApp"
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
-                    onChange={e => setEnrollForm(p => ({...p, phone: e.target.value}))} />
-                  <select
-                    required
+                    type="tel"
+                    maxLength={10}
+                    value={enrollForm.phone}
+                    onChange={e => {
+                      const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                      setEnrollForm(p => ({...p, phone: val}));
+                    }} />
+                  <select required
                     value={enrollForm.course}
                     onChange={e => setEnrollForm(p => ({...p, course: e.target.value}))}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200 text-slate-700"
@@ -454,6 +520,7 @@ const CoursesPage = () => {
                   </select>
                   <input placeholder="Portfolio / LinkedIn (optional)"
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
+                    value={enrollForm.portfolio}
                     onChange={e => setEnrollForm(p => ({...p, portfolio: e.target.value}))} />
                   <button
                     type="submit"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import ImageSlideshow from '../components/ImageSlideshow';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -77,6 +77,9 @@ const openWA_SS = (msg = 'Hello DVein Team, I am interested in your Software Sol
 const SoftwareSolutions = () => {
   const [activeAccordion, setActiveAccordion] = useState(null);
 
+  // CP-20: useRef for smooth-scroll instead of document.getElementById
+  const servicesRef = useRef(null);
+
   return (
     <div className="ss-page font-sans text-gray-900 bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen pt-24 pb-16">
 
@@ -100,7 +103,7 @@ const SoftwareSolutions = () => {
               style={{ backgroundColor: BRAND }}
             >Start Your Project</button>
             <button
-              onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => servicesRef.current?.scrollIntoView({ behavior: 'smooth' })}
               className="px-8 py-4 bg-white text-gray-800 border border-gray-200 rounded-xl font-bold shadow-sm hover:bg-gray-50 transition-all"
             >Explore Services</button>
           </div>
@@ -141,7 +144,7 @@ const SoftwareSolutions = () => {
       />
 
       {/* === KEY SERVICES === */}
-      <div id="services" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 mt-24">
+      <div id="services" ref={servicesRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 mt-24">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-black mb-4">Our Core Competencies</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">We leverage cutting-edge technology to solve complex challenges.</p>

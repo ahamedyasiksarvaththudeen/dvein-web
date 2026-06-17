@@ -63,7 +63,7 @@ npm run dev
 **Specific Crew Verification**:
 ```
 1. ✓ Ms. Gopika Ayyavu (Founder & CEO) - dir.jpeg
-2. ✓ Mr. Logesh (Manager Director) - manager.jpeg
+2. ✓ Mr. Logesh (Managing Director) - manager.jpeg
 3. ✓ Ms. Sahana (Executive Head) - executive.jpeg
 4. ✓ Ms. Jayasri (HR Executive) - jayasri.jpeg
 5. ✓ Ms. Aruna (HR) - aruna.jpeg

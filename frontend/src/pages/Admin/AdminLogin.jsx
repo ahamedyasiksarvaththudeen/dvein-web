@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo.png';
+import { adminSignIn, onAuthStateChanged } from '../../lib/firebaseService';
 
 const AdminLogin = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const redirect = new URLSearchParams(location.search).get('redirect') || '/admin/cms';
+  const navigate  = useNavigate();
+  const location  = useLocation();
+  const redirect  = new URLSearchParams(location.search).get('redirect') || '/admin/cms';
 
   const [form, setForm]       = useState({ email: '', password: '' });
   const [error, setError]     = useState('');
   const [loading, setLoading] = useState(false);
   const [showPw, setShowPw]   = useState(false);
 
-  // If already logged in, go straight to CMS
+  // If already logged in via Firebase, go straight to CMS (UI-28 fix: deps included)
   useEffect(() => {
-    if (localStorage.getItem('adminToken')) navigate(redirect, { replace: true });
-  }, []);
+    const unsubscribe = onAuthStateChanged((user) => {
+      if (user) navigate(redirect, { replace: true });
+    });
+    return unsubscribe;
+  }, [navigate, redirect]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
-    // Simple credential check — swap for a real API call if needed
-    const ADMIN_EMAIL    = 'admin@dveininnovations.com';
-    const ADMIN_PASSWORD = 'dvein@admin2025';
-
-    await new Promise(r => setTimeout(r, 600)); // short UX delay
-
-    if (form.email === ADMIN_EMAIL && form.password === ADMIN_PASSWORD) {
-      localStorage.setItem('adminToken', 'dvein_admin_token_secure');
+    try {
+      await adminSignIn(form.email, form.password);
       navigate(redirect, { replace: true });
-    } else {
+    } catch (err) {
+      console.error('[AdminLogin] sign-in failed:', err);
       setError('Invalid credentials. Please try again.');
       setLoading(false);
     }

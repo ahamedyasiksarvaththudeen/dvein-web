@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useContent } from '../context/ContentContext';
+import { submitContact } from '../lib/firebaseService';
 import { motion } from 'framer-motion';
 import { 
   FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaLinkedinIn, 
@@ -32,19 +33,13 @@ const Contact = () => {
       `_Sent from DVein Website_`,
     ].join('\n');
 
-    // Also try backend (silent)
-    try {
-      const data = new FormData();
-      data.append('name', formState.name);
-      data.append('email', formState.email);
-      data.append('service', formState.service || 'General Enquiry');
-      data.append('message', formState.message);
-      await fetch('/api/public/contact', {
-        method: 'POST', body: data, signal: AbortSignal.timeout(5000),
-      });
-    } catch (error) {
-      console.warn('Could not save contact message to backend before opening WhatsApp.', error);
-    }
+    // Save to Firestore (silent — WhatsApp always opens regardless)
+    submitContact({
+      name: formState.name,
+      email: formState.email,
+      service: formState.service || 'General Enquiry',
+      message: formState.message,
+    }).catch(err => console.warn('[Contact] Firestore save failed:', err));
 
     // Open WhatsApp
     window.open(`https://wa.me/${WA_OTHER}?text=${encodeURIComponent(waText)}`, '_blank');

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContent } from '../../context/ContentContext';
+import { onAuthStateChanged, adminSignOut } from '../../lib/firebaseService';
 import logo from '../../assets/logo.png';
 
 // ─── INLINE ICON SYSTEM ───────────────────────────────────────────────────────
@@ -998,6 +999,12 @@ const CareerHubEditor = () => {
   const setDot=(i,k,v)=>setData(p=>({...p,dna:{...p.dna,dots:(p.dna?.dots||[]).map((d,j)=>j===i?{...d,[k]:v}:d)}}));
   const setCtc=(k,v)=>setData(p=>({...p,contact:{...p.contact,[k]:v}}));
   const setPanel=(i,k,v)=>setData(p=>({...p,panels:(p.panels||[]).map((pl,j)=>j===i?{...pl,[k]:v}:pl)}));
+  const setPoster=(i,pi,v)=>setData(p=>({...p,panels:(p.panels||[]).map((pl,j)=>j===i?{...pl,posters:(pl.posters||[]).map((ps,k)=>k===pi?v:ps)}:pl)}));
+  const addPoster=(i)=>setData(p=>({...p,panels:(p.panels||[]).map((pl,j)=>j===i?{...pl,posters:[...(pl.posters||[]),'']}:pl)}));
+  const delPoster=(i,pi)=>setData(p=>({...p,panels:(p.panels||[]).map((pl,j)=>j===i?{...pl,posters:(pl.posters||[]).filter((_,k)=>k!==pi)}:pl)}));
+  const setDoc=(i,di,k,v)=>setData(p=>({...p,panels:(p.panels||[]).map((pl,j)=>j===i?{...pl,documents:(pl.documents||[]).map((d,l)=>l===di?{...d,[k]:v}:d)}:pl)}));
+  const addDoc=(i)=>setData(p=>({...p,panels:(p.panels||[]).map((pl,j)=>j===i?{...pl,documents:[...(pl.documents||[]),{_id:Date.now(),label:'New Document',url:''}]}:pl)}));
+  const delDoc=(i,di)=>setData(p=>({...p,panels:(p.panels||[]).map((pl,j)=>j===i?{...pl,documents:(pl.documents||[]).filter((_,l)=>l!==di)}:pl)}));
   const panels = data.panels||[];
   const dots   = data.dna?.dots||[];
   return (
@@ -1021,14 +1028,108 @@ const CareerHubEditor = () => {
             </div>
             <Field label="Description" value={pl.description} onChange={v=>setPanel(i,'description',v)} type="textarea" rows={2} />
             <ImageField label="Panel Image (URL / Upload / asset filename)" value={pl.image} onChange={v=>setPanel(i,'image',v)} placeholder="client-img.jpg or https://..." />
+
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-5 mb-2">Requirement Posters ({(pl.posters||[]).length})</p>
+            <p className="text-[11px] text-gray-400 mb-3">Shown on the details page opened when this panel's image is clicked.</p>
+            <div className="space-y-3 mb-1">
+              {(pl.posters||[]).map((ps,pi)=>(
+                <div key={pi} className="relative">
+                  <ImageField label={`Poster ${pi+1}`} value={ps} onChange={v=>setPoster(i,pi,v)} placeholder="https://..." />
+                  <button onClick={()=>delPoster(i,pi)} className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-50 text-red-400 hover:bg-red-100 transition-all">
+                    <Icon d={IC.trash} size={9} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button onClick={()=>addPoster(i)} className="mb-4 flex items-center gap-2 text-[#10B981] text-xs font-bold hover:text-green-600 transition-colors">
+              <Icon d={IC.plus} size={10} /> Add Poster
+            </button>
+
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-4 mb-2">Documentation ({(pl.documents||[]).length})</p>
+            <div className="space-y-3 mb-1">
+              {(pl.documents||[]).map((doc,di)=>(
+                <div key={doc._id||di} className="relative bg-gray-50 rounded-xl p-3 pr-9">
+                  <button onClick={()=>delDoc(i,di)} className="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded-full bg-red-50 text-red-400 hover:bg-red-100 transition-all">
+                    <Icon d={IC.trash} size={9} />
+                  </button>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <Field label="Label" value={doc.label} onChange={v=>setDoc(i,di,'label',v)} placeholder="Eligibility Criteria" />
+                    <Field label="URL (PDF / Doc link)" value={doc.url} onChange={v=>setDoc(i,di,'url',v)} placeholder="https://... or /file.pdf" />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={()=>addDoc(i)} className="flex items-center gap-2 text-[#10B981] text-xs font-bold hover:text-green-600 transition-colors">
+              <Icon d={IC.plus} size={10} /> Add Document
+            </button>
           </Card>
         ))}
       </div>
-      <AddBtn onClick={()=>setData(p=>({...p,panels:[...(p.panels||[]),{_id:Date.now(),tag:'NEW TAG',heading:'Recruitments',description:'Description here.',image:''}]}))} label="Add Panel" />
+      <AddBtn onClick={()=>setData(p=>({...p,panels:[...(p.panels||[]),{_id:Date.now(),tag:'NEW TAG',heading:'Recruitments',description:'Description here.',image:'',posters:[],documents:[]}]}))} label="Add Panel" />
       <Sub text="Success Story Section" />
       <Card className="mb-5">
         <Field label="Heading" value={data.successStory?.heading} onChange={v=>setSS('heading',v)} />
         <Field label="Description" value={data.successStory?.description} onChange={v=>setSS('description',v)} type="textarea" rows={3} />
+
+        {/* ── Images ── */}
+        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-5 mb-1">
+          Success Story Images ({(data.successStory?.images||[]).length})
+        </p>
+        <p className="text-[11px] text-gray-400 mb-3">
+          Shown in the image carousel. Leave empty to use the built-in bundled photos.
+        </p>
+        <div className="space-y-3 mb-1">
+          {(data.successStory?.images||[]).map((img,ii)=>(
+            <div key={ii} className="relative">
+              <ImageField
+                label={`Image ${ii+1}`}
+                value={img}
+                onChange={v=>setData(p=>({...p,successStory:{...p.successStory,images:(p.successStory?.images||[]).map((im,j)=>j===ii?v:im)}}))}
+                placeholder="https://... or upload"
+              />
+              <button
+                onClick={()=>setData(p=>({...p,successStory:{...p.successStory,images:(p.successStory?.images||[]).filter((_,j)=>j!==ii)}}))}
+                className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-50 text-red-400 hover:bg-red-100 transition-all">
+                <Icon d={IC.trash} size={9} />
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={()=>setData(p=>({...p,successStory:{...p.successStory,images:[...(p.successStory?.images||[]),'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800']}}))}
+          className="mb-4 flex items-center gap-2 text-[#10B981] text-xs font-bold hover:text-green-600 transition-colors">
+          <Icon d={IC.plus} size={10} /> Add Image
+        </button>
+
+        {/* ── Videos ── */}
+        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-4 mb-1">
+          Success Story Videos ({(data.successStory?.videos||[]).length})
+        </p>
+        <p className="text-[11px] text-gray-400 mb-3">
+          Direct MP4 video URLs (e.g. Firebase Storage URLs). Leave empty to use the built-in bundled videos.
+        </p>
+        <div className="space-y-2 mb-1">
+          {(data.successStory?.videos||[]).map((vid,vi)=>(
+            <div key={vi} className="relative pr-8">
+              <Field
+                label={`Video ${vi+1} URL`}
+                value={vid}
+                onChange={v=>setData(p=>({...p,successStory:{...p.successStory,videos:(p.successStory?.videos||[]).map((vd,j)=>j===vi?v:vd)}}))}
+                placeholder="https://firebasestorage.googleapis.com/... or direct .mp4 URL"
+              />
+              <button
+                onClick={()=>setData(p=>({...p,successStory:{...p.successStory,videos:(p.successStory?.videos||[]).filter((_,j)=>j!==vi)}}))}
+                className="absolute top-6 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-50 text-red-400 hover:bg-red-100 transition-all">
+                <Icon d={IC.trash} size={9} />
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={()=>setData(p=>({...p,successStory:{...p.successStory,videos:[...(p.successStory?.videos||[]),'https://']}}))}
+          className="flex items-center gap-2 text-[#10B981] text-xs font-bold hover:text-green-600 transition-colors">
+          <Icon d={IC.plus} size={10} /> Add Video URL
+        </button>
       </Card>
       <Sub text="Our DNA Section" />
       <Card className="mb-3">
@@ -1171,10 +1272,17 @@ const CMSPanel = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem('adminToken')) navigate('/admin/login?redirect=/admin/cms');
+    // Use Firebase auth state instead of hardcoded localStorage token (fixes UI-28 pattern)
+    const unsubscribe = onAuthStateChanged((user) => {
+      if (!user) navigate('/admin/login?redirect=/admin/cms');
+    });
+    return unsubscribe;
   }, [navigate]);
 
-  const handleLogout = () => { localStorage.removeItem('adminToken'); navigate('/admin/login'); };
+  const handleLogout = async () => {
+    await adminSignOut();
+    navigate('/admin/login');
+  };
   const activeInfo = NAV_GROUPS.flatMap(g => g.items).find(n => n.key === active);
   const Editor = EDITORS[active] || null;
 

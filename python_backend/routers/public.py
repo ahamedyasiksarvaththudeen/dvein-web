@@ -127,6 +127,17 @@ async def get_training_page():
     }
 
 
+import re as _re
+
+_EMAIL_RE = _re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+_ALLOWED_RESUME_CONTENT_TYPES = {
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+}
+_MAX_RESUME_BYTES = 5 * 1024 * 1024  # 5 MB
+
+
 @router.post("/apply")
 async def apply_job(
     firstName: str = Form(...),
@@ -138,9 +149,22 @@ async def apply_job(
     resume:    Optional[UploadFile] = File(None),
     db=Depends(get_db),
 ):
+    # BE-15: Validate email format
+    if not _EMAIL_RE.match(email):
+        raise HTTPException(status_code=422, detail="Invalid email address.")
+
     resume_path: Optional[str] = None
 
     if resume and resume.filename:
+        # BE-23: Validate file type
+        if resume.content_type not in _ALLOWED_RESUME_CONTENT_TYPES:
+            raise HTTPException(status_code=400, detail="Resume must be a PDF, DOC, or DOCX file.")
+        # BE-23: Validate file size
+        content_bytes = await resume.read()
+        if len(content_bytes) > _MAX_RESUME_BYTES:
+            raise HTTPException(status_code=400, detail="Resume must be smaller than 5 MB.")
+        await resume.seek(0)
+
         os.makedirs("uploads", exist_ok=True)
         safe_name = f"{os.urandom(4).hex()}_{resume.filename}"
         save_path = os.path.join("uploads", safe_name)
@@ -389,7 +413,10 @@ async def contact_form(
 # POST /api/public/cms/content  — saves CMS content (admin-only, requires X-Admin-Token)
 
 _CMS_FILE = Path("data/cms_content.json")
-_ADMIN_TOKEN = "dvein_admin_token_secure"
+# BE-21: Read admin token from environment — never hardcode secrets
+_ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "")
+if not _ADMIN_TOKEN:
+    print("[WARNING] ADMIN_TOKEN env var is not set. CMS write endpoint is disabled.")
 
 
 @router.get("/cms/content")
