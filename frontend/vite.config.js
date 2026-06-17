@@ -7,12 +7,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://backend-dvein-2.onrender.com',
+        target: 'https://dvein-web.onrender.com',
         changeOrigin: true,
         secure: false,
       },
       '/uploads': {
-        target: 'https://backend-dvein-2.onrender.com',
+        target: 'https://dvein-web.onrender.com',
         changeOrigin: true,
         secure: false,
       },
