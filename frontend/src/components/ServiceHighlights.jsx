@@ -41,7 +41,7 @@ const ServiceHighlights = () => {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
-    fetch('https://backend-dvein-2.onrender.com/api/public/services')
+    fetch('/api/public/services')
       .then(res => res.json())
       .then(data => setServices(data))
       .catch(() => { /* renders empty if backend unavailable */ });

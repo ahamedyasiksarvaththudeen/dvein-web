@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { submitApplication } from '../lib/firebaseService';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -135,7 +135,7 @@ const CoursesPage = () => {
   };
 
   useEffect(() => {
-    fetch('https://backend-dvein-2.onrender.com/api/public/trainings')
+    fetch('/api/public/trainings')
       .then(res => res.json())
       .then(data => setTrainings(data.filter(item => item.category === 'course')))
       .catch(() => { /* falls back to staticCourses */ });

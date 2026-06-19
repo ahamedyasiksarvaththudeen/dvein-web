@@ -76,7 +76,7 @@ const ProductsPage = () => {
   const inventoryRef = useRef(null);
 
   useEffect(() => {
-    fetch('https://backend-dvein-2.onrender.com/api/public/products')
+    fetch('/api/public/products')
       .then(res => res.json())
       .then(data => { setProducts(data); setLoading(false); })
       .catch(() => { setLoading(false); });

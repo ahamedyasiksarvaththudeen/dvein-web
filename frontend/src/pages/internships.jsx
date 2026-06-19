@@ -113,7 +113,7 @@ const Training = () => {
   const WA_NUMBER = '918667363896';
 
   useEffect(() => {
-    fetch('https://backend-dvein-2.onrender.com/api/public/training-page')
+    fetch('/api/public/training-page')
       .then(res => res.json())
       .then(apiData => { setData(apiData); })
       .catch(() => { /* CMS content used as primary source */ });

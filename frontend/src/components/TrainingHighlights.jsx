@@ -12,7 +12,7 @@ const TrainingHighlights = () => {
   const [trainings, setTrainings] = useState([]);
 
   useEffect(() => {
-    fetch('https://backend-dvein-2.onrender.com/api/public/trainings')
+    fetch('/api/public/trainings')
       .then(res => res.json())
       .then(data => setTrainings(data))
       .catch(() => { /* renders empty if backend unavailable */ });
