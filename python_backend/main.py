@@ -53,6 +53,13 @@ if os.path.isdir(_DIST_DIR):
 
 # ── API routes ─────────────────────────────────────────────────────────────────
 app.include_router(public.router, prefix="/api/public")
+# ── Health check for UptimeRobot monitoring ────────────────────────────────────
+from fastapi import Response
+
+@app.get("/health")
+@app.head("/health")
+async def health_check():
+    return Response(status_code=200)
 
 
 # ── SPA catch-all — serves index.html for every non-API path ──────────────────
